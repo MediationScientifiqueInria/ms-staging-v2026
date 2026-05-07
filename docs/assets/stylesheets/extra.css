@@ -497,9 +497,9 @@ li {
 }
 
 .home-calendar__day.has-event {
-  background: #fff6f6;
-  border-color: rgba(201, 25, 30, 0.32);
-  color: var(--md-accent-fg-color--dark);
+  background: var(--event-soft-color, #fff6f6);
+  border-color: var(--event-color, rgba(201, 25, 30, 0.32));
+  color: var(--event-color, var(--md-accent-fg-color--dark));
   font-weight: 700;
 }
 
@@ -531,7 +531,7 @@ li {
 
 .home-calendar__event {
   border: 1px solid rgba(39, 52, 139, 0.14);
-  border-left: 4px solid var(--md-accent-fg-color);
+  border-left: 4px solid var(--event-color, var(--md-accent-fg-color));
   border-radius: 8px;
   padding: 0.8rem;
   background: #ffffff;
@@ -548,11 +548,27 @@ li {
 
 .home-calendar__event-type {
   margin-bottom: 0.25rem !important;
-  color: var(--md-accent-fg-color);
+  color: var(--event-color, var(--md-accent-fg-color));
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
+}
+
+.home-calendar__event-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.home-calendar__event-tags span {
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  background: var(--event-soft-color, rgba(39, 52, 139, 0.08));
+  color: var(--event-color, var(--md-primary-fg-color));
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
 .home-calendar__event-date {

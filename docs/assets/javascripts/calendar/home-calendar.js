@@ -1,18 +1,3 @@
-// Script pour Matomo
-var _paq = window._paq = window._paq || [];
-/* tracker methods like "setCustomDimension" should be called before
-"trackPageView" */
-_paq.push(['trackPageView']);
-_paq.push(['enableLinkTracking']);
-(function() {
-  var u="https://matomo.inria.fr/";
-  _paq.push(['setTrackerUrl', u+'matomo.php']);
-  _paq.push(['setSiteId', '171']);
-  var d=document, g=d.createElement('script'),
-s=d.getElementsByTagName('script')[0];
-  g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-})();
-
 (function () {
   var locale = "fr-FR";
   var today = startOfDay(new Date());
@@ -52,6 +37,33 @@ s=d.getElementsByTagName('script')[0];
     return new Date(year, month - 1, day);
   }
 
+  function normalizeTags(value) {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    return value.filter(function (tag) {
+      return tag;
+    });
+  }
+
+  function safeColor(value) {
+    if (typeof value === "string" && /^#[0-9a-fA-F]{6}$/.test(value.trim())) {
+      return value.trim();
+    }
+
+    return "#d95e61";
+  }
+
+  function colorToRgba(color, alpha) {
+    var safe = safeColor(color);
+    var red = parseInt(safe.slice(1, 3), 16);
+    var green = parseInt(safe.slice(3, 5), 16);
+    var blue = parseInt(safe.slice(5, 7), 16);
+
+    return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
+  }
+
   function formatDate(date) {
     return new Intl.DateTimeFormat(locale, {
       day: "numeric",
@@ -88,6 +100,8 @@ s=d.getElementsByTagName('script')[0];
       endTime: event.heure_fin || event.end_time || "",
       location: event.lieu || event.location || "",
       type: event.type || "",
+      tags: normalizeTags(event.tags),
+      color: safeColor(event.couleur || event.color),
       audience: Array.isArray(event.public) ? event.public : [],
       territory: event.territoire || "",
       link: event.lien || event.url || "",
@@ -135,6 +149,8 @@ s=d.getElementsByTagName('script')[0];
   function createEventCard(event) {
     var card = document.createElement("article");
     card.className = "home-calendar__event";
+    card.style.setProperty("--event-color", event.color);
+    card.style.setProperty("--event-soft-color", colorToRgba(event.color, 0.1));
 
     if (event.type) {
       var type = document.createElement("p");
@@ -146,6 +162,19 @@ s=d.getElementsByTagName('script')[0];
     var title = document.createElement("h4");
     title.textContent = event.title;
     card.appendChild(title);
+
+    if (event.tags.length) {
+      var tags = document.createElement("div");
+      tags.className = "home-calendar__event-tags";
+
+      event.tags.forEach(function (tag) {
+        var item = document.createElement("span");
+        item.textContent = tag;
+        tags.appendChild(item);
+      });
+
+      card.appendChild(tags);
+    }
 
     var date = document.createElement("p");
     date.className = "home-calendar__event-date";
@@ -287,6 +316,8 @@ s=d.getElementsByTagName('script')[0];
 
       if (dayEvents.length) {
         button.classList.add("has-event");
+        button.style.setProperty("--event-color", dayEvents[0].color);
+        button.style.setProperty("--event-soft-color", colorToRgba(dayEvents[0].color, 0.1));
         button.setAttribute(
           "aria-label",
           formatDate(date) + " - " + dayEvents.length + " événement" + (dayEvents.length > 1 ? "s" : "")

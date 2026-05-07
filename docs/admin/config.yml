@@ -18,7 +18,7 @@ collections:
   - name: ressources
     label: Ressources
     label_singular: Ressource
-    folder: docs/ressources/posts
+    folder: docs/contenus/ressources/posts
     create: true
     slug: "{{slug}}"
     fields:
@@ -155,7 +155,7 @@ collections:
   - name: actualites
     label: Actualités
     label_singular: Actualité
-    folder: docs/actualites/posts
+    folder: docs/contenus/actualites/posts
     create: true
     slug: "{{slug}}"
     fields:
@@ -256,7 +256,7 @@ collections:
   - name: calendrier
     label: Calendrier
     label_singular: Événement
-    folder: docs/evenements
+    folder: docs/contenus/evenements
     create: true
     slug: "{{date_debut}}-{{slug}}"
     summary: "{{title}} — {{date_debut}}"
@@ -321,6 +321,31 @@ collections:
           - Événement
           - Autre
         default: Événement
+        required: false
+
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        hint: "Mots-clés libres affichés sur les cartes de l'événement"
+
+      - label: Couleur
+        name: couleur
+        widget: select
+        default: "#d95e61"
+        options:
+          - label: Rouge Inria
+            value: "#d95e61"
+          - label: Bleu Inria
+            value: "#27348b"
+          - label: Violet
+            value: "#a60f79"
+          - label: Or
+            value: "#d6bc86"
+          - label: Vert
+            value: "#2f7d5c"
+          - label: Turquoise
+            value: "#1f7a8c"
         required: false
 
       - label: Public

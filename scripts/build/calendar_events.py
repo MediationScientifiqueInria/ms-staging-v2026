@@ -8,7 +8,8 @@ from pathlib import Path
 import yaml
 
 
-EVENTS_DIR = Path("docs/evenements")
+EVENTS_DIR = Path("docs/contenus/evenements")
+DEFAULT_COLOR = "#d95e61"
 
 
 def _front_matter(markdown: str) -> tuple[dict, str]:
@@ -33,6 +34,28 @@ def _iso(value) -> str:
         return value.isoformat()
 
     return str(value).split("T")[0]
+
+
+def _as_list(value) -> list:
+    if value in (None, ""):
+        return []
+
+    if isinstance(value, list):
+        return [item for item in value if item not in (None, "")]
+
+    return [value]
+
+
+def _color(value) -> str:
+    if not isinstance(value, str):
+        return DEFAULT_COLOR
+
+    value = value.strip()
+
+    if re.fullmatch(r"#[0-9a-fA-F]{6}", value):
+        return value
+
+    return DEFAULT_COLOR
 
 
 def _event_from_file(path: Path) -> dict | None:
@@ -60,6 +83,8 @@ def _event_from_file(path: Path) -> dict | None:
         "heure_fin": data.get("heure_fin") or "",
         "lieu": data.get("lieu") or "",
         "type": data.get("type") or "Événement",
+        "tags": _as_list(data.get("tags")),
+        "couleur": _color(data.get("couleur") or data.get("color")),
         "public": data.get("public") or [],
         "territoire": data.get("territoire") or "",
         "lien": data.get("lien") or "",

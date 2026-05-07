@@ -269,7 +269,7 @@ html.admin-calendar-route .main.svelte-7y4msj {
   display: block;
   width: 100%;
   border: 1px solid #dfe4ef;
-  border-left: 4px solid #d95e61;
+  border-left: 4px solid var(--event-color, #d95e61);
   border-radius: 6px;
   padding: 8px;
   background: #ffffff;
@@ -283,7 +283,7 @@ html.admin-calendar-route .main.svelte-7y4msj {
 .admin-calendar__event.is-compact {
   overflow: hidden;
   padding: 5px 6px;
-  background: #fff6f6;
+  background: var(--event-soft-color, #fff6f6);
 }
 
 .admin-calendar__event strong,
@@ -302,6 +302,23 @@ html.admin-calendar-route .main.svelte-7y4msj {
   margin-top: 2px;
   color: #68758d;
   font-size: 11px;
+}
+
+.admin-calendar__event-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 7px;
+}
+
+.admin-calendar__event-tags span {
+  margin-top: 0;
+  border-radius: 999px;
+  padding: 2px 7px;
+  background: var(--event-soft-color, rgba(39, 52, 139, 0.08));
+  color: var(--event-color, #27348b);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .admin-calendar__more,
