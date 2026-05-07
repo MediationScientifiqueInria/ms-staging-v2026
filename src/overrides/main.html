@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% set noindex = config.extra.noindex | string | lower %}
+  {% if noindex in ["1", "true", "yes", "on"] %}
+    <meta name="robots" content="noindex, nofollow, noarchive">
+  {% endif %}
+{% endblock %}
