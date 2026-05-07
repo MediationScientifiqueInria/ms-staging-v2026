@@ -1,14 +1,14 @@
 site_name: Médiation scientifique - Inria
 
 exclude_docs: |
-  evenements/**
+  contenus/evenements/**
 
 theme:
   font:
     text: InriaSans-Regular
 
-  logo: assets/Inria-mediation.png
-  favicon: assets/favicon.ico
+  logo: assets/images/Inria-mediation.png
+  favicon: assets/images/favicon.ico
   name: material
   custom_dir: src/overrides
   palette:
@@ -28,12 +28,13 @@ theme:
     - navigation.sections
 
 extra_css:
-  - stylesheets/extra.css
+  - assets/stylesheets/extra.css
 extra_javascript:
-  - javascripts/extra.js
+  - assets/javascripts/analytics/matomo.js
+  - assets/javascripts/calendar/home-calendar.js
 
 hooks:
-  - hooks/calendar_events.py
+  - scripts/build/calendar_events.py
 
 
 
@@ -60,14 +61,14 @@ plugins:
     - glightbox
     - table-reader
     - blog:
-        blog_dir: ressources
+        blog_dir: contenus/ressources
         blog_toc: true
         post_date_format: long
         post_url_format: "{slug}"
         authors: false
         pagination_per_page: 12
     - blog:
-        blog_dir: actualites
+        blog_dir: contenus/actualites
         blog_toc: true
         post_date_format: long
         post_url_format: "{slug}"

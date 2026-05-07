@@ -39,6 +39,33 @@
     return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
   }
 
+  function normalizeTags(value) {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    return value.filter(function (tag) {
+      return tag;
+    });
+  }
+
+  function safeColor(value) {
+    if (typeof value === "string" && /^#[0-9a-fA-F]{6}$/.test(value.trim())) {
+      return value.trim();
+    }
+
+    return "#d95e61";
+  }
+
+  function colorToRgba(color, alpha) {
+    var safe = safeColor(color);
+    var red = parseInt(safe.slice(1, 3), 16);
+    var green = parseInt(safe.slice(3, 5), 16);
+    var blue = parseInt(safe.slice(5, 7), 16);
+
+    return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
+  }
+
   function isoDate(date) {
     var month = String(date.getMonth() + 1).padStart(2, "0");
     var day = String(date.getDate()).padStart(2, "0");
@@ -95,6 +122,8 @@
       endTime: event.heure_fin || "",
       location: event.lieu || "",
       type: event.type || "Événement",
+      tags: normalizeTags(event.tags),
+      color: safeColor(event.couleur || event.color),
       published: event.publie !== false,
     };
   }
@@ -174,6 +203,7 @@
       date_fin: isoDate(date),
       publie: "true",
       type: "Événement",
+      couleur: "#d95e61",
       libelle_lien: "En savoir plus",
     });
 
@@ -235,10 +265,25 @@
     button.type = "button";
     button.className = compact ? "admin-calendar__event is-compact" : "admin-calendar__event";
     button.setAttribute("aria-label", "Modifier " + event.title);
+    button.style.setProperty("--event-color", event.color);
+    button.style.setProperty("--event-soft-color", colorToRgba(event.color, compact ? 0.12 : 0.08));
     title.textContent = event.title;
     meta.textContent = compact ? event.startTime || event.type : eventDateLabel(event);
     button.appendChild(title);
     button.appendChild(meta);
+
+    if (!compact && event.tags.length) {
+      var tags = document.createElement("div");
+      tags.className = "admin-calendar__event-tags";
+
+      event.tags.forEach(function (tag) {
+        var item = document.createElement("span");
+        item.textContent = tag;
+        tags.appendChild(item);
+      });
+
+      button.appendChild(tags);
+    }
 
     if (!event.published) {
       button.classList.add("is-unpublished");
