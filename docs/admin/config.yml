@@ -1,0 +1,352 @@
+backend:
+  name: github
+  repo: MediationScientifiqueInria/mediationscientifiqueinria.github.io
+  branch: main
+  base_url: https://sveltia-cms-auth.pages.dev
+
+media_folder: docs/assets/images
+public_folder: /assets/images
+
+locale: fr
+
+# Champs partagés entre Ressources et Actualités
+# (dupliqués car Sveltia ne supporte pas les ancres YAML pour les collections)
+
+collections:
+
+  # ─── RESSOURCES ───────────────────────────────────────────────────────────
+  - name: ressources
+    label: Ressources
+    label_singular: Ressource
+    folder: docs/ressources/posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: Titre
+        name: title
+        widget: string
+
+      - label: Description
+        name: description
+        widget: text
+        hint: "Texte libre de présentation de la ressource"
+
+      - label: Date du sujet
+        name: date_sujet
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        required: false
+        hint: "Date à laquelle se rapporte le contenu (ex : date d'un événement passé)"
+
+      - label: Date de publication
+        name: date
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        hint: "Date de mise en ligne sur le site"
+
+      - label: Date de mise à jour
+        name: date_maj
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        required: false
+
+      - label: Langue
+        name: langue
+        widget: select
+        options:
+          - label: Français
+            value: fr
+          - label: Anglais
+            value: en
+          - label: Bilingue (FR/EN)
+            value: fr-en
+        default: fr
+
+      - label: Auteur / Producteur
+        name: auteur
+        widget: select
+        options:
+          - Inria – service médiation
+          - Co-production Inria
+          - Externe (recommandation)
+        hint: "Sélectionner la nature de la production"
+
+      - label: Contact pour précision
+        name: contact
+        widget: string
+        required: false
+        hint: "Email ou nom de la personne à contacter"
+
+      - label: Référent scientifique
+        name: referent_scientifique
+        widget: string
+        required: false
+
+      - label: Thématiques scientifiques
+        name: thematiques
+        widget: list
+        required: false
+        hint: "Thématiques issues de la cartographie (ex : Intelligence artificielle, Algorithmique...)"
+
+      - label: Domaines grand public
+        name: domaines
+        widget: list
+        required: false
+        hint: "Domaines selon Interstices (ex : Société numérique, Jeux...)"
+
+      - label: Cibles
+        name: cibles
+        widget: list
+        required: false
+        hint: "Public visé (ex : Lycéens, Cycle 3, Enseignants, Grand public...)"
+
+      - label: Centre / Territoire
+        name: territoire
+        widget: list
+        required: false
+        hint: "Centre Inria ou territoire concerné (ex : Paris, Grenoble, Île-de-France...)"
+
+      - label: Type
+        name: tags
+        widget: select
+        multiple: true
+        options:
+          - Ressource pédagogique
+          - Outil
+          - Publication
+          - Exposition
+          - Jeu
+          - Vidéo
+          - MOOC
+          - Atelier
+          - Autre
+        hint: "Type de ressource (utilisé comme filtre)"
+
+      - label: Support
+        name: support
+        widget: select
+        multiple: true
+        options:
+          - Physique
+          - Numérique (à télécharger)
+          - En ligne
+          - Empruntable (en prêt)
+          - Duplicable
+        required: false
+
+      - label: Image de couverture
+        name: cover_image
+        widget: image
+        required: false
+
+      - label: Contenu
+        name: body
+        widget: markdown
+        required: true
+        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une ressource sans contenu"
+
+  # ─── ACTUALITÉS ───────────────────────────────────────────────────────────
+  - name: actualites
+    label: Actualités
+    label_singular: Actualité
+    folder: docs/actualites/posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: Titre
+        name: title
+        widget: string
+
+      - label: Description
+        name: description
+        widget: text
+        hint: "Résumé affiché dans la liste des actualités"
+
+      - label: Sous-type
+        name: categories
+        widget: select
+        options:
+          - label: Actualité
+            value: Actu
+          - label: Bilan
+            value: Bilan
+          - label: Calendrier
+            value: Calendrier
+        hint: "Nature de l'actualité — détermine la rubrique"
+
+      - label: Date de publication
+        name: date
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+
+      - label: Date de mise à jour
+        name: date_maj
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        required: false
+
+      - label: Langue
+        name: langue
+        widget: select
+        options:
+          - label: Français
+            value: fr
+          - label: Anglais
+            value: en
+        default: fr
+
+      - label: Auteur / Producteur
+        name: auteur
+        widget: select
+        options:
+          - Inria – service médiation
+          - Co-production Inria
+          - Externe (recommandation)
+
+      - label: Contact pour précision
+        name: contact
+        widget: string
+        required: false
+
+      - label: Référent scientifique
+        name: referent_scientifique
+        widget: string
+        required: false
+
+      - label: Thématiques scientifiques
+        name: thematiques
+        widget: list
+        required: false
+
+      - label: Domaines grand public
+        name: domaines
+        widget: list
+        required: false
+
+      - label: Cibles
+        name: cibles
+        widget: list
+        required: false
+
+      - label: Centre / Territoire
+        name: territoire
+        widget: list
+        required: false
+
+      - label: Image de couverture
+        name: cover_image
+        widget: image
+        required: false
+
+      - label: Contenu
+        name: body
+        widget: markdown
+
+  # ─── CALENDRIER ──────────────────────────────────────────────────────────
+  - name: calendrier
+    label: Calendrier
+    label_singular: Événement
+    folder: docs/evenements
+    create: true
+    slug: "{{date_debut}}-{{slug}}"
+    summary: "{{title}} — {{date_debut}}"
+    editor:
+      preview: false
+    fields:
+      - label: Publié
+        name: publie
+        widget: boolean
+        default: true
+
+      - label: Titre
+        name: title
+        widget: string
+
+      - label: Description
+        name: description
+        widget: text
+        required: false
+
+      - label: Date de début
+        name: date_debut
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+
+      - label: Heure de début
+        name: heure_debut
+        widget: string
+        required: false
+        hint: "Format conseillé : HH:MM"
+
+      - label: Date de fin
+        name: date_fin
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        required: false
+
+      - label: Heure de fin
+        name: heure_fin
+        widget: string
+        required: false
+        hint: "Format conseillé : HH:MM"
+
+      - label: Lieu
+        name: lieu
+        widget: string
+        required: false
+
+      - label: Type
+        name: type
+        widget: select
+        options:
+          - Atelier
+          - Conférence
+          - Exposition
+          - Rencontre
+          - Formation
+          - Événement
+          - Autre
+        default: Événement
+        required: false
+
+      - label: Public
+        name: public
+        widget: list
+        required: false
+        hint: "Ex : grand public, scolaires, enseignants..."
+
+      - label: Centre / Territoire
+        name: territoire
+        widget: string
+        required: false
+
+      - label: Lien
+        name: lien
+        widget: string
+        required: false
+        hint: "URL vers l'inscription ou la page de l'événement"
+
+      - label: Libellé du lien
+        name: libelle_lien
+        widget: string
+        default: En savoir plus
+        required: false
+
+      - label: Notes internes
+        name: body
+        widget: markdown
+        required: false
