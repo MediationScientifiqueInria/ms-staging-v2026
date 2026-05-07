@@ -40,6 +40,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build MkDocs site
+        env:
+          MKDOCS_NO_INDEX: ${{ github.repository == 'MediationScientifiqueInria/ms-staging-v2026' && 'true' || 'false' }}
         run: mkdocs build --clean
 
       - name: Setup Pages

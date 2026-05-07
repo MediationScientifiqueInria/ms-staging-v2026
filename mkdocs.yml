@@ -1,5 +1,8 @@
 site_name: Médiation scientifique - Inria
 
+extra:
+  noindex: !ENV [MKDOCS_NO_INDEX, false]
+
 exclude_docs: |
   contenus/evenements/**
 
