@@ -1,7 +1,7 @@
 backend:
   name: github
-  repo: MediationScientifiqueInria/mediationscientifiqueinria.github.io
-  branch: main
+  repo: MediationScientifiqueInria/ms-staging-v2026
+  branch: dev
   base_url: https://sveltia-cms-auth.pages.dev
 
 media_folder: docs/assets/images
@@ -13,6 +13,54 @@ locale: fr
 # (dupliqués car Sveltia ne supporte pas les ancres YAML pour les collections)
 
 collections:
+
+  # ─── À LA UNE ─────────────────────────────────────────────────────────────
+  - name: a_la_une
+    label: À la une
+    files:
+      - name: accueil
+        label: Page d'accueil
+        file: docs/contenus/a-la-une.yml
+        fields:
+          - label: Contenus à afficher
+            name: items
+            widget: list
+            required: false
+            max: 4
+            hint: "Choisir jusqu'à 4 actualités ou événements pour le grand carrousel de l'accueil"
+            fields:
+              - label: Type de contenu
+                name: type
+                widget: select
+                options:
+                  - label: Actualité
+                    value: actualite
+                  - label: Événement
+                    value: evenement
+
+              - label: Actualité
+                name: actualite
+                widget: relation
+                collection: actualites
+                search_fields:
+                  - title
+                value_field: title
+                display_fields:
+                  - title
+                required: false
+                hint: "À remplir si le type choisi est Actualité"
+
+              - label: Événement
+                name: evenement
+                widget: relation
+                collection: calendrier
+                search_fields:
+                  - title
+                value_field: title
+                display_fields:
+                  - title
+                required: false
+                hint: "À remplir si le type choisi est Événement"
 
   # ─── RESSOURCES ───────────────────────────────────────────────────────────
   - name: ressources
@@ -145,6 +193,18 @@ collections:
         widget: image
         required: false
 
+      - label: URL externe
+        name: url_externe
+        widget: string
+        required: false
+        hint: "Lien vers la ressource externe, si elle est consultable hors du site"
+
+      - label: Source externe
+        name: source
+        widget: string
+        required: false
+        hint: "Nom du site, organisme ou producteur affiche sur la carte"
+
       - label: Contenu
         name: body
         widget: markdown
@@ -158,10 +218,21 @@ collections:
     folder: docs/contenus/actualites/posts
     create: true
     slug: "{{slug}}"
+    view_filters:
+      - label: À la une
+        field: featured
+        pattern: true
     fields:
       - label: Titre
         name: title
         widget: string
+
+      - label: Mettre à la une
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: "Affiche ce contenu dans le grand carrousel À la une de la page d'accueil"
 
       - label: Description
         name: description
@@ -171,6 +242,9 @@ collections:
       - label: Sous-type
         name: categories
         widget: select
+        multiple: true
+        min: 1
+        max: 1
         options:
           - label: Actualité
             value: Actu
@@ -251,6 +325,8 @@ collections:
       - label: Contenu
         name: body
         widget: markdown
+        required: true
+        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une actualité sans contenu"
 
   # ─── CALENDRIER ──────────────────────────────────────────────────────────
   - name: calendrier
@@ -260,6 +336,13 @@ collections:
     create: true
     slug: "{{date_debut}}-{{slug}}"
     summary: "{{title}} — {{date_debut}}"
+    view_filters:
+      - label: À la une
+        field: featured
+        pattern: true
+      - label: Publiés
+        field: publie
+        pattern: true
     editor:
       preview: false
     fields:
@@ -267,6 +350,13 @@ collections:
         name: publie
         widget: boolean
         default: true
+
+      - label: Mettre à la une
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: "Affiche cet événement dans le grand carrousel À la une de la page d'accueil"
 
       - label: Titre
         name: title
@@ -284,11 +374,116 @@ collections:
         date_format: DD/MM/YYYY
         time_format: false
 
+      - label: Toute la journée
+        name: toute_la_journee
+        widget: boolean
+        default: false
+        required: false
+        hint: "À cocher si l'événement n'a pas d'heure précise"
+
       - label: Heure de début
         name: heure_debut
-        widget: string
+        widget: select
         required: false
-        hint: "Format conseillé : HH:MM"
+        options:
+          - label: Non précisé
+            value: ""
+          - "00:00"
+          - "00:15"
+          - "00:30"
+          - "00:45"
+          - "01:00"
+          - "01:15"
+          - "01:30"
+          - "01:45"
+          - "02:00"
+          - "02:15"
+          - "02:30"
+          - "02:45"
+          - "03:00"
+          - "03:15"
+          - "03:30"
+          - "03:45"
+          - "04:00"
+          - "04:15"
+          - "04:30"
+          - "04:45"
+          - "05:00"
+          - "05:15"
+          - "05:30"
+          - "05:45"
+          - "06:00"
+          - "06:15"
+          - "06:30"
+          - "06:45"
+          - "07:00"
+          - "07:15"
+          - "07:30"
+          - "07:45"
+          - "08:00"
+          - "08:15"
+          - "08:30"
+          - "08:45"
+          - "09:00"
+          - "09:15"
+          - "09:30"
+          - "09:45"
+          - "10:00"
+          - "10:15"
+          - "10:30"
+          - "10:45"
+          - "11:00"
+          - "11:15"
+          - "11:30"
+          - "11:45"
+          - "12:00"
+          - "12:15"
+          - "12:30"
+          - "12:45"
+          - "13:00"
+          - "13:15"
+          - "13:30"
+          - "13:45"
+          - "14:00"
+          - "14:15"
+          - "14:30"
+          - "14:45"
+          - "15:00"
+          - "15:15"
+          - "15:30"
+          - "15:45"
+          - "16:00"
+          - "16:15"
+          - "16:30"
+          - "16:45"
+          - "17:00"
+          - "17:15"
+          - "17:30"
+          - "17:45"
+          - "18:00"
+          - "18:15"
+          - "18:30"
+          - "18:45"
+          - "19:00"
+          - "19:15"
+          - "19:30"
+          - "19:45"
+          - "20:00"
+          - "20:15"
+          - "20:30"
+          - "20:45"
+          - "21:00"
+          - "21:15"
+          - "21:30"
+          - "21:45"
+          - "22:00"
+          - "22:15"
+          - "22:30"
+          - "22:45"
+          - "23:00"
+          - "23:15"
+          - "23:30"
+          - "23:45"
 
       - label: Date de fin
         name: date_fin
@@ -300,9 +495,107 @@ collections:
 
       - label: Heure de fin
         name: heure_fin
-        widget: string
+        widget: select
         required: false
-        hint: "Format conseillé : HH:MM"
+        options:
+          - label: Non précisé
+            value: ""
+          - "00:00"
+          - "00:15"
+          - "00:30"
+          - "00:45"
+          - "01:00"
+          - "01:15"
+          - "01:30"
+          - "01:45"
+          - "02:00"
+          - "02:15"
+          - "02:30"
+          - "02:45"
+          - "03:00"
+          - "03:15"
+          - "03:30"
+          - "03:45"
+          - "04:00"
+          - "04:15"
+          - "04:30"
+          - "04:45"
+          - "05:00"
+          - "05:15"
+          - "05:30"
+          - "05:45"
+          - "06:00"
+          - "06:15"
+          - "06:30"
+          - "06:45"
+          - "07:00"
+          - "07:15"
+          - "07:30"
+          - "07:45"
+          - "08:00"
+          - "08:15"
+          - "08:30"
+          - "08:45"
+          - "09:00"
+          - "09:15"
+          - "09:30"
+          - "09:45"
+          - "10:00"
+          - "10:15"
+          - "10:30"
+          - "10:45"
+          - "11:00"
+          - "11:15"
+          - "11:30"
+          - "11:45"
+          - "12:00"
+          - "12:15"
+          - "12:30"
+          - "12:45"
+          - "13:00"
+          - "13:15"
+          - "13:30"
+          - "13:45"
+          - "14:00"
+          - "14:15"
+          - "14:30"
+          - "14:45"
+          - "15:00"
+          - "15:15"
+          - "15:30"
+          - "15:45"
+          - "16:00"
+          - "16:15"
+          - "16:30"
+          - "16:45"
+          - "17:00"
+          - "17:15"
+          - "17:30"
+          - "17:45"
+          - "18:00"
+          - "18:15"
+          - "18:30"
+          - "18:45"
+          - "19:00"
+          - "19:15"
+          - "19:30"
+          - "19:45"
+          - "20:00"
+          - "20:15"
+          - "20:30"
+          - "20:45"
+          - "21:00"
+          - "21:15"
+          - "21:30"
+          - "21:45"
+          - "22:00"
+          - "22:15"
+          - "22:30"
+          - "22:45"
+          - "23:00"
+          - "23:15"
+          - "23:30"
+          - "23:45"
 
       - label: Lieu
         name: lieu

@@ -3,9 +3,6 @@ site_name: Médiation scientifique - Inria
 extra:
   noindex: !ENV [MKDOCS_NO_INDEX, false]
 
-exclude_docs: |
-  contenus/evenements/**
-
 theme:
   font:
     text: InriaSans-Regular
@@ -34,10 +31,13 @@ extra_css:
   - assets/stylesheets/extra.css
 extra_javascript:
   - assets/javascripts/analytics/matomo.js
-  - assets/javascripts/calendar/home-calendar.js
+  - assets/javascripts/header-scroll.js
+  - assets/javascripts/home-hero.js
+  - assets/javascripts/home-carousel.js
 
 hooks:
   - scripts/build/calendar_events.py
+  - scripts/build/featured_actualites.py
 
 
 
@@ -77,4 +77,5 @@ plugins:
         post_url_format: "{slug}"
         authors: false
         pagination_per_page: 12
-    # - search # necessary for search to work
+    - material/search:
+        lang: fr

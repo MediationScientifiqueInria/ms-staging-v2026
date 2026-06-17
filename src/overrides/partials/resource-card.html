@@ -1,0 +1,88 @@
+<article class="resource-card">
+  {% set clean = namespace(description = post.meta.description | default("", true) | trim) %}
+  {% if clean.description | string | trim | lower == "none" %}
+    {% set clean.description = "" %}
+  {% endif %}
+
+  {% set fallback = namespace(excerpt = post.content | striptags | trim) %}
+  {% if fallback.excerpt.startswith("# " ~ post.title) %}
+    {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
+  {% endif %}
+  {% if fallback.excerpt.startswith(post.title) %}
+    {% set fallback.excerpt = fallback.excerpt.replace(post.title, "", 1) | trim %}
+  {% endif %}
+  {% if fallback.excerpt | string | trim | lower == "none" %}
+    {% set fallback.excerpt = "" %}
+  {% endif %}
+
+  {% set excerpt = clean.description or fallback.excerpt %}
+  {% set external_url = post.meta.url_externe | default("", true) | trim %}
+  {% set source = post.meta.source | default("", true) | trim %}
+  {% set image = post.meta.cover_image or "assets/images/Inria-mediation.png" %}
+
+  <a class="resource-card__image" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+    <img src="{{ image | url }}" alt="">
+  </a>
+
+  <div class="resource-card__content">
+    <div class="resource-card__chips" aria-label="Informations principales">
+      {% if post.meta.tags %}
+        {% for tag in post.meta.tags[:2] %}
+          <span class="resource-card__chip">{{ tag }}</span>
+        {% endfor %}
+      {% endif %}
+      {% if post.meta.support %}
+        {% for support in post.meta.support[:1] %}
+          <span class="resource-card__chip resource-card__chip--muted">{{ support }}</span>
+        {% endfor %}
+      {% endif %}
+      {% if post.meta.langue %}
+        <span class="resource-card__chip resource-card__chip--muted">{{ post.meta.langue | upper }}</span>
+      {% endif %}
+    </div>
+
+    <h2 class="resource-card__title">
+      <a href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+        {{ post.title }}
+      </a>
+    </h2>
+
+    {% if excerpt %}
+      <p>{{ excerpt | truncate(155, true, "...") }}</p>
+    {% endif %}
+
+    <dl class="resource-card__details">
+      {% if post.meta.thematiques %}
+        <div>
+          <dt>Theme</dt>
+          <dd>{{ post.meta.thematiques[:2] | join(", ") }}</dd>
+        </div>
+      {% endif %}
+      {% if post.meta.cibles %}
+        <div>
+          <dt>Public</dt>
+          <dd>{{ post.meta.cibles[:2] | join(", ") }}</dd>
+        </div>
+      {% endif %}
+      {% if source or post.meta.auteur %}
+        <div>
+          <dt>Source</dt>
+          <dd>{{ source or post.meta.auteur }}</dd>
+        </div>
+      {% endif %}
+    </dl>
+
+    <footer class="resource-card__footer">
+      {% if post.meta.date_maj %}
+        <span>Mis a jour le {{ post.meta.date_maj | date }}</span>
+      {% elif post.config.date.created %}
+        <span>Ajoute le {{ post.config.date.created | date }}</span>
+      {% endif %}
+
+      <a class="resource-card__action" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+        Consulter
+        <span aria-hidden="true">↗</span>
+      </a>
+    </footer>
+  </div>
+</article>

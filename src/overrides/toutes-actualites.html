@@ -1,0 +1,72 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="md-content" data-md-component="content">
+  <div class="md-content__inner">
+    <header class="md-typeset">
+      {{ page.content }}
+    </header>
+
+    <div class="actualites-posts">
+      {% for item in all_actualites %}
+        <article class="resource-card">
+          <a class="resource-card__image" href="{{ item.url | url }}">
+            <img src="{{ item.image | url }}" alt="">
+          </a>
+
+          <div class="resource-card__content">
+            <div class="resource-card__chips" aria-label="Informations principales">
+              {% if item.tags %}
+                {% for tag in item.tags[:2] %}
+                  <span class="resource-card__chip">{{ tag }}</span>
+                {% endfor %}
+              {% else %}
+                <span class="resource-card__chip">Actualité</span>
+              {% endif %}
+            </div>
+
+            <h2 class="resource-card__title">
+              <a href="{{ item.url | url }}">{{ item.title }}</a>
+            </h2>
+
+            {% if item.excerpt %}
+              <p>{{ item.excerpt | truncate(155, true, "...") }}</p>
+            {% endif %}
+
+            <dl class="resource-card__details">
+              {% if item.date %}
+                <div>
+                  <dt>Date</dt>
+                  <dd>{{ item.date }}</dd>
+                </div>
+              {% endif %}
+              {% if item.themes %}
+                <div>
+                  <dt>Theme</dt>
+                  <dd>{{ item.themes[:2] | join(", ") }}</dd>
+                </div>
+              {% endif %}
+              {% if item.auteur %}
+                <div>
+                  <dt>Auteur</dt>
+                  <dd>{{ item.auteur }}</dd>
+                </div>
+              {% endif %}
+            </dl>
+
+            <footer class="resource-card__footer">
+              <a class="resource-card__action" href="{{ item.url | url }}">
+                Lire
+                <span aria-hidden="true">↗</span>
+              </a>
+            </footer>
+          </div>
+        </article>
+      {% else %}
+        <p class="actualites-empty md-typeset">Aucune actualité publiée pour le moment.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

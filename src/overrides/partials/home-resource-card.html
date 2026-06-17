@@ -1,0 +1,59 @@
+<article class="resource-card">
+  {% set target_url = resource.external_url or resource.url %}
+  <a class="resource-card__image" href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
+    <img src="{{ resource.image | url }}" alt="">
+  </a>
+
+  <div class="resource-card__content">
+    <div class="resource-card__chips" aria-label="Informations principales">
+      {% for tag in resource.tags[:2] %}
+        <span class="resource-card__chip">{{ tag }}</span>
+      {% endfor %}
+      {% for support in resource.support[:1] %}
+        <span class="resource-card__chip resource-card__chip--muted">{{ support }}</span>
+      {% endfor %}
+    </div>
+
+    <h2 class="resource-card__title">
+      <a href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
+        {{ resource.title }}
+      </a>
+    </h2>
+
+    {% if resource.excerpt %}
+      <p>{{ resource.excerpt | truncate(155, true, "...") }}</p>
+    {% endif %}
+
+    <dl class="resource-card__details">
+      {% if resource.themes %}
+        <div>
+          <dt>Theme</dt>
+          <dd>{{ resource.themes[:2] | join(", ") }}</dd>
+        </div>
+      {% endif %}
+      {% if resource.cibles %}
+        <div>
+          <dt>Public</dt>
+          <dd>{{ resource.cibles[:2] | join(", ") }}</dd>
+        </div>
+      {% endif %}
+      {% if resource.source %}
+        <div>
+          <dt>Source</dt>
+          <dd>{{ resource.source }}</dd>
+        </div>
+      {% endif %}
+    </dl>
+
+    <footer class="resource-card__footer">
+      {% if resource.date %}
+        <span>Ajoute le {{ resource.date }}</span>
+      {% endif %}
+
+      <a class="resource-card__action" href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
+        Consulter
+        <span aria-hidden="true">↗</span>
+      </a>
+    </footer>
+  </div>
+</article>
