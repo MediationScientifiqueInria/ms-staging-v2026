@@ -1,0 +1,90 @@
+
+<article class="resource-card">
+  {% set clean = namespace(description = post.meta.description | default("", true) | trim) %}
+  {% if clean.description | string | trim | lower == "none" %}
+    {% set clean.description = "" %}
+  {% endif %}
+  {% set image = post.meta.cover_image %}
+  {% if not image and "![" in post.post.markdown and "](" in post.post.markdown %}
+    {% set image_parts = post.post.markdown.split("](", 1) %}
+    {% if image_parts | length > 1 %}
+      {% set image = image_parts[1].split(")", 1)[0] %}
+    {% endif %}
+  {% endif %}
+  {% set fallback = namespace(excerpt = post.content | striptags | trim) %}
+  {% if fallback.excerpt.startswith("# " ~ post.title) %}
+    {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
+  {% endif %}
+  {% if fallback.excerpt.startswith(post.title) %}
+    {% set fallback.excerpt = fallback.excerpt.replace(post.title, "", 1) | trim %}
+  {% endif %}
+  {% if fallback.excerpt | string | trim | lower == "none" %}
+    {% set fallback.excerpt = "" %}
+  {% endif %}
+  {% if not fallback.excerpt %}
+    {% set fallback.excerpt = post.markdown | default("", true) | trim %}
+    {% if fallback.excerpt.startswith("# " ~ post.title) %}
+      {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
+    {% endif %}
+    {% if fallback.excerpt.startswith("![") and ")" in fallback.excerpt %}
+      {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
+    {% endif %}
+  {% endif %}
+  {% set excerpt = clean.description or fallback.excerpt %}
+
+  {% set image = image or "assets/images/Inria-mediation.png" %}
+  <a class="resource-card__image" href="{{ post.url | url }}">
+    <img src="{{ image | url }}" alt="">
+  </a>
+
+  <div class="resource-card__content">
+    <div class="resource-card__chips" aria-label="Informations principales">
+      {% if post.meta.categories %}
+        {% for category in post.meta.categories[:2] %}
+          <span class="resource-card__chip">{{ category }}</span>
+        {% endfor %}
+      {% else %}
+        <span class="resource-card__chip">Actualité</span>
+      {% endif %}
+    </div>
+
+    <h2 class="resource-card__title">
+      <a href="{{ post.url | url }}">{{ post.title }}</a>
+    </h2>
+
+    {% if excerpt %}
+      <p>{{ excerpt | truncate(155, true, "...") }}</p>
+    {% endif %}
+
+    <dl class="resource-card__details">
+      {% if post.config.date.created %}
+        <div>
+          <dt>Date</dt>
+          <dd>{{ post.config.date.created | date }}</dd>
+        </div>
+      {% endif %}
+      {% if post.meta.thematiques %}
+        <div>
+          <dt>Theme</dt>
+          <dd>{{ post.meta.thematiques[:2] | join(", ") }}</dd>
+        </div>
+      {% endif %}
+      {% if post.meta.auteur %}
+        <div>
+          <dt>Auteur</dt>
+          <dd>{{ post.meta.auteur }}</dd>
+        </div>
+      {% endif %}
+    </dl>
+
+    <footer class="resource-card__footer">
+      {% if post.config.draft %}
+        <span class="md-draft">{{ lang.t("blog.draft") }}</span>
+      {% endif %}
+      <a class="resource-card__action" href="{{ post.url | url }}">
+        Lire
+        <span aria-hidden="true">↗</span>
+      </a>
+    </footer>
+  </div>
+</article>

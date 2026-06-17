@@ -1,0 +1,25 @@
+{% extends "blog.html" %}
+
+{% block container %}
+<div class="md-content ressources-content" data-md-component="content">
+  <div class="md-content__inner ressources-content__inner">
+    <header class="md-typeset">
+      {{ page.content }}
+    </header>
+
+    <div class="ressources-posts">
+      {% for post in posts %}
+        {% include "partials/resource-card.html" %}
+      {% else %}
+        <p class="actualites-empty md-typeset">Aucune ressource publiée pour le moment.</p>
+      {% endfor %}
+    </div>
+
+    {% if pagination %}
+      {% block pagination %}
+        {% include "partials/pagination.html" %}
+      {% endblock %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

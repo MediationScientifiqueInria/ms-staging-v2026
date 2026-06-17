@@ -61,6 +61,55 @@ html.admin-calendar-route .main.svelte-7y4msj {
   color: #ffffff;
 }
 
+.admin-event-time-field {
+  max-width: 220px !important;
+}
+
+.admin-event-time-input {
+  max-width: 9rem !important;
+}
+
+.admin-event-time-input.is-disabled-by-all-day {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.admin-event-time-menu {
+  position: fixed;
+  z-index: 2147483647;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #dfe4ef;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(32, 39, 52, 0.2);
+}
+
+.admin-event-time-menu[hidden] {
+  display: none;
+}
+
+.admin-event-time-menu__option {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  padding: 0 18px;
+  background: #ffffff;
+  color: #202734;
+  cursor: pointer;
+  font: inherit;
+  font-size: 20px;
+  line-height: 44px;
+  text-align: left;
+}
+
+.admin-event-time-menu__option:hover,
+.admin-event-time-menu__option:focus-visible,
+.admin-event-time-menu__option[aria-selected="true"] {
+  background: #dfe5ee;
+}
+
 .admin-calendar,
 .admin-calendar * {
   box-sizing: border-box;

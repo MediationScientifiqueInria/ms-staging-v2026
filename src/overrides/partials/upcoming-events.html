@@ -1,0 +1,33 @@
+<section class="home-band home-band--blue actualites-upcoming" aria-labelledby="upcoming-events-title">
+  <div class="home-band__inner">
+    <div class="section-heading actualites-upcoming__heading">
+      <div>
+        <span class="actualites-upcoming__eyebrow">Événements</span>
+        <h2 id="upcoming-events-title">Événements à venir</h2>
+      </div>
+      <a href="{{ 'contenus/evenements/' | url }}">Voir tous les événements</a>
+    </div>
+
+    <div class="home-carousel" data-carousel>
+      <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Événements précédents" data-carousel-prev>
+        ‹
+      </button>
+      <div class="events-posts actualites-upcoming__posts home-carousel__track" data-carousel-track>
+      {% set upcoming_events = namespace(count=0) %}
+      {% for event in home_evenements %}
+        {% if upcoming_events.count < 8 %}
+          {% set upcoming_events.count = upcoming_events.count + 1 %}
+          {% include "partials/event-card.html" %}
+        {% endif %}
+      {% endfor %}
+
+      {% if upcoming_events.count == 0 %}
+        <p class="actualites-empty md-typeset">Aucun événement à venir pour le moment.</p>
+      {% endif %}
+      </div>
+      <button class="home-carousel__button home-carousel__button--next" type="button" aria-label="Événements suivants" data-carousel-next>
+        ›
+      </button>
+    </div>
+  </div>
+</section>

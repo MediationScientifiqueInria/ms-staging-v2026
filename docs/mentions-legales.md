@@ -1,6 +1,11 @@
 ---
 title: Mentions légales
 description: Retrouvez toutes les mentions légales du site de la Médiation Scientifique d'Inria.
+search:
+  exclude: true
+hide:
+  - navigation
+  - toc
 ---
 
 # Mentions légales

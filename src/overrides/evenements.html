@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="md-content" data-md-component="content">
+  <div class="md-content__inner">
+    {% set active_month = current_evenements_month %}
+    {% include "partials/events-month-view.html" %}
+  </div>
+</div>
+{% endblock %}

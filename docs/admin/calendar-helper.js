@@ -11,6 +11,10 @@
   };
   var root;
   var nativeReturnButton;
+  var editorObserver;
+  var timeDropdown;
+  var activeTimeInput;
+  var activeTimeIndex = -1;
 
   function onReady(callback) {
     if (document.readyState === "loading") {
@@ -73,6 +77,18 @@
     return date.getFullYear() + "-" + month + "-" + day;
   }
 
+  function timeOptions() {
+    var options = [];
+
+    for (var hour = 0; hour < 24; hour += 1) {
+      for (var minute = 0; minute < 60; minute += 15) {
+        options.push(String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0"));
+      }
+    }
+
+    return options;
+  }
+
   function formatDate(date) {
     return new Intl.DateTimeFormat(locale, {
       day: "numeric",
@@ -118,8 +134,9 @@
       description: event.description || "",
       start: start,
       end: end,
-      startTime: event.heure_debut || "",
-      endTime: event.heure_fin || "",
+      allDay: event.toute_la_journee === true,
+      startTime: event.toute_la_journee === true ? "" : event.heure_debut || "",
+      endTime: event.toute_la_journee === true ? "" : event.heure_fin || "",
       location: event.lieu || "",
       type: event.type || "Événement",
       tags: normalizeTags(event.tags),
@@ -202,6 +219,7 @@
       date_debut: isoDate(date),
       date_fin: isoDate(date),
       publie: "true",
+      toute_la_journee: "false",
       type: "Événement",
       couleur: "#d95e61",
       libelle_lien: "En savoir plus",
@@ -246,7 +264,9 @@
       label += " → " + formatDate(event.end);
     }
 
-    if (event.startTime) {
+    if (event.allDay) {
+      label += " · Toute la journée";
+    } else if (event.startTime) {
       label += " · " + event.startTime;
 
       if (event.endTime) {
@@ -255,6 +275,321 @@
     }
 
     return label;
+  }
+
+  function dispatchNativeInput(input) {
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function filteredTimeOptions(value) {
+    var query = String(value || "").trim();
+    var numericQuery = query.replace(":", "");
+
+    if (!query) {
+      return timeOptions();
+    }
+
+    return timeOptions().filter(function (time) {
+      return time.indexOf(query) === 0 || time.replace(":", "").indexOf(numericQuery) === 0;
+    });
+  }
+
+  function ensureTimeDropdown() {
+    if (timeDropdown) {
+      return timeDropdown;
+    }
+
+    timeDropdown = document.createElement("div");
+    timeDropdown.className = "admin-event-time-menu";
+    timeDropdown.setAttribute("role", "listbox");
+    timeDropdown.hidden = true;
+    document.body.appendChild(timeDropdown);
+
+    document.addEventListener("mousedown", function (event) {
+      if (!activeTimeInput) {
+        return;
+      }
+
+      if (event.target === activeTimeInput || timeDropdown.contains(event.target)) {
+        return;
+      }
+
+      closeTimeDropdown();
+    });
+
+    window.addEventListener("resize", positionTimeDropdown);
+    window.addEventListener("scroll", positionTimeDropdown, true);
+
+    return timeDropdown;
+  }
+
+  function positionTimeDropdown() {
+    var rect;
+
+    if (!activeTimeInput || !timeDropdown || timeDropdown.hidden) {
+      return;
+    }
+
+    rect = activeTimeInput.getBoundingClientRect();
+    timeDropdown.style.left = Math.round(rect.left) + "px";
+    timeDropdown.style.top = Math.round(rect.bottom + 6) + "px";
+    timeDropdown.style.width = Math.max(170, Math.round(rect.width)) + "px";
+  }
+
+  function closeTimeDropdown() {
+    if (!timeDropdown) {
+      return;
+    }
+
+    timeDropdown.hidden = true;
+    timeDropdown.innerHTML = "";
+    activeTimeInput = null;
+    activeTimeIndex = -1;
+  }
+
+  function selectTimeOption(value) {
+    if (!activeTimeInput) {
+      return;
+    }
+
+    activeTimeInput.value = value;
+    dispatchNativeInput(activeTimeInput);
+    activeTimeInput.focus();
+    closeTimeDropdown();
+  }
+
+  function renderTimeDropdown() {
+    var options;
+
+    if (!activeTimeInput) {
+      return;
+    }
+
+    ensureTimeDropdown();
+    options = filteredTimeOptions(activeTimeInput.value);
+
+    if (!options.length) {
+      options = timeOptions();
+    }
+
+    activeTimeIndex = options.indexOf(activeTimeInput.value);
+
+    if (activeTimeIndex < 0) {
+      activeTimeIndex = 0;
+    }
+
+    timeDropdown.innerHTML = "";
+
+    options.forEach(function (time, index) {
+      var option = document.createElement("button");
+      option.type = "button";
+      option.className = "admin-event-time-menu__option";
+      option.setAttribute("role", "option");
+      option.setAttribute("aria-selected", index === activeTimeIndex ? "true" : "false");
+      option.textContent = time;
+      option.addEventListener("mousedown", function (event) {
+        event.preventDefault();
+      });
+      option.addEventListener("click", function () {
+        selectTimeOption(time);
+      });
+      timeDropdown.appendChild(option);
+    });
+
+    timeDropdown.hidden = false;
+    positionTimeDropdown();
+
+    if (timeDropdown.children[activeTimeIndex]) {
+      timeDropdown.children[activeTimeIndex].scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function moveTimeSelection(offset) {
+    var options;
+
+    if (!activeTimeInput || !timeDropdown || timeDropdown.hidden) {
+      return;
+    }
+
+    options = Array.prototype.slice.call(timeDropdown.children);
+    activeTimeIndex = Math.max(0, Math.min(options.length - 1, activeTimeIndex + offset));
+
+    options.forEach(function (option, index) {
+      option.setAttribute("aria-selected", index === activeTimeIndex ? "true" : "false");
+    });
+
+    if (options[activeTimeIndex]) {
+      options[activeTimeIndex].scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function findInputByName(name) {
+    var labels = {
+      heure_debut: "Heure de début",
+      heure_fin: "Heure de fin",
+      toute_la_journee: "Toute la journée",
+    };
+    var direct = document.querySelector(
+      [
+        'input[name="' + name + '"]',
+        'input[id*="' + name + '"]',
+        'input[aria-label*="' + name + '"]',
+      ].join(",")
+    );
+    var labelText;
+    var label;
+    var field;
+
+    if (direct) {
+      return direct;
+    }
+
+    labelText = labels[name];
+
+    if (!labelText) {
+      return null;
+    }
+
+    label = Array.prototype.slice.call(document.querySelectorAll("label, legend, span, p, div")).find(function (element) {
+      return element.textContent.trim().replace(/\s+/g, " ") === labelText;
+    });
+
+    if (!label) {
+      return null;
+    }
+
+    field = label.closest("label, fieldset, div");
+
+    if (!field) {
+      return null;
+    }
+
+    return field.querySelector("input");
+  }
+
+  function findFieldByName(name) {
+    var direct = document.querySelector(
+      [
+        'input[name="' + name + '"]',
+        'select[name="' + name + '"]',
+        'input[id*="' + name + '"]',
+        'select[id*="' + name + '"]',
+      ].join(",")
+    );
+
+    if (direct) {
+      return direct;
+    }
+
+    return findInputByName(name);
+  }
+
+  function enhanceTimeInput(name) {
+    var input = findInputByName(name);
+    var field;
+
+    if (!input || input.dataset.adminTimeEnhanced === "true") {
+      return input;
+    }
+
+    input.dataset.adminTimeEnhanced = "true";
+    input.setAttribute("placeholder", name === "heure_debut" ? "09:00" : "17:00");
+    input.setAttribute("inputmode", "numeric");
+    input.setAttribute("pattern", "([01][0-9]|2[0-3]):[0-5][0-9]");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("aria-haspopup", "listbox");
+    input.classList.add("admin-event-time-input");
+
+    field = input.closest("label, fieldset, div");
+
+    if (field) {
+      field.classList.add("admin-event-time-field");
+    }
+
+    input.addEventListener("focus", function () {
+      activeTimeInput = input;
+      renderTimeDropdown();
+    });
+
+    input.addEventListener("click", function () {
+      activeTimeInput = input;
+      renderTimeDropdown();
+    });
+
+    input.addEventListener("input", function () {
+      activeTimeInput = input;
+      renderTimeDropdown();
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        activeTimeInput = input;
+        renderTimeDropdown();
+        moveTimeSelection(1);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        activeTimeInput = input;
+        renderTimeDropdown();
+        moveTimeSelection(-1);
+      } else if (event.key === "Enter" && timeDropdown && !timeDropdown.hidden) {
+        event.preventDefault();
+
+        if (timeDropdown.children[activeTimeIndex]) {
+          selectTimeOption(timeDropdown.children[activeTimeIndex].textContent);
+        }
+      } else if (event.key === "Escape") {
+        closeTimeDropdown();
+      }
+    });
+
+    return input;
+  }
+
+  function enhanceAllDayToggle() {
+    var checkbox = findInputByName("toute_la_journee");
+    var startInput = findFieldByName("heure_debut");
+    var endInput = findFieldByName("heure_fin");
+
+    if (!checkbox || checkbox.dataset.adminAllDayEnhanced === "true") {
+      return;
+    }
+
+    checkbox.dataset.adminAllDayEnhanced = "true";
+
+    function syncAllDay() {
+      var isAllDay = checkbox.checked;
+
+      [startInput, endInput].forEach(function (input) {
+        if (!input) {
+          return;
+        }
+
+        input.disabled = isAllDay;
+        input.classList.toggle("is-disabled-by-all-day", isAllDay);
+
+        if (isAllDay) {
+          input.value = "";
+          dispatchNativeInput(input);
+        }
+      });
+
+      if (isAllDay) {
+        closeTimeDropdown();
+      }
+    }
+
+    checkbox.addEventListener("change", syncAllDay);
+    syncAllDay();
+  }
+
+  function enhanceNativeEditor() {
+    if (!window.location.hash.includes("/collections/calendrier/")) {
+      return;
+    }
+
+    enhanceAllDayToggle();
   }
 
   function createEventButton(event, compact) {
@@ -604,6 +939,10 @@
     createNativeReturnButton();
     loadEvents().then(syncRoute);
     window.addEventListener("hashchange", syncRoute);
+    window.addEventListener("hashchange", function () {
+      window.setTimeout(enhanceNativeEditor, 150);
+      window.setTimeout(enhanceNativeEditor, 500);
+    });
     window.addEventListener("resize", function () {
       if (isCalendarCollectionRoute()) {
         updateNavigationWidth();
@@ -624,5 +963,8 @@
         loadEvents();
       }
     });
+    editorObserver = new MutationObserver(enhanceNativeEditor);
+    editorObserver.observe(document.body, { childList: true, subtree: true });
+    enhanceNativeEditor();
   });
 })();

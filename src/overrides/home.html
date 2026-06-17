@@ -5,172 +5,152 @@
 
 <!-- Content -->
 {% block content %}
-<section>
-  <div>
-    <div>
-      <!-- Banner content -->
-      <!--             <div class="title-logo-rf">
-                <div class="title-logo-rf_img">
-                    <a href="https://www.inria.fr/fr"><img src="assets/images/RF-Inria_Logo_RVB.png" alt="Logo Republique Francaise Inria"></a>
-                    
-                </div> -->
-      <h1>Comprendre, partager, transmettre !</h1>
-    </div>
-    <div>
-      <figure id="image-intro">
-        <img src="assets/images/Inria-0338-075-HD.webp" alt="photo de l'espace d'exposition à Rocquencourt" />
-        <figcaption>© Inria / Photo B. Fourrier</figcaption>
-      </figure>
-      <div class="card-intro">
-        <p><strong>Les sciences du numérique vont à la rencontre de tous et toutes !</strong></p>
-
-        <p>
-          Nous créons et partageons des ateliers, des expositions, des jeux et des ressources de médiation
-          scientifique pour donner à tous et toutes envie de découvrir le monde fascinant des sciences et
-          technologies du numérique.
-        </p>
-        <p>
-          Que vous soyez curieux, enseignants, scientifiques, vous trouverez ici un aperçu de nos projets et de nos
-          collaborations.
-        </p>
-        <p>👉 On bosse dur dans les coulisses ! Le site est en chantier, il sera plus complet bientôt !</p>
-        <div><a id="mailto" href="mailto:mediation-scientifique@inria.fr">Nous contacter</a></div>
-      </div>
-    </div>
+<section class="home-hero" data-hero-slideshow>
+  <div class="home-hero__slides" aria-hidden="true">
+    <div class="home-hero__slide is-active" style="background-image: url('{{ "assets/images/1007721 (1).png" | url }}')"></div>
+    <div class="home-hero__slide" style="background-image: url('{{ "assets/images/Centre-Inria-de-Paris_0.jpg" | url }}')"></div>
+    <div class="home-hero__slide" style="background-image: url('{{ "assets/images/G_centre-inria-universite-lorraine_Facade-3-Inria-0239-438_1080x608.png" | url }}')"></div>
+  </div>
+  <div class="home-hero__content">
+    <h1>Comprendre, partager, transmettre !</h1>
+    <p>
+      Nous créons et partageons des ateliers, des expositions, des jeux et des ressources de médiation scientifique
+      pour donner à tous et toutes envie de découvrir le monde fascinant des sciences et technologies du numérique.
+    </p>
+    <p>
+      Que vous soyez curieux, enseignants, scientifiques, vous trouverez ici un aperçu de nos projets et de nos
+      collaborations.
+    </p>
   </div>
 </section>
 
-<section class="home-calendar-section" aria-labelledby="agenda-title">
-  <div class="home-calendar" data-home-calendar data-events-url="{{ base_url }}/data/evenements.json">
-    <div class="home-calendar__header">
-      <div>
-        <p class="home-calendar__eyebrow">Agenda</p>
-        <h2 id="agenda-title">Les prochains événements</h2>
+{% if home_featured_items %}
+<section class="home-band">
+  <div class="home-band__inner">
+    <div class="home-featured">
+      <div class="home-featured__header">
+        <h2>À la une</h2>
       </div>
-      <div class="home-calendar__controls" aria-label="Navigation du calendrier">
-        <button class="home-calendar__nav" type="button" data-calendar-prev aria-label="Mois précédent">‹</button>
-        <p class="home-calendar__month" data-calendar-month aria-live="polite"></p>
-        <button class="home-calendar__nav" type="button" data-calendar-next aria-label="Mois suivant">›</button>
-      </div>
-    </div>
 
-    <div class="home-calendar__layout">
-      <div class="home-calendar__grid-wrap">
-        <div class="home-calendar__weekdays" aria-hidden="true">
-          <span>Lun.</span>
-          <span>Mar.</span>
-          <span>Mer.</span>
-          <span>Jeu.</span>
-          <span>Ven.</span>
-          <span>Sam.</span>
-          <span>Dim.</span>
+      <div class="home-featured__layout">
+        <div class="home-featured-main-carousel home-carousel" data-carousel data-carousel-autoplay data-carousel-interval="4000">
+          <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Contenu à la une précédent" data-carousel-prev>
+            ‹
+          </button>
+          <div class="home-featured-main-carousel__track home-carousel__track" data-carousel-track>
+            {% for main_post in home_featured_items %}
+              <article class="home-featured__main">
+                {% if main_post.image %}
+                  <a class="home-featured__main-image" href="{{ main_post.url | url }}">
+                    <img src="{{ main_post.image | url }}" alt="">
+                  </a>
+                {% endif %}
+                <div class="home-featured__content">
+                  <span class="home-featured__type">{{ main_post.type_label }}</span>
+                  <div class="home-featured__title-row">
+                    <h3><a href="{{ main_post.url | url }}">{{ main_post.title }}</a></h3>
+                    {% if main_post.date %}
+                      <time>{{ main_post.date }}</time>
+                    {% endif %}
+                  </div>
+                  {% if main_post.excerpt %}
+                    <p>{{ main_post.excerpt | truncate(180, true, "...") }}</p>
+                  {% endif %}
+                  <footer class="home-featured__meta">
+                    {% if main_post.themes %}
+                      <span class="post-card__themes" aria-label="Thématiques">
+                        {% for theme in main_post.themes %}
+                          <span class="post-card__theme">{{ theme }}</span>
+                        {% endfor %}
+                      </span>
+                    {% endif %}
+                    {% if main_post.auteur %}
+                      <span>{{ main_post.auteur }}</span>
+                    {% endif %}
+                  </footer>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+          <button class="home-carousel__button home-carousel__button--next" type="button" aria-label="Contenu à la une suivant" data-carousel-next>
+            ›
+          </button>
         </div>
-        <div class="home-calendar__grid" data-calendar-grid aria-label="Calendrier mensuel"></div>
-      </div>
 
-      <div class="home-calendar__events">
-        <h3 data-calendar-list-title>À venir</h3>
-        <div class="home-calendar__event-list" data-calendar-events></div>
-        <p class="home-calendar__status" data-calendar-status>Chargement du calendrier...</p>
+        {% if featured_actualites %}
+          <aside class="home-featured__aside" aria-labelledby="home-latest-news-title">
+            <h2 id="home-latest-news-title">Actualités</h2>
+            <div class="home-featured__list">
+            {% for item in featured_actualites[:4] %}
+                <article class="home-featured__item">
+                  {% if item.image %}
+                    <a class="home-featured__item-image" href="{{ item.url | url }}">
+                      <img src="{{ item.image | url }}" alt="">
+                    </a>
+                  {% endif %}
+                  <div class="home-featured__item-content">
+                    <div class="home-featured__title-row">
+                      <h3><a href="{{ item.url | url }}">{{ item.title }}</a></h3>
+                      {% if item.date %}
+                        <time>{{ item.date }}</time>
+                      {% endif %}
+                    </div>
+                    {% if item.excerpt %}
+                      <p>{{ item.excerpt | truncate(75, true, "...") }}</p>
+                    {% endif %}
+                    <footer class="home-featured__meta">
+                      {% if item.themes %}
+                        <span class="post-card__themes" aria-label="Thématiques">
+                          {% for theme in item.themes %}
+                            <span class="post-card__theme">{{ theme }}</span>
+                          {% endfor %}
+                        </span>
+                      {% endif %}
+                      {% if item.auteur %}
+                        <span>{{ item.auteur }}</span>
+                      {% endif %}
+                    </footer>
+                  </div>
+                </article>
+              {% endfor %}
+            </div>
+            <a class="home-featured__aside-link" href="{{ 'contenus/actualites/' | url }}">Voir toutes les actualités</a>
+          </aside>
+        {% endif %}
       </div>
     </div>
-
-    <noscript>
-      <p class="home-calendar__status">Activez JavaScript pour consulter les événements du calendrier.</p>
-    </noscript>
   </div>
 </section>
+{% endif %}
 
-<section>
-  <div>
-    <h2>Explorez nos ressources</h2>
+{% include "partials/upcoming-events.html" %}
 
-    <ul>
-      <li>
-        <strong
-          ><a href="https://www.youtube.com/@Inria-MediationScientifique" target="_blank"
-            >🎞️ Chaîne YouTube Inria - Médiation scientifique</a
-          ></strong
-        >
-        : Vidéos pédagogiques et immersives pour plonger dans l’univers de la recherche.
-      </li>
-      <li>
-        <strong
-          ><a href="https://chiche.inria.fr/" target="_blank">👩‍🔬 1 scientifique, 1 classe : chiche !</a></strong
-        >
-        : Rencontres entre scientifiques et élèves.
-      </li>
-      <li>
-        <strong><a href="https://interstices.info/" target="_blank">🖥️ Interstices.info</a></strong> : Articles de
-        vulgarisation scientifique sur le numérique.
-      </li>
-      <li>
-        <strong
-          ><a href="https://inria.hal.science/INRIA-MEDIATION-SCIENTIFIQUE" target="_blank"
-            >🔬 HAL Inria – Médiation Scientifique</a
-          ></strong
-        >
-        : Publications accessibles à tous.
-      </li>
-      <li>
-        <strong><a href="https://learninglab.inria.fr" target="_blank">🧪 Inria Learning Lab</a></strong> :
-        Formations en ligne et MOOCs.
-      </li>
-    </ul>
-
-    <h3>Retrouvez aussi 👇</h3>
-    <h4>Des jeux :</h4>
-    <div class="game-list">
-      <ul>
-        <li>
-          <strong
-            ><a href="https://interstices.info/jeu-de-7-familles-de-linformatique/" target="_blank"
-              >☛ Jeu de 7 familles de l’informatique</a
-            ></strong
-          >
-        </li>
-        <li>
-          <strong><a href="https://phoneimpact.inria.fr" target="_blank">☛ Phone Impact</a></strong> : Jeu sur
-          l’impact environnemental.
-        </li>
-        <li>
-          <strong><a href="https://iww.inria.fr/NanSciNum/inside/" target="_blank">☛ Inria Inside</a></strong> :
-          Jeu immersif sur l’histoire de l’informatique.
-        </li>
-        <li>
-          <strong
-            ><a href="https://interstices.info/linformatique-de-a-a-z/" target="_blank">☛ Un abécédaire</a></strong
-          >
-          - L’informatique de A à Z.
-        </li>
-      </ul>
-    </div>
-
-    <div>
-      <ul>
-        <li>
-          <a
-            href="https://mediation-scientifique.gitlabpages.inria.fr/anr-medianum/Bandes-dessinees/bd/"
-            target="_blank"
-          >
-            Des bandes dessinées</a
-          >, des expositions sur le quantique, l’interface homme-machine,
-          <a href="https://pixees.fr/exposition-le-numerique-en-eaux-troubles/" target="_blank">
-            l’impact environnemental du numérique sur l’eau...</a
-          >
-        </li>
-      </ul>
-    </div>
-    <section>
-      <div>
-        <p>
-          Pour toute précision, contactez-nous à
-          <a href="mailto:mediation-scientifique@inria.fr">mediation-scientifique@inria.fr</a>
-        </p>
+{% if featured_resources %}
+<section class="home-band">
+  <div class="home-band__inner">
+    <div class="home-resources">
+      <div class="section-heading">
+        <h2>Explorez nos ressources</h2>
+        <a href="{{ 'contenus/ressources/' | url }}">Voir toutes les ressources</a>
       </div>
-    </section>
+
+      <div class="home-carousel" data-carousel>
+        <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Ressources précédentes" data-carousel-prev>
+          ‹
+        </button>
+        <div class="home-resources__grid home-carousel__track" data-carousel-track>
+          {% for resource in all_resources[:8] %}
+            {% include "partials/home-resource-card.html" %}
+          {% endfor %}
+        </div>
+        <button class="home-carousel__button home-carousel__button--next" type="button" aria-label="Ressources suivantes" data-carousel-next>
+          ›
+        </button>
+      </div>
+    </div>
   </div>
 </section>
+{% endif %}
 
 <section>
   <div class="slideshow">

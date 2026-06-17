@@ -1,0 +1,28 @@
+{#-
+  Custom blog view.
+  Wrap post excerpts so resources, archives and categories can share the same
+  card grid as the actualites page.
+-#}
+{% extends "main.html" %}
+
+{% block container %}
+  <div class="md-content" data-md-component="content">
+    <div class="md-content__inner">
+      <header class="md-typeset">
+        {{ page.content }}
+      </header>
+
+      <div class="posts-grid">
+        {% for post in posts %}
+          {% include "partials/post.html" %}
+        {% endfor %}
+      </div>
+
+      {% if pagination %}
+        {% block pagination %}
+          {% include "partials/pagination.html" %}
+        {% endblock %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
