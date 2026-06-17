@@ -1,0 +1,29 @@
+<nav class="events-month-nav" aria-label="Navigation des mois">
+  {% if active_month.prev_url %}
+    <a class="events-month-nav__arrow" href="{{ active_month.prev_url | url }}" aria-label="Mois précédent">‹</a>
+  {% else %}
+    <span class="events-month-nav__arrow is-disabled" aria-hidden="true">‹</span>
+  {% endif %}
+
+  <h1>{{ active_month.label }}</h1>
+
+  {% if active_month.next_url %}
+    <a class="events-month-nav__arrow" href="{{ active_month.next_url | url }}" aria-label="Mois suivant">›</a>
+  {% else %}
+    <span class="events-month-nav__arrow is-disabled" aria-hidden="true">›</span>
+  {% endif %}
+</nav>
+
+<div class="events-posts">
+  {% set month_events = namespace(count=0) %}
+  {% for event in all_evenements %}
+    {% if event.publie and event.month_key == active_month.key %}
+      {% set month_events.count = month_events.count + 1 %}
+      {% include "partials/event-card.html" %}
+    {% endif %}
+  {% endfor %}
+
+  {% if month_events.count == 0 %}
+    <p class="actualites-empty md-typeset">Aucun événement publié pour ce mois.</p>
+  {% endif %}
+</div>

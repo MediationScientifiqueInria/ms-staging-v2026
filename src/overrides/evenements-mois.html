@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="md-content" data-md-component="content">
+  <div class="md-content__inner">
+    {% set active_month = {
+      "key": page.meta.month_key,
+      "label": page.meta.month_label or page.title,
+      "prev_url": page.meta.prev_url,
+      "next_url": page.meta.next_url
+    } %}
+    {% include "partials/events-month-view.html" %}
+  </div>
+</div>
+{% endblock %}
