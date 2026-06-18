@@ -33,13 +33,13 @@
 <section class="home-band">
   <div class="home-band__inner">
     <div class="home-featured">
-      <div class="home-featured__header">
+      <div class="home-featured__header" data-reveal="left">
         <h2>À la une</h2>
         <span class="section-gradient-bar" aria-hidden="true"></span>
       </div>
 
       <div class="home-featured__layout">
-        <div class="home-featured-main-carousel home-carousel" data-carousel data-carousel-autoplay data-carousel-interval="4000">
+        <div class="home-featured-main-carousel home-carousel" data-carousel data-carousel-autoplay data-carousel-interval="4000" data-reveal="left">
           <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Contenu à la une précédent" data-carousel-prev>
             ‹
           </button>
@@ -84,7 +84,7 @@
         </div>
 
         {% if featured_actualites %}
-          <aside class="home-featured__aside" aria-labelledby="home-latest-news-title">
+          <aside class="home-featured__aside" aria-labelledby="home-latest-news-title" data-reveal="right">
             <div class="section-title-wrap">
               <h2 id="home-latest-news-title">Actualités</h2>
               <span class="section-gradient-bar section-gradient-bar--small" aria-hidden="true"></span>
@@ -138,7 +138,7 @@
 <section class="home-band">
   <div class="home-band__inner">
     <div class="home-resources">
-      <div class="section-heading">
+      <div class="section-heading" data-reveal="left">
         <div class="section-title-wrap">
           <h2>Explorez nos ressources</h2>
           <span class="section-gradient-bar" aria-hidden="true"></span>
@@ -146,7 +146,7 @@
         <a href="{{ 'contenus/ressources/' | url }}">Voir toutes les ressources</a>
       </div>
 
-      <div class="home-carousel" data-carousel>
+      <div class="home-carousel" data-carousel data-reveal="right">
         <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Ressources précédentes" data-carousel-prev>
           ‹
         </button>
