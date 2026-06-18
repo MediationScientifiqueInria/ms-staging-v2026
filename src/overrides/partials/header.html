@@ -9,7 +9,7 @@
 {% endif %}
 {% set current_url = page.url | d("", true) %}
 {% if not current_url %}
-  {% set class = class ~ " site-header--transparent" %}
+  {% set class = class ~ " site-header--home site-header--transparent" %}
 {% endif %}
 <header class="{{ class }}" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="{{ lang.t('header') }}">
