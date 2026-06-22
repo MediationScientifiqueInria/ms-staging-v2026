@@ -69,10 +69,11 @@
           <dd>{{ post.meta.thematiques[:2] | join(", ") }}</dd>
         </div>
       {% endif %}
-      {% if post.meta.auteur %}
+      {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
+      {% if author %}
         <div>
           <dt>Auteur</dt>
-          <dd>{{ post.meta.auteur }}</dd>
+          <dd>{{ author }}</dd>
         </div>
       {% endif %}
     </dl>

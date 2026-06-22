@@ -86,6 +86,7 @@ def _post_from_file(path: Path, section: str) -> dict | None:
     data, body = _front_matter(path.read_text(encoding="utf-8"))
     title = data.get("title") or path.stem
     published = _as_date(data.get("date"))
+    author = data.get("auteur_autre") or data.get("auteur") or ""
 
     if published == date.min:
         return None
@@ -96,13 +97,13 @@ def _post_from_file(path: Path, section: str) -> dict | None:
         "image": _image(data, body) or "assets/images/Inria-mediation.png",
         "excerpt": _excerpt(data, body),
         "date": _date_label(published),
-        "auteur": data.get("auteur") or "",
+        "auteur": author,
         "themes": [item for item in data.get("thematiques", []) if item],
         "tags": [item for item in data.get("tags", []) if item],
         "support": [item for item in data.get("support", []) if item],
         "cibles": [item for item in data.get("cibles", []) if item],
         "external_url": data.get("url_externe") or "",
-        "source": data.get("source") or data.get("auteur") or "",
+        "source": data.get("source") or author,
         "featured": data.get("featured", False) is True,
         "content_type": section,
         "type_label": "Actualité" if section == "actualites" else "Ressource",

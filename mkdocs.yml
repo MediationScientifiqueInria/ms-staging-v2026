@@ -37,6 +37,7 @@ extra_javascript:
   - assets/javascripts/reveal-on-scroll.js
 
 hooks:
+  - scripts/build/content_dates.py
   - scripts/build/calendar_events.py
   - scripts/build/featured_actualites.py
 

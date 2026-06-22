@@ -1,1 +1,9 @@
-items: []
+items:
+  - type: actualite
+    actualite: Aenean Dolor Semper
+  - type: actualite
+    actualite: Curabitur Mattis Tellus
+  - type: evenement
+    evenement: Pellentesque Magna Ipsum
+  - type: evenement
+    evenement: Etiam Vulputate Amet

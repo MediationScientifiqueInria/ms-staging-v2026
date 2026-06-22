@@ -18,6 +18,7 @@
   {% set excerpt = clean.description or fallback.excerpt %}
   {% set external_url = post.meta.url_externe | default("", true) | trim %}
   {% set source = post.meta.source | default("", true) | trim %}
+  {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
   {% set image = post.meta.cover_image or "assets/images/Inria-mediation.png" %}
 
   <a class="resource-card__image" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
@@ -64,19 +65,19 @@
           <dd>{{ post.meta.cibles[:2] | join(", ") }}</dd>
         </div>
       {% endif %}
-      {% if source or post.meta.auteur %}
+      {% if source or author %}
         <div>
           <dt>Source</dt>
-          <dd>{{ source or post.meta.auteur }}</dd>
+          <dd>{{ source or author }}</dd>
         </div>
       {% endif %}
     </dl>
 
     <footer class="resource-card__footer">
       {% if post.meta.date_maj %}
-        <span>Mis a jour le {{ post.meta.date_maj | date }}</span>
+        <span>Mis à jour le {{ post.meta.date_maj | date }}</span>
       {% elif post.config.date.created %}
-        <span>Ajoute le {{ post.config.date.created | date }}</span>
+        <span>Ajouté le {{ post.config.date.created | date }}</span>
       {% endif %}
 
       <a class="resource-card__action" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
