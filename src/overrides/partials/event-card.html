@@ -14,9 +14,9 @@
       {% endif %}
     </div>
 
-    <h2 class="resource-card__title">
+    <h3 class="resource-card__title">
       <a href="{{ event.url | url }}">{{ event.title }}</a>
-    </h2>
+    </h3>
 
     {% if event.description %}
       <p>{{ event.description | truncate(155, true, "...") }}</p>

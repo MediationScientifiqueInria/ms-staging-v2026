@@ -1,4 +1,4 @@
 # Contenus
 
-- [Les actualités Inria](../contenus/actualites/)
-- [Toutes nos ressources](../contenus/ressources/)
+- [Les actualités Inria](actualites/index.md)
+- [Toutes nos ressources](ressources/index.md)

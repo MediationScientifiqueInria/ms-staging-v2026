@@ -96,14 +96,6 @@ collections:
         time_format: false
         hint: "Date de mise en ligne sur le site"
 
-      - label: Date de mise à jour
-        name: date_maj
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
-        required: false
-
       - label: Langue
         name: langue
         widget: select
@@ -119,11 +111,18 @@ collections:
       - label: Auteur / Producteur
         name: auteur
         widget: select
+        required: true
+        default: Inria - Médiation Scientifique
         options:
-          - Inria – service médiation
+          - Inria - Médiation Scientifique
           - Co-production Inria
-          - Externe (recommandation)
         hint: "Sélectionner la nature de la production"
+
+      - label: Autre auteur / producteur
+        name: auteur_autre
+        widget: string
+        required: false
+        hint: "À remplir si l'auteur ou le producteur n'est pas dans la liste"
 
       - label: Contact pour précision
         name: contact
@@ -239,35 +238,12 @@ collections:
         widget: text
         hint: "Résumé affiché dans la liste des actualités"
 
-      - label: Sous-type
-        name: categories
-        widget: select
-        multiple: true
-        min: 1
-        max: 1
-        options:
-          - label: Actualité
-            value: Actu
-          - label: Bilan
-            value: Bilan
-          - label: Calendrier
-            value: Calendrier
-        hint: "Nature de l'actualité — détermine la rubrique"
-
       - label: Date de publication
         name: date
         widget: datetime
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
-
-      - label: Date de mise à jour
-        name: date_maj
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
-        required: false
 
       - label: Langue
         name: langue
@@ -282,10 +258,16 @@ collections:
       - label: Auteur / Producteur
         name: auteur
         widget: select
+        required: true
+        default: Inria - Médiation Scientifique
         options:
-          - Inria – service médiation
+          - Inria - Médiation Scientifique
           - Co-production Inria
-          - Externe (recommandation)
+
+      - label: Autre auteur / producteur
+        name: auteur_autre
+        widget: string
+        required: false
 
       - label: Contact pour précision
         name: contact
