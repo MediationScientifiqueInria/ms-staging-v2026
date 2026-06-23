@@ -1,11 +1,11 @@
 backend:
   name: github
   repo: MediationScientifiqueInria/ms-staging-v2026
-  branch: dev
+  branch: main
   base_url: https://sveltia-cms-auth.pages.dev
 
 media_folder: docs/assets/images
-public_folder: /assets/images
+public_folder: assets/images
 
 locale: fr
 
