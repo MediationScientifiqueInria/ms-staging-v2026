@@ -6,7 +6,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 import yaml
-from mkdocs.structure.files import File
+from mkdocs.structure.files import File, InclusionLevel
 
 
 EVENTS_DIR = Path("docs/contenus/evenements")
@@ -179,6 +179,15 @@ def _image(data: dict, body: str) -> str:
     return match.group(1) if match else ""
 
 
+def _excerpt(body: str) -> str:
+    body = re.sub(r"(?m)^\s*!\[[^\]]*\]\([^\n]*\)\s*$", "", body)
+    body = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", body)
+    body = re.sub(r"<[^>]+>", "", body)
+    body = re.sub(r"#{1,6}\s*", "", body)
+    body = re.sub(r"\s+", " ", body).strip()
+    return body
+
+
 def _event_from_file(path: Path) -> dict | None:
     data, body = _front_matter(path.read_text(encoding="utf-8"))
     title = data.get("title") or data.get("titre") or path.stem
@@ -188,11 +197,6 @@ def _event_from_file(path: Path) -> dict | None:
     if not date_debut:
         return None
 
-    description = data.get("description") or ""
-
-    if not description and body:
-        description = body
-
     return {
         "entry_id": path.stem,
         "publie": data.get("publie", True) is not False,
@@ -201,7 +205,9 @@ def _event_from_file(path: Path) -> dict | None:
         "title": title,
         "url": f"contenus/evenements/{path.stem}/",
         "image": _image(data, body),
-        "description": description,
+        "description": _excerpt(body),
+        "date_publication": _iso(data.get("date_publication")),
+        "date_ajout": datetime.fromtimestamp(path.stat().st_mtime).isoformat(timespec="seconds"),
         "date_debut": date_debut,
         "date_debut_label": _short_date(data.get("date_debut") or data.get("date")),
         "month_key": _month_key(data.get("date_debut") or data.get("date")),
@@ -238,7 +244,7 @@ def _collect_events(config) -> list[dict]:
     return sorted(events, key=lambda event: (event["date_debut"], event["titre"].lower()))
 
 
-def _group_events_by_month(events: list[dict]) -> list[dict]:
+def _group_events_by_month(events: list[dict], base_url: str = "contenus/evenements") -> list[dict]:
     current_key = date.today().strftime("%Y-%m")
     event_months = sorted({event["month_key"] for event in events if event["month_key"]})
     start_key = min(event_months + [_add_months(current_key, -12)])
@@ -258,26 +264,26 @@ def _group_events_by_month(events: list[dict]) -> list[dict]:
         months.append({
             "key": key,
             "label": _month_label_from_key(key),
-            "url": f"contenus/evenements/{key}/",
+            "url": f"{base_url}/{key}/",
             "events": counts[key],
-            "prev_url": f"contenus/evenements/{keys[index - 1]}/" if index > 0 else "",
-            "next_url": f"contenus/evenements/{keys[index + 1]}/" if index < len(keys) - 1 else "",
+            "prev_url": f"{base_url}/{keys[index - 1]}/" if index > 0 else "",
+            "next_url": f"{base_url}/{keys[index + 1]}/" if index < len(keys) - 1 else "",
         })
 
     return months
 
 
-def _current_month(months: list[dict]) -> dict:
+def _current_month(months: list[dict], base_url: str = "contenus/evenements") -> dict:
     current_key = date.today().strftime("%Y-%m")
 
     for month in months:
         if month["key"] == current_key:
-            return {**month, "url": "contenus/evenements/"}
+            return {**month, "url": f"{base_url}/"}
 
     return {
         "key": current_key,
         "label": _month_label_from_key(current_key),
-        "url": "contenus/evenements/",
+        "url": f"{base_url}/",
         "events": [],
         "prev_url": "",
         "next_url": "",
@@ -286,7 +292,6 @@ def _current_month(months: list[dict]) -> dict:
 
 def _event_detail_markdown(meta: dict, markdown: str) -> str:
     title = meta.get("title") or meta.get("titre") or "Événement"
-    description = meta.get("description") or ""
     body = markdown.strip()
     details = [
         ("Date de début", _iso(meta.get("date_debut") or meta.get("date"))),
@@ -301,9 +306,6 @@ def _event_detail_markdown(meta: dict, markdown: str) -> str:
     ]
 
     parts = [f"# {title}"]
-
-    if description:
-        parts.append(str(description))
 
     visible_details = [(label, value) for label, value in details if value]
 
@@ -325,9 +327,6 @@ def on_page_markdown(markdown, page, config, files):
     if not page.file.src_uri.startswith("contenus/evenements/"):
         return markdown
 
-    if page.file.src_uri == "contenus/evenements/index.md":
-        return markdown
-
     if page.meta.get("template") == "evenements-mois.html":
         return markdown
 
@@ -336,35 +335,40 @@ def on_page_markdown(markdown, page, config, files):
     return _event_detail_markdown(page.meta, markdown)
 
 
+def _generated_month_page(config, month: dict, path: str) -> File:
+    return File.generated(
+        config,
+        path,
+        content=(
+            "---\n"
+            f"title: {month['label']}\n"
+            "template: evenements-mois.html\n"
+            f"month_key: {month['key']}\n"
+            f"month_label: {month['label']}\n"
+            f"prev_url: {month['prev_url']}\n"
+            f"next_url: {month['next_url']}\n"
+            "hide:\n"
+            "  - navigation\n"
+            "  - toc\n"
+            "---\n\n"
+            f"# {month['label']}\n"
+        ),
+        inclusion=InclusionLevel.NOT_IN_NAV,
+    )
+
+
 def on_files(files, config, **kwargs):
-    for month in _group_events_by_month(_collect_events(config)):
-        files.append(
-            File.generated(
-                config,
-                f"contenus/evenements/{month['key']}.md",
-                content=(
-                    "---\n"
-                    f"title: {month['label']}\n"
-                    "template: evenements-mois.html\n"
-                    f"month_key: {month['key']}\n"
-                    f"month_label: {month['label']}\n"
-                    f"prev_url: {month['prev_url']}\n"
-                    f"next_url: {month['next_url']}\n"
-                    "hide:\n"
-                    "  - navigation\n"
-                    "  - toc\n"
-                    "---\n\n"
-                    f"# {month['label']}\n"
-                ),
-            )
-        )
+    events = _collect_events(config)
+
+    for month in _group_events_by_month(events, "contenus/actualites/evenements"):
+        files.append(_generated_month_page(config, month, f"contenus/actualites/evenements/{month['key']}.md"))
 
     return files
 
 
 def on_env(env, config, files, **kwargs):
     events = _collect_events(config)
-    months = _group_events_by_month(events)
+    actualites_months = _group_events_by_month(events, "contenus/actualites/evenements")
     today = date.today().isoformat()
     upcoming_events = [
         event for event in events if event["publie"] and event["date_debut"] >= today
@@ -374,8 +378,9 @@ def on_env(env, config, files, **kwargs):
     env.globals["all_evenements"] = events
     env.globals["upcoming_evenements"] = upcoming_events
     env.globals["home_evenements"] = upcoming_events or list(reversed(published_events))
-    env.globals["evenements_by_month"] = months
-    env.globals["current_evenements_month"] = _current_month(months)
+    env.globals["actualites_evenements_by_month"] = actualites_months
+    env.globals["current_actualites_evenements_month"] = _current_month(actualites_months, "contenus/actualites/evenements")
+    env.globals["current_actualites_evenements_url"] = f"contenus/actualites/evenements/{env.globals['current_actualites_evenements_month']['key']}/"
     return env
 
 

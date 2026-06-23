@@ -5,7 +5,11 @@
     <span class="events-month-nav__arrow is-disabled" aria-hidden="true">‹</span>
   {% endif %}
 
-  <h1>{{ active_month.label }}</h1>
+  {% if events_month_heading_level == 2 %}
+    <h2>{{ active_month.label }}</h2>
+  {% else %}
+    <h1>{{ active_month.label }}</h1>
+  {% endif %}
 
   {% if active_month.next_url %}
     <a class="events-month-nav__arrow" href="{{ active_month.next_url | url }}" aria-label="Mois suivant">›</a>

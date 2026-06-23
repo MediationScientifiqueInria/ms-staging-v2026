@@ -1,0 +1,46 @@
+partenaires:
+  - nom: Universcience
+    logo: assets/images/logos/universcience.svg
+    afficher_accueil: true
+    url: ''
+  - nom: AMCSTI
+    logo: assets/images/logos/logo-amcsti-1.png
+    afficher_accueil: true
+    url: ''
+  - nom: EsTV
+    logo: assets/images/logos/estv.jpg
+    afficher_accueil: true
+    url: ''
+  - nom: France Universités
+    logo: assets/images/logos/france_universites_logo-1.avif
+    afficher_accueil: true
+    url: ''
+  - nom: MEV
+    logo: ''
+    afficher_accueil: false
+    url: ''
+  - nom: Swh
+    afficher_accueil: false
+    url: ''
+  - nom: France IOI
+    logo: assets/images/logos/Logo-IoI.png
+    afficher_accueil: true
+    url: ''
+  - nom: Animath
+    logo: assets/images/logos/animath.webp
+    afficher_accueil: true
+  - nom: Réseau Canopé
+    logo: assets/images/logos/Logo-Reseau-Canope.png
+    afficher_accueil: true
+  - nom: Talents du numérique
+    logo: assets/images/logos/talent-du-num.png
+    afficher_accueil: true
+  - nom: Les Trophées NSI
+    logo: assets/images/logos/logo-NSI.png
+    afficher_accueil: true
+  - nom: Class code
+    logo: assets/images/logos/logo-footer.svg
+    afficher_accueil: true
+  - nom: Arbre de connaissances
+    logo: assets/images/logos/logo-ADC.png
+    afficher_accueil: true
