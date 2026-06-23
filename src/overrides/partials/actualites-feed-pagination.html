@@ -1,0 +1,11 @@
+{% if feed_pagination %}
+<nav class="md-pagination">
+  {% for pagination_page in feed_pagination.pages %}
+    {% if pagination_page.number == feed_pagination.current %}
+      <span class="md-pagination__current">{{ pagination_page.number }}</span>
+    {% else %}
+      <a class="md-pagination__link" href="{{ pagination_page.url | url }}">{{ pagination_page.number }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>
+{% endif %}

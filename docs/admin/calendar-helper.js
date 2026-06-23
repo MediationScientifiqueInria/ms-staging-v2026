@@ -1,6 +1,7 @@
 (function () {
   var EVENTS_URL = new URL("../data/evenements.json", window.location.href).toString();
   var COLLECTION_HASH = "#/collections/calendrier";
+  var NEWS_COLLECTION_HASH = "#/collections/actualites";
   var locale = "fr-FR";
   var today = startOfDay(new Date());
   var events = [];
@@ -155,6 +156,64 @@
     var params = new URLSearchParams(window.location.hash.split("?")[1] || "");
 
     return isCalendarCollectionRoute() && params.has("list");
+  }
+
+
+  function closestNavItem(link) {
+    return link.closest("li, [role='listitem']") || link.parentElement;
+  }
+
+  function findNavigationLink(hash, options) {
+    var links = Array.prototype.slice.call(document.querySelectorAll("nav a[href*='" + hash + "']"));
+
+    return links.find(function (link) {
+      if (link.closest(".admin-calendar")) {
+        return false;
+      }
+
+      if (options && options.excludeSection && link.closest(".admin-calendar-nav-section")) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
+  function syncActualitesNavigation() {
+    var newsLink = findNavigationLink(NEWS_COLLECTION_HASH);
+    var eventLink = findNavigationLink(COLLECTION_HASH, { excludeSection: true });
+    var newsItem;
+    var eventItem;
+    var section;
+
+    if (!newsLink || !eventLink) {
+      return;
+    }
+
+    newsItem = closestNavItem(newsLink);
+    eventItem = closestNavItem(eventLink);
+
+    if (!newsItem || !eventItem || eventItem.closest(".admin-calendar-nav-section")) {
+      return;
+    }
+
+    eventItem.classList.add("admin-calendar-nav-hidden");
+    section = newsItem.querySelector(".admin-calendar-nav-section");
+
+    if (!section) {
+      section = document.createElement("div");
+      section.className = "admin-calendar-nav-section";
+      section.setAttribute("aria-label", "Sections Actualités");
+      newsItem.appendChild(section);
+    }
+
+    if (!section.querySelector("a[href*='" + COLLECTION_HASH + "']")) {
+      var sectionLink = document.createElement("a");
+      sectionLink.className = "admin-calendar-nav-section__link";
+      sectionLink.href = COLLECTION_HASH;
+      sectionLink.textContent = "Événements";
+      section.appendChild(sectionLink);
+    }
   }
 
   function updateNavigationWidth() {
@@ -771,7 +830,7 @@
       '<div class="admin-calendar__shell">' +
       '<header class="admin-calendar__header">' +
       '<div>' +
-      '<p class="admin-calendar__eyebrow">Calendrier</p>' +
+      '<p class="admin-calendar__eyebrow">Actualités</p>' +
       '<div class="admin-calendar__title-row">' +
       '<h1>Agenda des événements</h1>' +
       '<a class="admin-calendar__native-link" href="#/collections/calendrier?list=1">Vue native</a>' +
@@ -839,7 +898,7 @@
       var rect;
       var text = element.textContent.trim().replace(/\s+/g, " ");
 
-      if (text !== "Calendrier") {
+      if (text !== "Événements" && text !== "Evenements" && text !== "Calendrier") {
         return false;
       }
 
@@ -937,8 +996,13 @@
   onReady(function () {
     createCalendar();
     createNativeReturnButton();
+    syncActualitesNavigation();
     loadEvents().then(syncRoute);
     window.addEventListener("hashchange", syncRoute);
+    new MutationObserver(syncActualitesNavigation).observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
     window.addEventListener("hashchange", function () {
       window.setTimeout(enhanceNativeEditor, 150);
       window.setTimeout(enhanceNativeEditor, 500);

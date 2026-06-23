@@ -1,0 +1,8 @@
+<nav class="actualites-tabs" aria-label="Sections des actualités">
+  <a class="actualites-tabs__link{% if actualites_tab == 'actualites' %} is-active{% endif %}" href="{{ 'contenus/actualites/' | url }}"{% if actualites_tab == 'actualites' %} aria-current="page"{% endif %}>
+    Actualités
+  </a>
+  <a class="actualites-tabs__link{% if actualites_tab == 'evenements' %} is-active{% endif %}" href="{{ actualites_evenements_tab_url | d(current_actualites_evenements_url, true) | url }}"{% if actualites_tab == 'evenements' %} aria-current="page"{% endif %}>
+    Calendrier Inria
+  </a>
+</nav>

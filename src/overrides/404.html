@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+
+{% block content %}
+  <section class="not-found-page" aria-labelledby="not-found-title">
+    <h1 id="not-found-title" class="not-found-page__code">404</h1>
+    <h2>Oh oh... je crois que vous vous êtes perdu.</h2>
+    <p>
+      Cette page s'est peut-être cachée dans un coin du web. Pas de panique :
+      on peut repartir tranquillement depuis l'accueil.
+    </p>
+    <a class="md-button md-button--primary not-found-page__button" href="{{ nav.homepage.url | url }}">
+      Retour à l'accueil
+    </a>
+  </section>
+{% endblock %}

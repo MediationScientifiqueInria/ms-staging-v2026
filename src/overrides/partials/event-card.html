@@ -2,17 +2,17 @@
   {% set image = event.image or "assets/images/Inria-mediation.png" %}
   <a class="resource-card__image" href="{{ event.url | url }}">
     <img src="{{ image | url }}" alt="">
+    <span class="resource-card__type-badge">Événement</span>
   </a>
 
   <div class="resource-card__content">
-    <div class="resource-card__chips" aria-label="Informations principales">
-      <span class="resource-card__chip">{{ event.type or "Événement" }}</span>
-      {% if event.tags %}
+    {% if event.tags %}
+      <div class="resource-card__chips" aria-label="Informations principales">
         {% for tag in event.tags[:1] %}
           <span class="resource-card__chip resource-card__chip--muted">{{ tag }}</span>
         {% endfor %}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
 
     <h3 class="resource-card__title">
       <a href="{{ event.url | url }}">{{ event.title }}</a>

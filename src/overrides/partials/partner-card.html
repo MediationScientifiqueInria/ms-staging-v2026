@@ -1,0 +1,16 @@
+{% set card_content %}
+  {% if partner.image %}
+    <img src="{{ partner.image | url }}" alt="{{ partner.name }}">
+  {% else %}
+    <span>{{ partner.name }}</span>
+  {% endif %}
+{% endset %}
+<article class="partner-card{% if not partner.image %} partner-card--text{% endif %}">
+  {% if partner.url %}
+    <a class="partner-card__link" href="{{ partner.url }}" target="_blank" rel="noopener">
+      {{ card_content }}
+    </a>
+  {% else %}
+    {{ card_content }}
+  {% endif %}
+</article>

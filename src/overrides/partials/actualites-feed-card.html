@@ -1,0 +1,56 @@
+<article class="resource-card">
+  {% set image = item.image or "assets/images/Inria-mediation.png" %}
+
+  <a class="resource-card__image" href="{{ item.url | url }}">
+    <img src="{{ image | url }}" alt="">
+    <span class="resource-card__type-badge">
+      {% if item.content_type == "evenements" %}Événement{% else %}Article{% endif %}
+    </span>
+  </a>
+
+  <div class="resource-card__content">
+    {% if item.tags %}
+      <div class="resource-card__chips" aria-label="Informations principales">
+        {% for tag in item.tags[:1] %}
+          <span class="resource-card__chip resource-card__chip--muted">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <h2 class="resource-card__title">
+      <a href="{{ item.url | url }}">{{ item.title }}</a>
+    </h2>
+
+    {% if item.excerpt %}
+      <p>{{ item.excerpt | truncate(155, true, "...") }}</p>
+    {% endif %}
+
+    <dl class="resource-card__details">
+      {% if item.date %}
+        <div>
+          <dt>Date</dt>
+          <dd>{{ item.date }}</dd>
+        </div>
+      {% endif %}
+      {% if item.themes %}
+        <div>
+          <dt>Theme</dt>
+          <dd>{{ item.themes[:2] | join(", ") }}</dd>
+        </div>
+      {% endif %}
+      {% if item.auteur %}
+        <div>
+          <dt>{% if item.content_type == "evenements" %}Lieu{% else %}Auteur{% endif %}</dt>
+          <dd>{{ item.auteur }}</dd>
+        </div>
+      {% endif %}
+    </dl>
+
+    <footer class="resource-card__footer">
+      <a class="resource-card__action" href="{{ item.url | url }}">
+        {% if item.content_type == "evenements" %}Consulter{% else %}Lire{% endif %}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </footer>
+  </div>
+</article>

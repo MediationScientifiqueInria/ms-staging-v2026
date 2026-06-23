@@ -1,9 +1,4 @@
 <article class="resource-card">
-  {% set clean = namespace(description = post.meta.description | default("", true) | trim) %}
-  {% if clean.description | string | trim | lower == "none" %}
-    {% set clean.description = "" %}
-  {% endif %}
-
   {% set fallback = namespace(excerpt = post.content | striptags | trim) %}
   {% if fallback.excerpt.startswith("# " ~ post.title) %}
     {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
@@ -15,7 +10,7 @@
     {% set fallback.excerpt = "" %}
   {% endif %}
 
-  {% set excerpt = clean.description or fallback.excerpt %}
+  {% set excerpt = fallback.excerpt %}
   {% set external_url = post.meta.url_externe | default("", true) | trim %}
   {% set source = post.meta.source | default("", true) | trim %}
   {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
