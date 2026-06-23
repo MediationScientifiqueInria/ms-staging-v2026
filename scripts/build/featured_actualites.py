@@ -121,7 +121,7 @@ def _post_from_file(path: Path, section: str) -> dict | None:
     return {
         "title": title,
         "url": f"contenus/{section}/{_slug(title)}/",
-        "image": _image(data, body) or "assets/images/Inria-mediation.png",
+        "image": _image(data, body) or "assets/images/1007721 (1).png",
         "excerpt": _excerpt(data, body),
         "date": _date_label(published),
         "auteur": author,
@@ -167,7 +167,7 @@ def _feed_event_from_file(path: Path) -> dict | None:
     return {
         "title": title,
         "url": f"contenus/evenements/{path.stem}/",
-        "image": _image(data, body) or "assets/images/Inria-mediation.png",
+        "image": _image(data, body) or "assets/images/1007721 (1).png",
         "excerpt": _excerpt({}, body),
         "date": _date_label(published),
         "auteur": data.get("lieu") or "",
@@ -200,7 +200,7 @@ def _event_to_featured_item(event: dict) -> dict:
     return {
         "title": event["title"],
         "url": event["url"],
-        "image": event.get("image") or "assets/images/Inria-mediation.png",
+        "image": event.get("image") or "assets/images/1007721 (1).png",
         "excerpt": event.get("description") or "",
         "date": event.get("month_label") or event.get("date_debut_label") or "",
         "auteur": event.get("lieu") or "",
@@ -217,7 +217,7 @@ def _event_to_feed_item(event: dict) -> dict:
     return {
         "title": event["title"],
         "url": event["url"],
-        "image": event.get("image") or "assets/images/Inria-mediation.png",
+        "image": event.get("image") or "assets/images/1007721 (1).png",
         "excerpt": event.get("description") or "",
         "date": event.get("date_debut_label") or event.get("month_label") or "",
         "auteur": event.get("lieu") or "",
