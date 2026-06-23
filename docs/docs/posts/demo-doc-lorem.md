@@ -1,13 +1,15 @@
 ---
 title: Document lorem ipsum
+cover_image: ''
 date: 2026-06-01
-cover_image: assets/images/Inria-mediation.png
+auteur: ''
 thematiques:
   - Lorem
 tags:
   - Placeholder
 support:
   - Document
+url_externe: ''
 source: Médiation scientifique Inria
 ---
 
