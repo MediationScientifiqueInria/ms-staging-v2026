@@ -65,8 +65,8 @@ def _as_datetime(value) -> datetime:
     return datetime.min
 
 
-def _file_datetime(path: Path) -> datetime:
-    return datetime.fromtimestamp(path.stat().st_mtime)
+def _content_added_datetime(data: dict) -> datetime:
+    return _first_datetime(data.get("date_publication"), data.get("date"))
 
 
 def _first_datetime(*values) -> datetime:
@@ -112,6 +112,7 @@ def _post_from_file(path: Path, section: str) -> dict | None:
     data, body = _front_matter(path.read_text(encoding="utf-8"))
     title = data.get("title") or path.stem
     published = _as_datetime(data.get("date"))
+    added = _content_added_datetime(data)
     author = data.get("auteur_autre") or data.get("auteur") or ""
 
     if published == datetime.min:
@@ -134,6 +135,7 @@ def _post_from_file(path: Path, section: str) -> dict | None:
         "content_type": section,
         "type_label": "Article" if section == "actualites" else "Ressource",
         "published": published,
+        "added": added,
     }
 
 
@@ -155,7 +157,8 @@ def _collect_posts(config, posts_dir: Path, section: str) -> list[dict]:
 def _feed_event_from_file(path: Path) -> dict | None:
     data, body = _front_matter(path.read_text(encoding="utf-8"))
     event_date = _as_date(data.get("date_debut") or data.get("date"))
-    published = _first_datetime(data.get("date_publication"), _file_datetime(path), event_date)
+    published = _first_datetime(data.get("date_publication"), event_date)
+    added = _as_datetime(data.get("date_publication"))
     title = data.get("title") or data.get("titre") or path.stem
 
     if event_date == date.min or data.get("publie", True) is False:
@@ -174,6 +177,7 @@ def _feed_event_from_file(path: Path) -> dict | None:
         "content_type": "evenements",
         "type_label": "Événement",
         "published": published,
+        "added": added,
     }
 
 
@@ -205,6 +209,7 @@ def _event_to_featured_item(event: dict) -> dict:
         "content_type": "evenements",
         "type_label": "Événement",
         "published": _as_datetime(event.get("date_debut")),
+        "added": _as_datetime(event.get("date_publication")),
     }
 
 
@@ -222,6 +227,7 @@ def _event_to_feed_item(event: dict) -> dict:
         "content_type": "evenements",
         "type_label": "Événement",
         "published": _first_datetime(event.get("date_publication"), event.get("date_ajout"), event.get("date_debut")),
+        "added": _as_datetime(event.get("date_publication")),
     }
 
 
@@ -330,7 +336,7 @@ def _configured_featured(config, actualites: list[dict], events: list[dict]) -> 
 def on_files(files, config, **kwargs):
     actualites = _collect_posts(config, ACTUALITES_DIR, "actualites")
     events = _collect_feed_events(config)
-    feed = sorted(actualites + events, key=lambda item: item["published"], reverse=True)
+    feed = sorted(actualites + events, key=lambda item: item["added"], reverse=True)
     feed_pages = _paginate(feed, "contenus/actualites/")
 
     for index in range(1, len(feed_pages)):
@@ -364,7 +370,7 @@ def on_env(env, config, files, **kwargs):
         post for post in actualites
         if post["url"] not in home_featured_urls
     ]
-    actualites_feed = sorted(actualites + feed_events, key=lambda item: item["published"], reverse=True)
+    actualites_feed = sorted(actualites + feed_events, key=lambda item: item["added"], reverse=True)
 
     env.globals["featured_actualites"] = latest_actualites[:4]
     env.globals["home_featured_items"] = home_featured_items
