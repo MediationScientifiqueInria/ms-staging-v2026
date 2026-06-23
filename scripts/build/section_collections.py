@@ -67,7 +67,7 @@ def _image(data: dict, body: str) -> str:
         return data["cover_image"]
 
     match = re.search(r"!\[[^\]]*\]\(([^)]+)\)", body)
-    return match.group(1) if match else "assets/images/Inria-mediation.png"
+    return match.group(1) if match else "assets/images/1007721 (1).png"
 
 
 def _excerpt(body: str) -> str:

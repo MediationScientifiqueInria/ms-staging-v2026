@@ -14,7 +14,7 @@
   {% set external_url = post.meta.url_externe | default("", true) | trim %}
   {% set source = post.meta.source | default("", true) | trim %}
   {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
-  {% set image = post.meta.cover_image or "assets/images/Inria-mediation.png" %}
+  {% set image = post.meta.cover_image or "assets/images/1007721 (1).png" %}
 
   <a class="resource-card__image" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
     <img src="{{ image | url }}" alt="">

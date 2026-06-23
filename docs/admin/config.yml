@@ -124,6 +124,7 @@ collections:
       - label: Date de publication
         name: date
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
@@ -199,6 +200,7 @@ collections:
       - label: Date de publication
         name: date
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
@@ -285,18 +287,26 @@ collections:
         required: true
         hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une ressource sans contenu"
 
-      - label: Date du sujet
-        name: date_sujet
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
-        required: false
-        hint: "Date à laquelle se rapporte le contenu (ex : date d'un événement passé)"
+      - label: Type
+        name: tags
+        widget: select
+        multiple: true
+        options:
+          - Ressource pédagogique
+          - Outil
+          - Publication
+          - Exposition
+          - Jeu
+          - Vidéo
+          - MOOC
+          - Atelier
+          - Autre
+        hint: "Type de ressource (utilisé comme filtre)"
 
       - label: Date de publication
         name: date
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
@@ -365,22 +375,6 @@ collections:
         required: false
         hint: "Centre Inria ou territoire concerné (ex : Paris, Grenoble, Île-de-France...)"
 
-      - label: Type
-        name: tags
-        widget: select
-        multiple: true
-        options:
-          - Ressource pédagogique
-          - Outil
-          - Publication
-          - Exposition
-          - Jeu
-          - Vidéo
-          - MOOC
-          - Atelier
-          - Autre
-        hint: "Type de ressource (utilisé comme filtre)"
-
       - label: Support
         name: support
         widget: select
@@ -442,6 +436,7 @@ collections:
       - label: Date de publication
         name: date
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
@@ -549,6 +544,7 @@ collections:
       - label: Date de publication
         name: date_publication
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
