@@ -13,9 +13,6 @@ permissions:
 
 jobs:
   retry:
-    if: >-
-      contains(fromJSON('["failure", "timed_out"]'), github.event.workflow_run.conclusion) &&
-      github.event.workflow_run.run_attempt < 3
     runs-on: ubuntu-latest
     steps:
       - name: Retry failed Pages deployment
@@ -23,9 +20,29 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ github.event.workflow_run.id }}
           RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           RUN_SHA: ${{ github.event.workflow_run.head_sha }}
           REPOSITORY: ${{ github.repository }}
         run: |
+          if [ "${RUN_CONCLUSION}" = "success" ]; then
+            echo "Deploy workflow succeeded; no retry needed."
+            exit 0
+          fi
+
+          case "${RUN_CONCLUSION}" in
+            failure|timed_out|cancelled)
+              ;;
+            *)
+              echo "Deploy workflow conclusion is ${RUN_CONCLUSION}; no retry needed."
+              exit 0
+              ;;
+          esac
+
+          if [ "${RUN_ATTEMPT}" -ge 3 ]; then
+            echo "Deploy workflow already reached ${RUN_ATTEMPT} attempts; no retry."
+            exit 0
+          fi
+
           latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
 
           if [ "${RUN_SHA}" != "${latest_sha}" ]; then
@@ -33,7 +50,7 @@ jobs:
             exit 0
           fi
 
-          failed_jobs="$(gh run view "${RUN_ID}" --repo "${REPOSITORY}" --json jobs --jq '.jobs[] | select(.conclusion == "failure" or .conclusion == "timed_out") | .name')"
+          failed_jobs="$(gh run view "${RUN_ID}" --repo "${REPOSITORY}" --json jobs --jq '.jobs[] | select(.conclusion == "failure" or .conclusion == "timed_out" or .conclusion == "cancelled") | .name')"
 
           if ! printf '%s\n' "${failed_jobs}" | grep -qx "deploy"; then
             echo "Deploy job did not fail; skipping retry."
