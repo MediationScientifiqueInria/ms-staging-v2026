@@ -4,8 +4,9 @@
 <div class="md-content" data-md-component="content">
   <div class="md-content__inner">
     {% set actualites_page_index = page.meta.actualites_page_index | d(0, true) | int %}
-    {% set feed_page = actualites_feed_pages[actualites_page_index] %}
-    {% set actualites_tab = "actualites" %}
+    {% set actualites_view = page.meta.actualites_view | d("actualites", true) %}
+    {% set feed_page = actualites_article_pages[actualites_page_index] if actualites_view == "articles" else actualites_feed_pages[actualites_page_index] %}
+    {% set actualites_tab = actualites_view %}
 
     <header class="section-heading">
       <div class="section-title-wrap">

@@ -78,10 +78,12 @@ site-header--transparent" %} {% endif %}
           class="site-header-nav__link{% if current_url.startswith('ecosysteme') or current_url.startswith('partenaires') %} is-active{% endif %}"
           href="{{ 'ecosysteme/' | url }}"
         >
-          Écosystème
+          Réseau
         </a>
-        <div class="site-header-nav__panel" aria-label="Écosystème">
+        <div class="site-header-nav__panel" aria-label="Réseau">
           <div class="site-header-nav__panel-inner">
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#ecosysteme' | url }}">Écosystème</a>
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#diffusion' | url }}">Diffusion</a>
             <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#partenaires' | url }}">Partenaires</a>
           </div>
         </div>

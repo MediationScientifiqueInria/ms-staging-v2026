@@ -283,7 +283,7 @@ def _unique_by_url(items: list[dict]) -> list[dict]:
 
 
 def _generated_actualites_page(config, path: str, view: str, index: int) -> File:
-    title = "Actualités"
+    title = "Articles" if view == "articles" else "Actualités"
 
     return File.generated(
         config,
@@ -338,9 +338,13 @@ def on_files(files, config, **kwargs):
     events = _collect_feed_events(config)
     feed = sorted(actualites + events, key=lambda item: item["added"], reverse=True)
     feed_pages = _paginate(feed, "contenus/actualites/")
+    article_pages = _paginate(actualites, "contenus/actualites/articles/")
 
     for index in range(1, len(feed_pages)):
         files.append(_generated_actualites_page(config, f"contenus/actualites/page/{index + 1}.md", "actualites", index))
+
+    for index in range(0, len(article_pages)):
+        files.append(_generated_actualites_page(config, f"contenus/actualites/articles/{'index' if index == 0 else f'page/{index + 1}'}.md", "articles", index))
 
     return files
 
@@ -376,6 +380,7 @@ def on_env(env, config, files, **kwargs):
     env.globals["home_featured_items"] = home_featured_items
     env.globals["all_actualites"] = actualites
     env.globals["actualites_feed_pages"] = _paginate(actualites_feed, "contenus/actualites/")
+    env.globals["actualites_article_pages"] = _paginate(actualites, "contenus/actualites/articles/")
     env.globals["featured_resources"] = ressources[:3]
     env.globals["all_resources"] = ressources
     return env
