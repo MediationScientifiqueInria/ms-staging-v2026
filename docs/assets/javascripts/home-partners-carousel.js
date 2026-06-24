@@ -1,108 +1,151 @@
 document.querySelectorAll("[data-partners-carousel]").forEach((carousel) => {
   const track = carousel.querySelector("[data-partners-track]");
 
-  if (!track || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (!track) {
     return;
   }
 
-  let isPaused = false;
-  let isDragging = false;
-  let dragStartX = 0;
-  let dragStartScroll = 0;
-  let resumeTimeout;
-  let lastFrame = performance.now();
+  let animation;
+  let activePointer;
+  let startX = 0;
+  let startTime = 0;
+  let hasMoved = false;
+  let keyboardResume;
+  let wheelResume;
 
-  const loopWidth = () => track.scrollWidth / 2;
+  const findAnimation = () => {
+    animation = track.getAnimations().find(
+      (item) => item.animationName === "home-partners-scroll",
+    );
+  };
 
-  const normalizeScroll = () => {
-    const width = loopWidth();
+  const duration = () => Number(animation?.effect.getTiming().duration) || 36000;
 
-    if (!width) {
+  const normalizeTime = (time) => {
+    const total = duration();
+    return ((time % total) + total) % total;
+  };
+
+  const moveBy = (pixels) => {
+    if (!animation) {
+      findAnimation();
+    }
+
+    if (!animation) {
       return;
     }
 
-    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    const loopWidth = track.scrollWidth / 2;
 
-    if (carousel.scrollLeft >= maxScroll - 2) {
-      carousel.scrollLeft -= width;
-    } else if (carousel.scrollLeft <= 2) {
-      carousel.scrollLeft += width;
-    }
-  };
-
-  const pauseTemporarily = () => {
-    isPaused = true;
-    window.clearTimeout(resumeTimeout);
-    resumeTimeout = window.setTimeout(() => {
-      isPaused = false;
-    }, 1800);
-  };
-
-  const tick = (now) => {
-    const delta = now - lastFrame;
-    lastFrame = now;
-
-    if (!isPaused && !isDragging) {
-      carousel.scrollLeft += delta * 0.035;
-      normalizeScroll();
+    if (!loopWidth) {
+      return;
     }
 
-    window.requestAnimationFrame(tick);
+    const currentTime = Number(animation.currentTime) || 0;
+    animation.currentTime = normalizeTime(
+      currentTime + (pixels / loopWidth) * duration(),
+    );
   };
-
-  window.requestAnimationFrame(() => {
-    carousel.scrollLeft = loopWidth();
-    window.requestAnimationFrame(tick);
-  });
-
-  carousel.addEventListener("scroll", normalizeScroll, { passive: true });
-  carousel.addEventListener("mouseenter", () => {
-    isPaused = true;
-  });
-  carousel.addEventListener("mouseleave", () => {
-    isPaused = false;
-  });
-  carousel.addEventListener("focusin", () => {
-    isPaused = true;
-  });
-  carousel.addEventListener("focusout", () => {
-    isPaused = false;
-  });
-  carousel.addEventListener("wheel", pauseTemporarily, { passive: true });
 
   carousel.addEventListener("pointerdown", (event) => {
-    if (event.pointerType !== "mouse" || event.button !== 0) {
+    if (event.pointerType === "mouse" && event.button !== 0) {
       return;
     }
 
-    isDragging = true;
-    isPaused = true;
-    dragStartX = event.clientX;
-    dragStartScroll = carousel.scrollLeft;
+    findAnimation();
+
+    if (!animation) {
+      return;
+    }
+
+    activePointer = event.pointerId;
+    startX = event.clientX;
+    startTime = Number(animation.currentTime) || 0;
+    hasMoved = false;
+    animation.pause();
     carousel.classList.add("is-dragging");
     carousel.setPointerCapture(event.pointerId);
   });
 
   carousel.addEventListener("pointermove", (event) => {
-    if (!isDragging) {
+    if (event.pointerId !== activePointer || !animation) {
       return;
     }
 
-    event.preventDefault();
-    carousel.scrollLeft = dragStartScroll - (event.clientX - dragStartX);
+    const distance = startX - event.clientX;
+    const loopWidth = track.scrollWidth / 2;
+
+    if (Math.abs(distance) > 4) {
+      hasMoved = true;
+    }
+
+    if (loopWidth) {
+      animation.currentTime = normalizeTime(
+        startTime + (distance / loopWidth) * duration(),
+      );
+    }
   });
 
   const endDrag = (event) => {
-    if (!isDragging) {
+    if (event.pointerId !== activePointer) {
       return;
     }
 
-    isDragging = false;
+    activePointer = undefined;
     carousel.classList.remove("is-dragging");
-    carousel.releasePointerCapture(event.pointerId);
-    pauseTemporarily();
+
+    if (carousel.hasPointerCapture(event.pointerId)) {
+      carousel.releasePointerCapture(event.pointerId);
+    }
+
+    animation?.play();
   };
 
   carousel.addEventListener("pointerup", endDrag);
   carousel.addEventListener("pointercancel", endDrag);
+
+  carousel.addEventListener(
+    "click",
+    (event) => {
+      if (hasMoved) {
+        event.preventDefault();
+        event.stopPropagation();
+        hasMoved = false;
+      }
+    },
+    true,
+  );
+
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+      return;
+    }
+
+    event.preventDefault();
+    window.clearTimeout(keyboardResume);
+    moveBy(event.key === "ArrowRight" ? 120 : -120);
+    animation?.pause();
+    keyboardResume = window.setTimeout(() => animation?.play(), 1200);
+  });
+
+  carousel.addEventListener(
+    "wheel",
+    (event) => {
+      const horizontalDelta = event.shiftKey ? event.deltaY : event.deltaX;
+
+      if (
+        Math.abs(horizontalDelta) < 1
+        || (!event.shiftKey && Math.abs(event.deltaY) > Math.abs(event.deltaX))
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      window.clearTimeout(wheelResume);
+      moveBy(horizontalDelta);
+      animation?.pause();
+      wheelResume = window.setTimeout(() => animation?.play(), 900);
+    },
+    { passive: false },
+  );
 });
