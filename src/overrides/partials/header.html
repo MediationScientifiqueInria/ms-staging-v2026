@@ -1,92 +1,107 @@
-{#-
-  Custom header based on the Material for MkDocs header partial.
--#}
-{% set class = "md-header" %}
-{% if "navigation.tabs.sticky" in features %}
-  {% set class = class ~ " md-header--shadow md-header--lifted" %}
-{% elif "navigation.tabs" not in features %}
-  {% set class = class ~ " md-header--shadow" %}
-{% endif %}
-{% set current_url = page.url | d("", true) %}
-{% if not current_url %}
-  {% set class = class ~ " site-header--transparent" %}
-{% endif %}
+{#- Custom header based on the Material for MkDocs header partial. -#} {% set class = "md-header" %} {% if
+"navigation.tabs.sticky" in features %} {% set class = class ~ " md-header--shadow md-header--lifted" %} {% elif
+"navigation.tabs" not in features %} {% set class = class ~ " md-header--shadow" %} {% endif %} {% set current_url
+= page.url | d("", true) %} {% if not current_url %} {% set class = class ~ " site-header--home
+site-header--transparent" %} {% endif %}
 <header class="{{ class }}" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="{{ lang.t('header') }}">
-    <a href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}" title="{{ config.site_name | e }}" class="md-header__button md-logo" aria-label="{{ config.site_name }}" data-md-component="logo">
-      {% include "partials/logo.html" %}
+    <a
+      href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
+      title="{{ config.site_name | e }}"
+      class="md-header__button md-logo site-wordmark"
+      aria-label="{{ config.site_name }}"
+      data-md-component="logo"
+    >
+      <span class="site-wordmark__main" aria-hidden="true">Inria</span>
+      <span class="site-wordmark__sub" aria-hidden="true">Médiation Scientifique</span>
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      {% set icon = config.theme.icon.menu or "material/menu" %}
-      {% include ".icons/" ~ icon ~ ".svg" %}
+      {% set icon = config.theme.icon.menu or "material/menu" %} {% include ".icons/" ~ icon ~ ".svg" %}
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
-          <span class="md-ellipsis">
-            {{ config.site_name }}
-          </span>
+          <span class="md-ellipsis"> {{ config.site_name }} </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
-            {% if page.meta and page.meta.title %}
-              {{ page.meta.title }}
-            {% else %}
-              {{ page.title }}
-            {% endif %}
+            {% if page.meta and page.meta.title %} {{ page.meta.title }} {% else %} {{ page.title }} {% endif %}
           </span>
         </div>
       </div>
     </div>
 
     <div class="site-header-nav" aria-label="Navigation principale">
-      <a class="site-header-nav__link{% if not current_url %} is-active{% endif %}" href="{{ nav.homepage.url | url }}">
+      <a
+        class="site-header-nav__link{% if not current_url %} is-active{% endif %}"
+        href="{{ nav.homepage.url | url }}"
+      >
         Accueil
       </a>
-      <a class="site-header-nav__link{% if current_url.startswith('contenus/actualites') %} is-active{% endif %}" href="{{ 'contenus/actualites/' | url }}">
-        Actualités
-      </a>
-      <a class="site-header-nav__link{% if current_url.startswith('contenus/evenements') %} is-active{% endif %}" href="{{ 'contenus/evenements/' | url }}">
-        Événements
-      </a>
-      <a class="site-header-nav__link{% if current_url.startswith('contenus/ressources') %} is-active{% endif %}" href="{{ 'contenus/ressources/' | url }}">
+      <div class="site-header-nav__item">
+        <a
+          class="site-header-nav__link{% if current_url.startswith('qui-sommes-nous') or current_url.startswith('bilans') or current_url.startswith('docs') %} is-active{% endif %}"
+          href="{{ 'qui-sommes-nous/' | url }}"
+        >
+          Nous connaître
+        </a>
+        <div class="site-header-nav__panel" aria-label="Nous connaître">
+          <div class="site-header-nav__panel-inner">
+            <a class="site-header-nav__panel-link" href="{{ 'qui-sommes-nous/#bilans' | url }}">Bilans</a>
+            <a class="site-header-nav__panel-link" href="{{ 'qui-sommes-nous/#docs-reference' | url }}">Docs</a>
+          </div>
+        </div>
+      </div>
+      <div class="site-header-nav__item">
+        <a
+          class="site-header-nav__link{% if current_url.startswith('contenus/actualites') or current_url.startswith('contenus/evenements') %} is-active{% endif %}"
+          href="{{ 'contenus/actualites/' | url }}"
+        >
+          Actualités
+        </a>
+        <div class="site-header-nav__panel" aria-label="Actualités">
+          <div class="site-header-nav__panel-inner">
+            <a class="site-header-nav__panel-link" href="{{ current_actualites_evenements_url | url }}"
+              >Calendrier Inria</a
+            >
+          </div>
+        </div>
+      </div>
+      <a
+        class="site-header-nav__link{% if current_url.startswith('contenus/ressources') %} is-active{% endif %}"
+        href="{{ 'contenus/ressources/' | url }}"
+      >
         Ressources
       </a>
-      <a class="site-header-nav__link{% if current_url.startswith('partenaires') %} is-active{% endif %}" href="{{ 'partenaires/' | url }}">
-        Partenaires
-      </a>
+      <div class="site-header-nav__item">
+        <a
+          class="site-header-nav__link{% if current_url.startswith('ecosysteme') or current_url.startswith('partenaires') %} is-active{% endif %}"
+          href="{{ 'ecosysteme/' | url }}"
+        >
+          Réseau
+        </a>
+        <div class="site-header-nav__panel" aria-label="Réseau">
+          <div class="site-header-nav__panel-inner">
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#ecosysteme' | url }}">Écosystème</a>
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#diffusion' | url }}">Diffusion</a>
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#partenaires' | url }}">Partenaires</a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    {% if config.theme.palette %}
-      {% if not config.theme.palette is mapping %}
-        {% include "partials/palette.html" %}
-      {% endif %}
-    {% endif %}
-    {% if not config.theme.palette is mapping %}
-      {% include "partials/javascripts/palette.html" %}
-    {% endif %}
-    {% if config.extra.alternate %}
-      {% include "partials/alternate.html" %}
-    {% endif %}
-    {% if "material/search" in config.plugins %}
-      {% set search = config.plugins["material/search"] | attr("config") %}
-      {% if search.enabled %}
-        <label class="md-header__button md-icon" for="__search">
-          {% set icon = config.theme.icon.search or "material/magnify" %}
-          {% include ".icons/" ~ icon ~ ".svg" %}
-        </label>
-        {% include "partials/search.html" %}
-      {% endif %}
-    {% endif %}
-    {% if config.repo_url %}
-      <div class="md-header__source">
-        {% include "partials/source.html" %}
-      </div>
+    {% if config.theme.palette %} {% if not config.theme.palette is mapping %} {% include "partials/palette.html"
+    %} {% endif %} {% endif %} {% if not config.theme.palette is mapping %} {% include
+    "partials/javascripts/palette.html" %} {% endif %} {% if config.extra.alternate %} {% include
+    "partials/alternate.html" %} {% endif %} {% if "material/search" in config.plugins %} {% set search =
+    config.plugins["material/search"] | attr("config") %} {% if search.enabled %}
+    <label class="md-header__button md-icon" for="__search">
+      {% set icon = config.theme.icon.search or "material/magnify" %} {% include ".icons/" ~ icon ~ ".svg" %}
+    </label>
+    {% include "partials/search.html" %} {% endif %} {% endif %} {% if config.repo_url %}
+    <div class="md-header__source">{% include "partials/source.html" %}</div>
     {% endif %}
   </nav>
-  {% if "navigation.tabs.sticky" in features %}
-    {% if "navigation.tabs" in features %}
-      {% include "partials/tabs.html" %}
-    {% endif %}
-  {% endif %}
+  {% if "navigation.tabs.sticky" in features %} {% if "navigation.tabs" in features %} {% include
+  "partials/tabs.html" %} {% endif %} {% endif %}
 </header>

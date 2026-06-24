@@ -1,9 +1,5 @@
 
 <article class="resource-card">
-  {% set clean = namespace(description = post.meta.description | default("", true) | trim) %}
-  {% if clean.description | string | trim | lower == "none" %}
-    {% set clean.description = "" %}
-  {% endif %}
   {% set image = post.meta.cover_image %}
   {% if not image and "![" in post.post.markdown and "](" in post.post.markdown %}
     {% set image_parts = post.post.markdown.split("](", 1) %}
@@ -30,9 +26,9 @@
       {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
     {% endif %}
   {% endif %}
-  {% set excerpt = clean.description or fallback.excerpt %}
+  {% set excerpt = fallback.excerpt %}
 
-  {% set image = image or "assets/images/Inria-mediation.png" %}
+  {% set image = image or "assets/images/1007721 (1).png" %}
   <a class="resource-card__image" href="{{ post.url | url }}">
     <img src="{{ image | url }}" alt="">
   </a>
@@ -69,10 +65,11 @@
           <dd>{{ post.meta.thematiques[:2] | join(", ") }}</dd>
         </div>
       {% endif %}
-      {% if post.meta.auteur %}
+      {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
+      {% if author %}
         <div>
           <dt>Auteur</dt>
-          <dd>{{ post.meta.auteur }}</dd>
+          <dd>{{ author }}</dd>
         </div>
       {% endif %}
     </dl>

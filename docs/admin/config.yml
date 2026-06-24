@@ -1,11 +1,11 @@
 backend:
   name: github
   repo: MediationScientifiqueInria/ms-staging-v2026
-  branch: dev
+  branch: main
   base_url: https://sveltia-cms-auth.pages.dev
 
 media_folder: docs/assets/images
-public_folder: /assets/images
+public_folder: assets/images
 
 locale: fr
 
@@ -13,6 +13,42 @@ locale: fr
 # (dupliqués car Sveltia ne supporte pas les ancres YAML pour les collections)
 
 collections:
+
+  # ─── PARTENAIRES ─────────────────────────────────────────────────────────
+  - name: partenaires
+    label: Partenaires
+    files:
+      - name: liste
+        label: Liste des partenaires
+        file: docs/contenus/partenaires.yml
+        fields:
+          - label: Partenaires
+            name: partenaires
+            widget: list
+            summary: "{{fields.nom}}"
+            fields:
+              - label: Nom
+                name: nom
+                widget: string
+
+              - label: Logo
+                name: logo
+                widget: image
+                required: false
+                hint: "Logo du partenaire. Si vide, le nom s'affichera en texte."
+
+              - label: Mettre en avant
+                name: afficher_accueil
+                widget: boolean
+                default: true
+                required: false
+                hint: "Affiche ce partenaire dans le carousel de la page d'accueil"
+
+              - label: Lien
+                name: url
+                widget: string
+                required: false
+                hint: "Site du partenaire, optionnel"
 
   # ─── À LA UNE ─────────────────────────────────────────────────────────────
   - name: a_la_une
@@ -62,6 +98,172 @@ collections:
                 required: false
                 hint: "À remplir si le type choisi est Événement"
 
+  # ─── NOUS CONNAÎTRE ──────────────────────────────────────────────────────
+  - name: bilans
+    label: Bilans
+    label_singular: Bilan
+    folder: docs/bilans/posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: Titre
+        name: title
+        widget: string
+
+      - label: Image de couverture
+        name: cover_image
+        widget: image
+        required: false
+
+      - label: Contenu
+        name: body
+        widget: markdown
+        required: true
+        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher un bilan sans contenu"
+
+      - label: Date de publication
+        name: date
+        widget: datetime
+        default: "{{now}}"
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+
+      - label: Langue
+        name: langue
+        widget: select
+        options:
+          - label: Français
+            value: fr
+          - label: Anglais
+            value: en
+          - label: Bilingue (FR/EN)
+            value: fr-en
+        default: fr
+
+      - label: Auteur / Producteur
+        name: auteur
+        widget: string
+        default: Inria - Médiation Scientifique
+        required: false
+
+      - label: Thématiques
+        name: thematiques
+        widget: list
+        required: false
+
+      - label: Type
+        name: tags
+        widget: select
+        multiple: true
+        options:
+          - Bilan annuel
+          - Bilan d'action
+          - Infographie
+          - Retour d'expérience
+          - Autre
+        required: false
+
+      - label: URL externe
+        name: url_externe
+        widget: string
+        required: false
+        hint: "Lien externe optionnel si le bilan est consultable ailleurs"
+
+      - label: Source externe
+        name: source
+        widget: string
+        required: false
+
+  - name: docs_reference
+    label: Docs de référence
+    label_singular: Doc de référence
+    folder: docs/docs/posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: Titre
+        name: title
+        widget: string
+
+      - label: Image de couverture
+        name: cover_image
+        widget: image
+        required: false
+
+      - label: Contenu
+        name: body
+        widget: markdown
+        required: true
+        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher un document sans contenu"
+
+      - label: Date de publication
+        name: date
+        widget: datetime
+        default: "{{now}}"
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+
+      - label: Langue
+        name: langue
+        widget: select
+        options:
+          - label: Français
+            value: fr
+          - label: Anglais
+            value: en
+          - label: Bilingue (FR/EN)
+            value: fr-en
+        default: fr
+
+      - label: Auteur / Producteur
+        name: auteur
+        widget: string
+        default: Inria - Médiation Scientifique
+        required: false
+
+      - label: Thématiques
+        name: thematiques
+        widget: list
+        required: false
+
+      - label: Type
+        name: tags
+        widget: select
+        multiple: true
+        options:
+          - Document de référence
+          - Guide
+          - Charte
+          - Méthodologie
+          - Ressource externe
+          - Autre
+        required: false
+
+      - label: Support
+        name: support
+        widget: select
+        multiple: true
+        options:
+          - PDF
+          - Page web
+          - Document
+          - Tableau
+          - Autre
+        required: false
+
+      - label: URL externe
+        name: url_externe
+        widget: string
+        required: false
+        hint: "Lien externe optionnel si le document est consultable ailleurs"
+
+      - label: Source externe
+        name: source
+        widget: string
+        required: false
+
   # ─── RESSOURCES ───────────────────────────────────────────────────────────
   - name: ressources
     label: Ressources
@@ -74,35 +276,41 @@ collections:
         name: title
         widget: string
 
-      - label: Description
-        name: description
-        widget: text
-        hint: "Texte libre de présentation de la ressource"
-
-      - label: Date du sujet
-        name: date_sujet
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
+      - label: Image de couverture
+        name: cover_image
+        widget: image
         required: false
-        hint: "Date à laquelle se rapporte le contenu (ex : date d'un événement passé)"
+
+      - label: Contenu
+        name: body
+        widget: markdown
+        required: true
+        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une ressource sans contenu"
+
+      - label: Type
+        name: tags
+        widget: select
+        multiple: true
+        options:
+          - Ressource pédagogique
+          - Outil
+          - Publication
+          - Exposition
+          - Jeu
+          - Vidéo
+          - MOOC
+          - Atelier
+          - Autre
+        hint: "Type de ressource (utilisé comme filtre)"
 
       - label: Date de publication
         name: date
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
         hint: "Date de mise en ligne sur le site"
-
-      - label: Date de mise à jour
-        name: date_maj
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
-        required: false
 
       - label: Langue
         name: langue
@@ -119,11 +327,18 @@ collections:
       - label: Auteur / Producteur
         name: auteur
         widget: select
+        required: true
+        default: Inria - Médiation Scientifique
         options:
-          - Inria – service médiation
+          - Inria - Médiation Scientifique
           - Co-production Inria
-          - Externe (recommandation)
         hint: "Sélectionner la nature de la production"
+
+      - label: Autre auteur / producteur
+        name: auteur_autre
+        widget: string
+        required: false
+        hint: "À remplir si l'auteur ou le producteur n'est pas dans la liste"
 
       - label: Contact pour précision
         name: contact
@@ -160,22 +375,6 @@ collections:
         required: false
         hint: "Centre Inria ou territoire concerné (ex : Paris, Grenoble, Île-de-France...)"
 
-      - label: Type
-        name: tags
-        widget: select
-        multiple: true
-        options:
-          - Ressource pédagogique
-          - Outil
-          - Publication
-          - Exposition
-          - Jeu
-          - Vidéo
-          - MOOC
-          - Atelier
-          - Autre
-        hint: "Type de ressource (utilisé comme filtre)"
-
       - label: Support
         name: support
         widget: select
@@ -186,11 +385,6 @@ collections:
           - En ligne
           - Empruntable (en prêt)
           - Duplicable
-        required: false
-
-      - label: Image de couverture
-        name: cover_image
-        widget: image
         required: false
 
       - label: URL externe
@@ -204,12 +398,6 @@ collections:
         widget: string
         required: false
         hint: "Nom du site, organisme ou producteur affiche sur la carte"
-
-      - label: Contenu
-        name: body
-        widget: markdown
-        required: true
-        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une ressource sans contenu"
 
   # ─── ACTUALITÉS ───────────────────────────────────────────────────────────
   - name: actualites
@@ -227,6 +415,17 @@ collections:
         name: title
         widget: string
 
+      - label: Image de couverture
+        name: cover_image
+        widget: image
+        required: false
+
+      - label: Contenu
+        name: body
+        widget: markdown
+        required: true
+        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une actualité sans contenu"
+
       - label: Mettre à la une
         name: featured
         widget: boolean
@@ -234,40 +433,13 @@ collections:
         required: false
         hint: "Affiche ce contenu dans le grand carrousel À la une de la page d'accueil"
 
-      - label: Description
-        name: description
-        widget: text
-        hint: "Résumé affiché dans la liste des actualités"
-
-      - label: Sous-type
-        name: categories
-        widget: select
-        multiple: true
-        min: 1
-        max: 1
-        options:
-          - label: Actualité
-            value: Actu
-          - label: Bilan
-            value: Bilan
-          - label: Calendrier
-            value: Calendrier
-        hint: "Nature de l'actualité — détermine la rubrique"
-
       - label: Date de publication
         name: date
         widget: datetime
+        default: "{{now}}"
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
-
-      - label: Date de mise à jour
-        name: date_maj
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
-        required: false
 
       - label: Langue
         name: langue
@@ -282,10 +454,16 @@ collections:
       - label: Auteur / Producteur
         name: auteur
         widget: select
+        required: true
+        default: Inria - Médiation Scientifique
         options:
-          - Inria – service médiation
+          - Inria - Médiation Scientifique
           - Co-production Inria
-          - Externe (recommandation)
+
+      - label: Autre auteur / producteur
+        name: auteur_autre
+        widget: string
+        required: false
 
       - label: Contact pour précision
         name: contact
@@ -317,20 +495,9 @@ collections:
         widget: list
         required: false
 
-      - label: Image de couverture
-        name: cover_image
-        widget: image
-        required: false
-
-      - label: Contenu
-        name: body
-        widget: markdown
-        required: true
-        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une actualité sans contenu"
-
-  # ─── CALENDRIER ──────────────────────────────────────────────────────────
+  # ─── ÉVÉNEMENTS ─────────────────────────────────────────────────────────
   - name: calendrier
-    label: Calendrier
+    label: Événements
     label_singular: Événement
     folder: docs/contenus/evenements
     create: true
@@ -362,10 +529,27 @@ collections:
         name: title
         widget: string
 
-      - label: Description
-        name: description
-        widget: text
+      - label: Image de couverture
+        name: cover_image
+        widget: image
         required: false
+        hint: "Image utilisée sur les cartes. Les images du contenu se gèrent directement dans le champ Contenu."
+
+      - label: Contenu
+        name: body
+        widget: markdown
+        required: false
+        hint: "Texte libre de l'événement. Les images insérées ici s'affichent dans l'ordre où elles sont placées."
+
+      - label: Date de publication
+        name: date_publication
+        widget: datetime
+        default: "{{now}}"
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
+        required: false
+        hint: "Date utilisée pour classer l'événement dans le flux Actualités. Si vide, la date d'ajout du fichier est utilisée."
 
       - label: Date de début
         name: date_debut
@@ -662,9 +846,4 @@ collections:
         name: libelle_lien
         widget: string
         default: En savoir plus
-        required: false
-
-      - label: Notes internes
-        name: body
-        widget: markdown
         required: false

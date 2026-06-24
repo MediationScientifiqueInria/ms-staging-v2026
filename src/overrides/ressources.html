@@ -3,8 +3,11 @@
 {% block container %}
 <div class="md-content ressources-content" data-md-component="content">
   <div class="md-content__inner ressources-content__inner">
-    <header class="md-typeset">
-      {{ page.content }}
+    <header class="section-heading">
+      <div class="section-title-wrap">
+        <h1>{{ page.title }}</h1>
+        <span class="section-gradient-bar" aria-hidden="true"></span>
+      </div>
     </header>
 
     <div class="ressources-posts">

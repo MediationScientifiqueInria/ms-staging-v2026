@@ -14,11 +14,11 @@
       {% endfor %}
     </div>
 
-    <h2 class="resource-card__title">
+    <h3 class="resource-card__title">
       <a href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
         {{ resource.title }}
       </a>
-    </h2>
+    </h3>
 
     {% if resource.excerpt %}
       <p>{{ resource.excerpt | truncate(155, true, "...") }}</p>

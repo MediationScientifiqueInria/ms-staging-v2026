@@ -28,15 +28,21 @@ theme:
     - navigation.sections
 
 extra_css:
-  - assets/stylesheets/extra.css
+  - assets/stylesheets/extra.css?v=20260622
 extra_javascript:
   - assets/javascripts/analytics/matomo.js
   - assets/javascripts/header-scroll.js
   - assets/javascripts/home-hero.js
   - assets/javascripts/home-carousel.js
+  - assets/javascripts/home-partners-carousel.js
+  - assets/javascripts/clickable-cards.js
+  - assets/javascripts/reveal-on-scroll.js
 
 hooks:
+  - scripts/build/content_dates.py
   - scripts/build/calendar_events.py
+  - scripts/build/partners.py
+  - scripts/build/section_collections.py
   - scripts/build/featured_actualites.py
 
 
@@ -64,6 +70,20 @@ plugins:
     - glightbox
     - table-reader
     - blog:
+        blog_dir: bilans
+        blog_toc: true
+        post_date_format: long
+        post_url_format: "{slug}"
+        authors: false
+        pagination_per_page: 12
+    - blog:
+        blog_dir: docs
+        blog_toc: true
+        post_date_format: long
+        post_url_format: "{slug}"
+        authors: false
+        pagination_per_page: 12
+    - blog:
         blog_dir: contenus/ressources
         blog_toc: true
         post_date_format: long
@@ -76,6 +96,6 @@ plugins:
         post_date_format: long
         post_url_format: "{slug}"
         authors: false
-        pagination_per_page: 12
+        pagination_per_page: 1000
     - material/search:
         lang: fr

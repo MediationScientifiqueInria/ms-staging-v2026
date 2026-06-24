@@ -5,13 +5,21 @@
 
 <!-- Content -->
 {% block content %}
+{% set hero_slide_1 = "assets/images/1007721 (1).png" | url %}
+{% set hero_slide_2 = "assets/images/Centre-Inria-de-Paris_0.jpg" | url %}
+{% set hero_slide_3 = "assets/images/G_centre-inria-universite-lorraine_Facade-3-Inria-0239-438_1080x608.png" | url %}
 <section class="home-hero" data-hero-slideshow>
   <div class="home-hero__slides" aria-hidden="true">
-    <div class="home-hero__slide is-active" style="background-image: url('{{ "assets/images/1007721 (1).png" | url }}')"></div>
-    <div class="home-hero__slide" style="background-image: url('{{ "assets/images/Centre-Inria-de-Paris_0.jpg" | url }}')"></div>
-    <div class="home-hero__slide" style="background-image: url('{{ "assets/images/G_centre-inria-universite-lorraine_Facade-3-Inria-0239-438_1080x608.png" | url }}')"></div>
+    <div class="home-hero__slide is-active" style="background-image: url('{{ hero_slide_1 }}')"></div>
+    <div class="home-hero__slide" style="background-image: url('{{ hero_slide_2 }}')"></div>
+    <div class="home-hero__slide" style="background-image: url('{{ hero_slide_3 }}')"></div>
   </div>
   <div class="home-hero__content">
+    <p class="home-hero__brand">
+      <span class="home-hero__brand-main">Inria</span>
+      <span class="home-hero__brand-sub">Médiation Scientifique</span>
+      <span class="home-hero__brand-bar" aria-hidden="true"></span>
+    </p>
     <h1>Comprendre, partager, transmettre !</h1>
     <p>
       Nous créons et partageons des ateliers, des expositions, des jeux et des ressources de médiation scientifique
@@ -25,15 +33,16 @@
 </section>
 
 {% if home_featured_items %}
-<section class="home-band">
+<section class="home-band" aria-labelledby="home-featured-title">
   <div class="home-band__inner">
     <div class="home-featured">
-      <div class="home-featured__header">
-        <h2>À la une</h2>
+      <div class="home-featured__header" data-reveal="left">
+        <h2 id="home-featured-title">À la une</h2>
+        <span class="section-gradient-bar" aria-hidden="true"></span>
       </div>
 
       <div class="home-featured__layout">
-        <div class="home-featured-main-carousel home-carousel" data-carousel data-carousel-autoplay data-carousel-interval="4000">
+        <div class="home-featured-main-carousel home-carousel" aria-label="Contenus à la une" data-carousel data-carousel-autoplay data-carousel-interval="4000" data-carousel-dots data-reveal="left">
           <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Contenu à la une précédent" data-carousel-prev>
             ‹
           </button>
@@ -67,25 +76,36 @@
                     {% if main_post.auteur %}
                       <span>{{ main_post.auteur }}</span>
                     {% endif %}
+                    <a class="home-featured__action" href="{{ main_post.url | url }}">
+                      {% if main_post.content_type == "actualites" %}Lire{% else %}Consulter{% endif %}
+                      <span aria-hidden="true">↗</span>
+                    </a>
                   </footer>
                 </div>
               </article>
             {% endfor %}
           </div>
+          <div class="home-carousel__dots" aria-label="Pagination des contenus à la une" data-carousel-dots-list></div>
           <button class="home-carousel__button home-carousel__button--next" type="button" aria-label="Contenu à la une suivant" data-carousel-next>
             ›
           </button>
         </div>
 
         {% if featured_actualites %}
-          <aside class="home-featured__aside" aria-labelledby="home-latest-news-title">
-            <h2 id="home-latest-news-title">Actualités</h2>
+          <aside class="home-featured__aside" aria-labelledby="home-latest-news-title" data-reveal="right">
+            <div class="section-title-wrap">
+              <h2 id="home-latest-news-title">Dernières actualités</h2>
+              <span class="section-gradient-bar section-gradient-bar--small" aria-hidden="true"></span>
+            </div>
             <div class="home-featured__list">
             {% for item in featured_actualites[:4] %}
                 <article class="home-featured__item">
                   {% if item.image %}
                     <a class="home-featured__item-image" href="{{ item.url | url }}">
                       <img src="{{ item.image | url }}" alt="">
+                      <span class="resource-card__type-badge">
+                        {% if item.content_type == "evenements" %}Événement{% else %}Article{% endif %}
+                      </span>
                     </a>
                   {% endif %}
                   <div class="home-featured__item-content">
@@ -126,15 +146,18 @@
 {% include "partials/upcoming-events.html" %}
 
 {% if featured_resources %}
-<section class="home-band">
+<section class="home-band" aria-labelledby="home-resources-title">
   <div class="home-band__inner">
     <div class="home-resources">
-      <div class="section-heading">
-        <h2>Explorez nos ressources</h2>
+      <div class="section-heading" data-reveal="left">
+        <div class="section-title-wrap">
+          <h2 id="home-resources-title">Explorez nos ressources</h2>
+          <span class="section-gradient-bar" aria-hidden="true"></span>
+        </div>
         <a href="{{ 'contenus/ressources/' | url }}">Voir toutes les ressources</a>
       </div>
 
-      <div class="home-carousel" data-carousel>
+      <div class="home-carousel" aria-label="Ressources mises en avant" data-carousel data-reveal="right">
         <button class="home-carousel__button home-carousel__button--prev" type="button" aria-label="Ressources précédentes" data-carousel-prev>
           ‹
         </button>
@@ -152,7 +175,48 @@
 </section>
 {% endif %}
 
-<section>
+{% if home_partners %}
+<section class="home-band home-band--partners" aria-labelledby="home-partners-title">
+  <div class="home-band__inner">
+    <div class="home-partners">
+      <div class="section-heading" data-reveal="left">
+        <div class="section-title-wrap">
+          <h2 id="home-partners-title">Nos partenaires</h2>
+          <span class="section-gradient-bar" aria-hidden="true"></span>
+        </div>
+        <a href="{{ 'ecosysteme/#partenaires' | url }}">Voir tous les partenaires</a>
+      </div>
+
+      <div class="home-partners__carousel" data-partners-carousel data-reveal="right">
+        <div class="home-partners__track" data-partners-track>
+          {% for partner in home_partners %}
+            <article class="partner-card home-partners__card">
+              {% if partner.url %}<a class="partner-card__link" href="{{ partner.url }}" target="_blank" rel="noopener">{% endif %}
+                {% if partner.image %}
+                  <img src="{{ partner.image | url }}" alt="{{ partner.name }}">
+                {% else %}
+                  <span>{{ partner.name }}</span>
+                {% endif %}
+              {% if partner.url %}</a>{% endif %}
+            </article>
+          {% endfor %}
+          {% for partner in home_partners %}
+            <article class="partner-card home-partners__card" aria-hidden="true">
+              {% if partner.image %}
+                <img src="{{ partner.image | url }}" alt="">
+              {% else %}
+                <span>{{ partner.name }}</span>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section aria-label="Diaporama médiathèque Inria">
   <div class="slideshow">
     <iframe
       src="https://mediatheque.inria.fr/Mediatheque/embed/public/slideshow/0BD1UyHz4Ku6dDWbKG6Q32QM25I354Og8Zjc2BfOg7Rb9kKDiRN9X65XT58P687V"
