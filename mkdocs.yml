@@ -28,13 +28,13 @@ theme:
     - navigation.sections
 
 extra_css:
-  - assets/stylesheets/extra.css?v=20260622
+  - assets/stylesheets/extra.css?v=20260624-4
 extra_javascript:
   - assets/javascripts/analytics/matomo.js
   - assets/javascripts/header-scroll.js
   - assets/javascripts/home-hero.js
   - assets/javascripts/home-carousel.js
-  - assets/javascripts/home-partners-carousel.js
+  - assets/javascripts/home-partners-carousel.js?v=20260624-5
   - assets/javascripts/clickable-cards.js
   - assets/javascripts/reveal-on-scroll.js
 

@@ -184,10 +184,10 @@
           <h2 id="home-partners-title">Nos partenaires</h2>
           <span class="section-gradient-bar" aria-hidden="true"></span>
         </div>
-        <a href="{{ 'ecosysteme/#partenaires' | url }}">Voir tous les partenaires</a>
+        <a href="{{ 'ecosysteme/#partenaires' | url }}">Consulter nos partenaires</a>
       </div>
 
-      <div class="home-partners__carousel" data-partners-carousel data-reveal="right">
+      <div class="home-partners__carousel" data-partners-carousel data-reveal="right" tabindex="0" aria-label="Carrousel des partenaires : utilisez les flèches ou faites glisser pour le parcourir">
         <div class="home-partners__track" data-partners-track>
           {% for partner in home_partners %}
             <article class="partner-card home-partners__card">
@@ -216,7 +216,7 @@
 </section>
 {% endif %}
 
-<section aria-label="Diaporama médiathèque Inria">
+<!-- <section aria-label="Diaporama médiathèque Inria">
   <div class="slideshow">
     <iframe
       src="https://mediatheque.inria.fr/Mediatheque/embed/public/slideshow/0BD1UyHz4Ku6dDWbKG6Q32QM25I354Og8Zjc2BfOg7Rb9kKDiRN9X65XT58P687V"
@@ -226,6 +226,6 @@
     >
     </iframe>
   </div>
-</section>
+</section> -->
 
 {% endblock %}
