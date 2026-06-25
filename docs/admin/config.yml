@@ -151,9 +151,9 @@ collections:
         name: date
         widget: datetime
         default: "{{now}}"
-        format: YYYY-MM-DD
+        format: YYYY-MM-DDTHH:mm:ss
         date_format: DD/MM/YYYY
-        time_format: false
+        time_format: HH:mm
 
       - label: Langue
         name: langue
@@ -227,9 +227,9 @@ collections:
         name: date
         widget: datetime
         default: "{{now}}"
-        format: YYYY-MM-DD
+        format: YYYY-MM-DDTHH:mm:ss
         date_format: DD/MM/YYYY
-        time_format: false
+        time_format: HH:mm
 
       - label: Langue
         name: langue
@@ -317,10 +317,19 @@ collections:
         name: date
         widget: datetime
         default: "{{now}}"
+        format: YYYY-MM-DDTHH:mm:ss
+        date_format: DD/MM/YYYY
+        time_format: HH:mm
+        hint: "Date de mise en ligne sur le site"
+
+      - label: Date du sujet
+        name: date_sujet
+        widget: datetime
         format: YYYY-MM-DD
         date_format: DD/MM/YYYY
         time_format: false
-        hint: "Date de mise en ligne sur le site"
+        required: false
+        hint: "Date à laquelle le sujet, l’activité ou la ressource se rapporte"
 
       - label: Langue
         name: langue
@@ -413,9 +422,16 @@ collections:
 
       - label: Cibles
         name: cibles
-        widget: list
+        widget: select
+        multiple: true
         required: false
-        hint: "Public visé (ex : Lycéens, Cycle 3, Enseignants, Grand public...)"
+        options:
+          - Grand public
+          - Scolaires / Étudiants
+          - Communauté éducative
+          - Scientifiques
+          - Collectivités / Associations
+        hint: "Sélectionner un ou plusieurs publics visés"
 
       - label: Centre / Territoire
         name: territoire
@@ -458,12 +474,6 @@ collections:
           - Empruntable
           - Duplicable
         required: false
-
-      - label: URL externe
-        name: url_externe
-        widget: string
-        required: false
-        hint: "Lien vers la ressource externe, si elle est consultable hors du site"
 
       - label: Source externe
         name: source
@@ -509,9 +519,9 @@ collections:
         name: date
         widget: datetime
         default: "{{now}}"
-        format: YYYY-MM-DD
+        format: YYYY-MM-DDTHH:mm:ss
         date_format: DD/MM/YYYY
-        time_format: false
+        time_format: HH:mm
 
       - label: Langue
         name: langue
@@ -559,8 +569,15 @@ collections:
 
       - label: Cibles
         name: cibles
-        widget: list
+        widget: select
+        multiple: true
         required: false
+        options:
+          - Grand public
+          - Scolaires / Étudiants
+          - Communauté éducative
+          - Scientifiques
+          - Collectivités / Associations
 
       - label: Centre / Territoire
         name: territoire
@@ -617,9 +634,9 @@ collections:
         name: date_publication
         widget: datetime
         default: "{{now}}"
-        format: YYYY-MM-DD
+        format: YYYY-MM-DDTHH:mm:ss
         date_format: DD/MM/YYYY
-        time_format: false
+        time_format: HH:mm
         required: false
         hint: "Date utilisée pour classer l'événement dans le flux Actualités. Si vide, la date d'ajout du fichier est utilisée."
 
@@ -899,9 +916,16 @@ collections:
 
       - label: Public
         name: public
-        widget: list
+        widget: select
+        multiple: true
         required: false
-        hint: "Ex : grand public, scolaires, enseignants..."
+        options:
+          - Grand public
+          - Scolaires / Étudiants
+          - Communauté éducative
+          - Scientifiques
+          - Collectivités / Associations
+        hint: "Sélectionner un ou plusieurs publics visés"
 
       - label: Centre / Territoire
         name: territoire

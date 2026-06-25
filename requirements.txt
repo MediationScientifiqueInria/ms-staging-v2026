@@ -8,3 +8,4 @@ mkdocs-static-i18n==0.52
 mkdocs-video
 mkdocs-glightbox
 mkdocs-table-reader-plugin
+Pillow>=11.0,<12

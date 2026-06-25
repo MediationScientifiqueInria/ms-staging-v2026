@@ -40,6 +40,7 @@ extra_javascript:
   - assets/javascripts/search-results.js
 
 hooks:
+  - scripts/build/optimize_images.py
   - scripts/build/content_dates.py
   - scripts/build/calendar_events.py
   - scripts/build/partners.py
