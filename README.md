@@ -30,4 +30,4 @@ Les événements du calendrier sont créés dans :
 
 Sveltia CMS n’utilise pas `local_backend` ni `decap-server` pour le mode local. Si on se connectes au backend GitHub au lieu de choisir le dépôt local, les changements ne seront pas écrits directement dans ton dossier de travail.
 
-En mode GitHub, l’admin cible le dépôt `MediationScientifiqueInria/ms-staging-v2026` sur la branche `staging`. En mode local, il faut quand même choisir **Work with Local Repository** pour écrire dans les fichiers de ce dossier.
+En mode GitHub, le workflow configure automatiquement l’admin avec le dépôt et la branche déployés (`main` en production ou `staging` en préproduction). En mode local, il faut quand même choisir **Work with Local Repository** pour écrire dans les fichiers de ce dossier.

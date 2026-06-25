@@ -22,6 +22,7 @@ jobs:
           RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
           RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
           REPOSITORY: ${{ github.repository }}
         run: |
           if [ "${RUN_CONCLUSION}" = "success" ]; then
@@ -43,10 +44,10 @@ jobs:
             exit 0
           fi
 
-          latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/staging" --jq '.object.sha')"
+          latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/${RUN_BRANCH}" --jq '.object.sha')"
 
           if [ "${RUN_SHA}" != "${latest_sha}" ]; then
-            echo "A newer staging commit exists; skipping retry for ${RUN_SHA}."
+            echo "A newer ${RUN_BRANCH} commit exists; skipping retry for ${RUN_SHA}."
             exit 0
           fi
 
