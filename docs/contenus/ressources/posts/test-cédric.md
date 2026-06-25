@@ -1,8 +1,7 @@
 ---
-title: fdsfds
-cover_image: /assets/images/Centre-Inria-de-Paris_0.jpg
-featured: false
-date: 2026-06-23
+title: Test cédric
+cover_image: /assets/images/media-61790.webp
+date: 2026-06-25
 langue: fr
 auteur: Inria - Médiation Scientifique
 auteur_autre: ''
@@ -12,6 +11,11 @@ thematiques: []
 domaines: []
 cibles: []
 territoire: []
+support: []
+url_externe: ''
+source: ''
+tags:
+  - Autre
 ---
 
-fdsfds
+Oups

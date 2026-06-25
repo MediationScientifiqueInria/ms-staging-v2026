@@ -1171,6 +1171,7 @@ html .md-footer-meta.md-typeset a:hover {
   width: 100%;
   height: 8rem;
   border-radius: 6px;
+  object-fit: cover;
 }
 
 .post-card__themes {
@@ -1427,6 +1428,7 @@ html .md-footer-meta.md-typeset a:hover {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   transition: transform 220ms ease;
 }
 
@@ -1951,6 +1953,7 @@ html .md-footer-meta.md-typeset a:hover {
 .home-featured__item-image img {
   display: block;
   width: 100%;
+  object-fit: cover;
 }
 
 .home-featured__main-image img {

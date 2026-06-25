@@ -29,6 +29,9 @@
   {% set excerpt = fallback.excerpt %}
 
   {% set image = image or "assets/images/1007721 (1).png" %}
+  {% if image.startswith("/") %}
+    {% set image = image[1:] %}
+  {% endif %}
   <a class="resource-card__image" href="{{ post.url | url }}">
     <img src="{{ image | url }}" alt="">
   </a>
