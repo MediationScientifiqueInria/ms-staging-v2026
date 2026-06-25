@@ -28,7 +28,7 @@ theme:
     - navigation.sections
 
 extra_css:
-  - assets/stylesheets/extra.css?v=20260624-4
+  - assets/stylesheets/extra.css?v=20260625-1
 extra_javascript:
   - assets/javascripts/analytics/matomo.js
   - assets/javascripts/header-scroll.js

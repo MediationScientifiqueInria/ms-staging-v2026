@@ -173,7 +173,7 @@ def _color(value) -> str:
 
 def _image(data: dict, body: str) -> str:
     if data.get("cover_image"):
-        return data["cover_image"]
+        return str(data["cover_image"]).removeprefix("/")
 
     match = re.search(r"!\[[^\]]*\]\(([^)]+)\)", body)
     return match.group(1) if match else ""
