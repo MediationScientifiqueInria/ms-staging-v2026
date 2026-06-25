@@ -1,8 +1,6 @@
 ---
 title: Test cédric
-cover_image: /assets/images/media-61790.webp
-tags:
-  - Autre
+cover_image: /assets/images/Centre-Inria-de-Paris_0.jpg
 date: 2026-06-25
 langue: fr
 auteur: Inria - Médiation Scientifique
@@ -16,6 +14,8 @@ territoire: []
 support: []
 url_externe: ''
 source: ''
+tags:
+  - Autre
 ---
 
 Oups
