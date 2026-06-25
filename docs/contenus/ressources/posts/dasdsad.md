@@ -1,7 +1,7 @@
 ---
 title: dasdsad
 cover_image: /assets/images/Centre-Inria-de-Paris_0.jpg
-date: 2026-06-25
+date: 2026-06-25T16:00:15
 langue: fr
 auteur: Inria - Médiation Scientifique
 auteur_autre: ''

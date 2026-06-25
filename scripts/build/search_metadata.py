@@ -13,7 +13,10 @@ SEARCHABLE_FIELDS = (
     "langue",
     "auteur",
     "auteur_autre",
+    "contact",
+    "referent_scientifique",
     "source",
+    "date_sujet",
 )
 
 THESAURUS_PATH = Path("data/search-thesaurus.yml")
@@ -56,9 +59,9 @@ def on_config(config):
     return config
 
 
-def on_page_markdown(markdown, page, **kwargs):
+def on_page_content(html, page, **kwargs):
     if not page.file.src_uri.startswith("contenus/ressources/posts/"):
-        return markdown
+        return html
 
     values = []
     for field in SEARCHABLE_FIELDS:
@@ -69,7 +72,7 @@ def on_page_markdown(markdown, page, **kwargs):
             values.append(str(value))
 
     if not values:
-        return markdown
+        return html
 
     expanded_values = []
     seen = set()
@@ -81,4 +84,4 @@ def on_page_markdown(markdown, page, **kwargs):
                 expanded_values.append(term)
 
     metadata = " ".join(escape(value) for value in expanded_values)
-    return f'{markdown}\n\n<div class="search-metadata" aria-hidden="true">{metadata}</div>\n'
+    return f'{html}\n<div class="search-metadata" aria-hidden="true">{metadata}</div>\n'

@@ -1,16 +1,22 @@
 <article class="resource-card">
-  {% set fallback = namespace(excerpt = post.content | striptags | trim) %}
+  {% set fallback = namespace(excerpt = post.meta.description | default(post.meta.card_excerpt, true) | trim) %}
+  {% if not fallback.excerpt %}
+    {% set fallback.excerpt = post.markdown | default("", true) | trim %}
+  {% endif %}
   {% if fallback.excerpt.startswith("# " ~ post.title) %}
     {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
   {% endif %}
   {% if fallback.excerpt.startswith(post.title) %}
     {% set fallback.excerpt = fallback.excerpt.replace(post.title, "", 1) | trim %}
   {% endif %}
+  {% if fallback.excerpt.startswith("![") and ")" in fallback.excerpt %}
+    {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
+  {% endif %}
   {% if fallback.excerpt | string | trim | lower == "none" %}
     {% set fallback.excerpt = "" %}
   {% endif %}
 
-  {% set excerpt = fallback.excerpt %}
+  {% set excerpt = fallback.excerpt | striptags %}
   {% set external_url = post.meta.url_externe | default("", true) | trim %}
   {% set source = post.meta.source | default("", true) | trim %}
   {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
@@ -51,12 +57,6 @@
     {% endif %}
 
     <dl class="resource-card__details">
-      {% if post.meta.thematiques %}
-        <div>
-          <dt>Theme</dt>
-          <dd>{{ post.meta.thematiques[:2] | join(", ") }}</dd>
-        </div>
-      {% endif %}
       {% if post.meta.cibles %}
         <div>
           <dt>Public</dt>
@@ -73,9 +73,9 @@
 
     <footer class="resource-card__footer">
       {% if post.meta.date_maj %}
-        <span>Mis à jour le {{ post.meta.date_maj | date }}</span>
+        <span>Mis à jour le {{ post.meta.date_maj | date }} à {{ post.meta.date_maj.strftime("%H:%M") }}</span>
       {% elif post.config.date.created %}
-        <span>Ajouté le {{ post.config.date.created | date }}</span>
+        <span>Ajouté le {{ post.config.date.created | date }} à {{ post.config.date.created.strftime("%H:%M") }}</span>
       {% endif %}
 
       <a class="resource-card__action" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>

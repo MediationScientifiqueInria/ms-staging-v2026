@@ -1,7 +1,8 @@
 ---
-title: Test cédric
-cover_image: /assets/images/media-61790.webp
-date: 2026-06-25T16:00:15
+title: kjfhsd
+cover_image: ''
+date: 2026-06-25T16:38:00
+date_sujet: 2026-06-03
 langue: fr
 auteur: Inria - Médiation Scientifique
 auteur_autre: ''
@@ -12,10 +13,7 @@ domaines: []
 cibles: []
 territoire: []
 support: []
-url_externe: ''
 source: ''
-tags:
-  - Autre
 ---
 
-Oups
+fsdfds

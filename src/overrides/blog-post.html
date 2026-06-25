@@ -118,9 +118,30 @@
                         </time>
                       </dd>
                     </div>
+                    {% if page.meta.date_sujet %}
+                      <div>
+                        <dt>Date du sujet</dt>
+                        <dd>{{ page.meta.date_sujet | date }}</dd>
+                      </div>
+                    {% endif %}
+                    {% if page.meta.date_maj %}
+                      <div>
+                        <dt>Mis à jour le</dt>
+                        <dd>
+                          {{ page.meta.date_maj | date }}
+                          à {{ page.meta.date_maj.strftime("%H:%M") }}
+                        </dd>
+                      </div>
+                    {% endif %}
+                    {% if page.meta.thematiques %}
+                      <div>
+                        <dt>Thématiques scientifiques</dt>
+                        <dd>{{ page.meta.thematiques | join(", ") }}</dd>
+                      </div>
+                    {% endif %}
                     {% if page.meta.domaines %}
                       <div>
-                        <dt>Thème</dt>
+                        <dt>Thèmes grand public</dt>
                         <dd>{{ page.meta.domaines | join(", ") }}</dd>
                       </div>
                     {% endif %}
@@ -132,7 +153,7 @@
                     {% endif %}
                     {% if page.meta.territoire %}
                       <div>
-                        <dt>Centre</dt>
+                        <dt>Territoire</dt>
                         <dd>{{ page.meta.territoire | join(", ") }}</dd>
                       </div>
                     {% endif %}
@@ -142,10 +163,34 @@
                         <dd>{{ page.meta.support | join(", ") }}</dd>
                       </div>
                     {% endif %}
+                    {% if page.meta.langue %}
+                      <div>
+                        <dt>Langue</dt>
+                        <dd>{{ page.meta.langue | upper }}</dd>
+                      </div>
+                    {% endif %}
                     {% if author %}
                       <div>
                         <dt>Auteur / Producteur</dt>
                         <dd>{{ author }}</dd>
+                      </div>
+                    {% endif %}
+                    {% if page.meta.contact %}
+                      <div>
+                        <dt>Contact</dt>
+                        <dd>{{ page.meta.contact }}</dd>
+                      </div>
+                    {% endif %}
+                    {% if page.meta.referent_scientifique %}
+                      <div>
+                        <dt>Référent scientifique</dt>
+                        <dd>{{ page.meta.referent_scientifique }}</dd>
+                      </div>
+                    {% endif %}
+                    {% if page.meta.source %}
+                      <div>
+                        <dt>Source externe</dt>
+                        <dd>{{ page.meta.source }}</dd>
                       </div>
                     {% endif %}
                   </dl>

@@ -11,15 +11,19 @@ permissions:
   actions: write
   contents: read
 
+concurrency:
+  group: retry-pages-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
 jobs:
   retry:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Retry failed Pages deployment
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ github.event.workflow_run.id }}
-          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
           RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           RUN_SHA: ${{ github.event.workflow_run.head_sha }}
           RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
@@ -39,15 +43,13 @@ jobs:
               ;;
           esac
 
-          if [ "${RUN_ATTEMPT}" -ge 3 ]; then
-            echo "Deploy workflow already reached ${RUN_ATTEMPT} attempts; no retry."
-            exit 0
-          fi
+          # Read the current value from the API instead of trusting the event
+          # payload, which may be stale when retries finish close together.
+          current_attempt="$(gh api "repos/${REPOSITORY}/actions/runs/${RUN_ID}" --jq '.run_attempt')"
 
-          latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/${RUN_BRANCH}" --jq '.object.sha')"
-
-          if [ "${RUN_SHA}" != "${latest_sha}" ]; then
-            echo "A newer ${RUN_BRANCH} commit exists; skipping retry for ${RUN_SHA}."
+          # Allow the initial attempt plus three delayed retries.
+          if [ "${current_attempt}" -ge 4 ]; then
+            echo "Deploy workflow already reached ${current_attempt} attempts; no retry."
             exit 0
           fi
 
@@ -63,5 +65,31 @@ jobs:
             exit 0
           fi
 
-          echo "Retrying Pages deployment, attempt $((RUN_ATTEMPT + 1)) of 3."
+          # GitHub Pages can keep an internal deployment lock briefly after a
+          # failure. Immediate retries hit the same lock and fail again.
+          case "${current_attempt}" in
+            1) retry_delay=45 ;;
+            2) retry_delay=90 ;;
+            *) retry_delay=180 ;;
+          esac
+
+          echo "Waiting ${retry_delay}s for GitHub Pages to release its deployment lock."
+          sleep "${retry_delay}"
+
+          latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/${RUN_BRANCH}" --jq '.object.sha')"
+
+          if [ "${RUN_SHA}" != "${latest_sha}" ]; then
+            echo "A newer ${RUN_BRANCH} commit exists; skipping retry for ${RUN_SHA}."
+            exit 0
+          fi
+
+          # Re-read the attempt after waiting in case another retry or a manual
+          # action already advanced the workflow.
+          latest_attempt="$(gh api "repos/${REPOSITORY}/actions/runs/${RUN_ID}" --jq '.run_attempt')"
+          if [ "${latest_attempt}" != "${current_attempt}" ]; then
+            echo "Run advanced from attempt ${current_attempt} to ${latest_attempt}; skipping duplicate retry."
+            exit 0
+          fi
+
+          echo "Retrying Pages deployment, attempt $((current_attempt + 1)) of 4."
           gh run rerun "${RUN_ID}" --repo "${REPOSITORY}" --failed
