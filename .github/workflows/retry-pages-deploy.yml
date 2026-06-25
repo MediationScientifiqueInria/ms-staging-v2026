@@ -43,10 +43,10 @@ jobs:
             exit 0
           fi
 
-          latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          latest_sha="$(gh api "repos/${REPOSITORY}/git/ref/heads/staging" --jq '.object.sha')"
 
           if [ "${RUN_SHA}" != "${latest_sha}" ]; then
-            echo "A newer main commit exists; skipping retry for ${RUN_SHA}."
+            echo "A newer staging commit exists; skipping retry for ${RUN_SHA}."
             exit 0
           fi
 
