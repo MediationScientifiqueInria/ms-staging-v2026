@@ -1,6 +1,6 @@
 ---
 title: Test cédric
-cover_image: ''
+cover_image: /assets/images/media-61790.webp
 tags:
   - Autre
 date: 2026-06-25
