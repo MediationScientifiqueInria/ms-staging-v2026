@@ -1,6 +1,6 @@
 ---
 title: fdsfds
-cover_image: ''
+cover_image: /assets/images/Centre-Inria-de-Paris_0.jpg
 featured: false
 date: 2026-06-23
 langue: fr
