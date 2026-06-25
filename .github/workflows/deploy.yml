@@ -1,9 +1,10 @@
 name: Deploy MkDocs to GitHub Pages
 
 on:
-  # Trigger on push to staging branch
+  # The same workflow is shared by the production and staging repositories.
   push:
     branches:
+      - main
       - staging
   
   # Allow manual trigger from Actions tab
@@ -46,9 +47,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Configure CMS for this repository
+        env:
+          CMS_REPOSITORY: ${{ github.repository }}
+          CMS_BRANCH: ${{ github.ref_name }}
+        run: |
+          sed -i -E "s|^  repo:.*$|  repo: ${CMS_REPOSITORY}|" docs/admin/config.yml
+          sed -i -E "s|^  branch:.*$|  branch: ${CMS_BRANCH}|" docs/admin/config.yml
+
       - name: Build MkDocs site
         env:
-          MKDOCS_NO_INDEX: ${{ github.repository == 'MediationScientifiqueInria/ms-staging-v2026' && 'true' || 'false' }}
+          MKDOCS_NO_INDEX: ${{ github.ref_name == 'staging' && 'true' || 'false' }}
         run: mkdocs build --clean
 
       - name: Setup Pages

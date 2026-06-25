@@ -1564,6 +1564,39 @@ html .md-footer-meta.md-typeset a:hover {
   transform: translateY(-0.04em);
 }
 
+.resource-sidebar-meta__list {
+  margin: 0;
+  padding: 0 0.6rem;
+}
+
+.resource-sidebar-meta__list div {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(39, 52, 139, 0.12);
+}
+
+.resource-sidebar-meta__list div:last-child {
+  border-bottom: 0;
+}
+
+.resource-sidebar-meta__list dt {
+  margin-bottom: 0.15rem;
+  color: var(--md-primary-fg-color);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resource-sidebar-meta__list dd {
+  margin: 0;
+  color: #1b1b1b;
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.search-metadata {
+  display: none;
+}
+
 .resource-card:hover,
 .resource-card:focus-within {
   border-color: rgba(39, 52, 139, 0.34);

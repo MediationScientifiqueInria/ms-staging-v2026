@@ -8,7 +8,7 @@ theme:
     text: InriaSans-Regular
 
   logo: assets/images/Inria-mediation.png
-  favicon: assets/images/favicon.ico
+  favicon: assets/images/logos/favicon.png
   name: material
   custom_dir: src/overrides
   palette:
@@ -37,6 +37,7 @@ extra_javascript:
   - assets/javascripts/home-partners-carousel.js?v=20260624-5
   - assets/javascripts/clickable-cards.js
   - assets/javascripts/reveal-on-scroll.js
+  - assets/javascripts/search-results.js
 
 hooks:
   - scripts/build/content_dates.py
@@ -44,6 +45,7 @@ hooks:
   - scripts/build/partners.py
   - scripts/build/section_collections.py
   - scripts/build/featured_actualites.py
+  - scripts/build/search_metadata.py
 
 
 

@@ -98,6 +98,32 @@ collections:
                 required: false
                 hint: "À remplir si le type choisi est Événement"
 
+  # ─── RECHERCHE ────────────────────────────────────────────────────────────
+  - name: thesaurus_recherche
+    label: Thésaurus de recherche
+    files:
+      - name: synonymes
+        label: Synonymes
+        file: data/search-thesaurus-custom.yml
+        fields:
+          - label: Correspondances
+            name: entries
+            widget: list
+            required: false
+            summary: "{{fields.term}}"
+            hint: "Associer un terme présent dans les métadonnées des ressources à des mots que le public pourrait rechercher."
+            fields:
+              - label: Terme principal
+                name: term
+                widget: string
+                hint: "Doit correspondre exactement à un thème, centre, support, auteur ou autre valeur utilisée dans les ressources."
+
+              - label: Synonymes et termes associés
+                name: synonyms
+                widget: list
+                required: false
+                hint: "Ajouter un mot ou une expression par ligne."
+
   # ─── NOUS CONNAÎTRE ──────────────────────────────────────────────────────
   - name: bilans
     label: Bilans
@@ -287,22 +313,6 @@ collections:
         required: true
         hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une ressource sans contenu"
 
-      - label: Type
-        name: tags
-        widget: select
-        multiple: true
-        options:
-          - Ressource pédagogique
-          - Outil
-          - Publication
-          - Exposition
-          - Jeu
-          - Vidéo
-          - MOOC
-          - Atelier
-          - Autre
-        hint: "Type de ressource (utilisé comme filtre)"
-
       - label: Date de publication
         name: date
         widget: datetime
@@ -353,15 +363,53 @@ collections:
 
       - label: Thématiques scientifiques
         name: thematiques
-        widget: list
+        widget: select
+        multiple: true
         required: false
-        hint: "Thématiques issues de la cartographie (ex : Intelligence artificielle, Algorithmique...)"
+        options:
+          - Architectures, systèmes et réseaux
+          - Sciences du logiciel
+          - Données et connaissances
+          - Sécurité et confidentialité
+          - Interaction, multimédia et robotique
+          - Modélisation, simulation et contrôle
+          - Informatique théorique
+          - Mathématiques pour l'informatique
+          - Intelligence artificielle
+          - Sciences du vivant
+          - Santé numérique
+          - Environnement et planète
+          - Energie
+          - Industries du futur
+          - Informatique et télécommunications
+          - Transport et logistique
+          - Villes et territoires intelligents
+          - Société & connaissance
+        hint: "Sélectionner une ou plusieurs thématiques scientifiques"
 
-      - label: Domaines grand public
+      - label: Thèmes grand public
         name: domaines
-        widget: list
+        widget: select
+        multiple: true
         required: false
-        hint: "Domaines selon Interstices (ex : Société numérique, Jeux...)"
+        options:
+          - Environnement et climat
+          - Environnement & Planète
+          - Algorithmes
+          - Architecture & Systèmes
+          - Modélisation & Simulation
+          - Histoire du numérique
+          - Sécurité & Vie privée
+          - Médecine & Sciences du vivant
+          - Interaction Humain/Machine
+          - Intelligence artificielle
+          - Langages, programmation & logiciel
+          - Réseaux & Communication
+          - Traitement d’images & Son
+          - Robotique
+          - Culture & Société
+          - Données
+        hint: "Thèmes grand public issus de la classification Interstices"
 
       - label: Cibles
         name: cibles
@@ -371,9 +419,33 @@ collections:
 
       - label: Centre / Territoire
         name: territoire
-        widget: list
+        widget: select
+        multiple: true
         required: false
-        hint: "Centre Inria ou territoire concerné (ex : Paris, Grenoble, Île-de-France...)"
+        options:
+          - label: Centre Inria de l’Université de Bordeaux
+            value: Centre Inria de l’Université de Bordeaux
+          - label: Centre Inria de l’Université Grenoble Alpes
+            value: Centre Inria de l’Université Grenoble Alpes
+          - label: Centre Inria de l’Université de Lille
+            value: Centre Inria de l’Université de Lille
+          - label: Centre Inria de l’Université de Lorraine — Nancy
+            value: Centre Inria de l’Université de Lorraine
+          - label: Centre Inria de l’Université de Rennes
+            value: Centre Inria de l’Université de Rennes
+          - label: Centre Inria d’Université Côte d’Azur — Sophia Antipolis, Nice
+            value: Centre Inria d’Université Côte d’Azur
+          - label: Centre Inria de Lyon
+            value: Centre Inria de Lyon
+          - label: Centre Inria de Paris
+            value: Centre Inria de Paris
+          - label: Centre Inria de Saclay
+            value: Centre Inria de Saclay
+          - label: Inria Chile — Chili
+            value: Inria Chile
+          - label: Siège Inria — Rocquencourt
+            value: Siège Inria (Rocquencourt)
+        hint: "Sélectionner un ou plusieurs centres ; les villes associées sont indiquées pour faciliter la recherche"
 
       - label: Support
         name: support
@@ -381,9 +453,9 @@ collections:
         multiple: true
         options:
           - Physique
-          - Numérique (à télécharger)
+          - Numérique
           - En ligne
-          - Empruntable (en prêt)
+          - Empruntable
           - Duplicable
         required: false
 
