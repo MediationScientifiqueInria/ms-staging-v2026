@@ -1,0 +1,316 @@
+# Chaque entrée associe une valeur utilisée dans les métadonnées des ressources
+# aux mots et expressions qui doivent également permettre de la retrouver.
+terms:
+  Intelligence artificielle:
+    - IA
+    - intelligence machine
+    - apprentissage automatique
+    - machine learning
+    - apprentissage profond
+    - deep learning
+    - réseau de neurones
+    - IA générative
+    - algorithme intelligent
+
+  Langages, programmation & logiciel:
+    - langage
+    - langages
+    - programmation
+    - logiciel
+    - code
+    - coder
+    - développement
+    - développeur
+    - application
+    - programme informatique
+    - génie logiciel
+
+  Sciences du logiciel:
+    - logiciel
+    - génie logiciel
+    - programmation
+    - code
+    - développement
+
+  Algorithmes:
+    - algorithme
+    - algorithmique
+    - calcul
+    - méthode de calcul
+    - suite d’instructions
+    - résolution de problème
+    - tri
+    - optimisation
+
+  Informatique théorique:
+    - théorie informatique
+    - calculabilité
+    - complexité
+    - algorithmique
+
+  Données:
+    - donnée
+    - data
+    - base de données
+    - statistiques
+    - données numériques
+    - analyse de données
+    - big data
+    - visualisation de données
+
+  Données et connaissances:
+    - donnée
+    - data
+    - base de données
+    - connaissance
+    - web sémantique
+
+  Sécurité & Vie privée:
+    - cybersécurité
+    - sécurité informatique
+    - vie privée
+    - données personnelles
+    - confidentialité
+    - protection des données
+    - piratage
+    - hacker
+    - mot de passe
+    - cryptographie
+    - RGPD
+
+  Sécurité et confidentialité:
+    - cybersécurité
+    - sécurité informatique
+    - vie privée
+    - données personnelles
+
+  Environnement & Planète:
+    - environnement
+    - planète
+    - climat
+    - écologie
+    - développement durable
+    - changement climatique
+    - réchauffement climatique
+    - biodiversité
+    - transition écologique
+    - empreinte carbone
+    - numérique responsable
+
+  Environnement et climat:
+    - environnement
+    - planète
+    - climat
+    - écologie
+    - développement durable
+    - changement climatique
+    - réchauffement climatique
+    - biodiversité
+    - transition écologique
+    - empreinte carbone
+    - numérique responsable
+
+  Environnement et planète:
+    - environnement
+    - planète
+    - climat
+    - écologie
+    - développement durable
+
+  Médecine & Sciences du vivant:
+    - médecine
+    - santé
+    - biologie
+    - vivant
+    - santé numérique
+    - e-santé
+    - diagnostic
+    - patient
+    - génomique
+    - bioinformatique
+    - neurosciences
+
+  Sciences du vivant:
+    - biologie
+    - vivant
+    - médecine
+    - santé
+
+  Santé numérique:
+    - santé
+    - médecine
+    - e-santé
+    - télémédecine
+
+  Interaction Humain/Machine:
+    - IHM
+    - interface
+    - interaction homme machine
+    - interaction humain machine
+    - expérience utilisateur
+    - UX
+    - ergonomie
+    - interface utilisateur
+    - réalité virtuelle
+    - réalité augmentée
+    - accessibilité numérique
+
+  Interaction, multimédia et robotique:
+    - IHM
+    - interface
+    - multimédia
+    - robot
+    - robotique
+
+  Traitement d’images & Son:
+    - image
+    - images
+    - vision
+    - son
+    - audio
+    - vidéo
+    - traitement d’image
+    - vision par ordinateur
+    - reconnaissance d’image
+    - reconnaissance vocale
+    - parole
+    - photographie
+
+  Réseaux & Communication:
+    - réseau
+    - internet
+    - communication
+    - télécommunications
+    - wifi
+    - web
+    - connexion
+    - réseau informatique
+    - réseau mobile
+    - 5G
+    - objets connectés
+    - IoT
+
+  Architectures, systèmes et réseaux:
+    - architecture informatique
+    - système
+    - réseau
+    - internet
+    - infrastructure
+
+  Architecture & Systèmes:
+    - architecture informatique
+    - système
+    - infrastructure
+    - ordinateur
+    - processeur
+    - système d’exploitation
+    - serveur
+    - cloud
+    - calcul haute performance
+    - supercalculateur
+    - informatique embarquée
+
+  Modélisation & Simulation:
+    - modèle
+    - modélisation
+    - simulation
+    - modèle numérique
+    - simulation numérique
+    - jumeau numérique
+    - prédiction
+    - prévision
+    - réalité virtuelle
+
+  Modélisation, simulation et contrôle:
+    - modèle
+    - modélisation
+    - simulation
+    - contrôle
+    - automatique
+
+  Robotique:
+    - robot
+    - automate
+    - robot autonome
+    - drone
+    - cobot
+    - robot industriel
+    - véhicule autonome
+    - mécatronique
+
+  Culture & Société:
+    - culture
+    - société
+    - numérique responsable
+    - humanités numériques
+    - impact du numérique
+    - éthique du numérique
+    - inclusion numérique
+    - fracture numérique
+    - réseaux sociaux
+    - désinformation
+    - citoyenneté numérique
+
+  Société & connaissance:
+    - société
+    - connaissance
+    - culture numérique
+    - humanités numériques
+
+  Histoire du numérique:
+    - histoire de l’informatique
+    - patrimoine numérique
+    - histoire d’internet
+    - histoire des ordinateurs
+    - pionniers de l’informatique
+    - anciennes technologies
+    - mémoire du numérique
+
+  Mathématiques pour l'informatique:
+    - mathématiques
+    - maths
+    - calcul
+
+  Energie:
+    - énergie
+    - électricité
+    - sobriété énergétique
+
+  Industries du futur:
+    - industrie
+    - usine
+    - industrie 4.0
+
+  Informatique et télécommunications:
+    - informatique
+    - télécom
+    - télécommunications
+    - réseau
+
+  Transport et logistique:
+    - transport
+    - mobilité
+    - logistique
+
+  Villes et territoires intelligents:
+    - ville intelligente
+    - smart city
+    - territoire intelligent
+    - urbanisme
+
+  Centre Inria de l’Université de Lorraine:
+    - Nancy
+    - Metz
+    - Lorraine
+
+  Centre Inria d’Université Côte d’Azur:
+    - Sophia Antipolis
+    - Nice
+    - Côte d’Azur
+
+  Centre Inria de l’Université Grenoble Alpes:
+    - Grenoble
+
+  Siège Inria (Rocquencourt):
+    - Rocquencourt
+    - siège
