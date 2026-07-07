@@ -81,7 +81,8 @@ def _normalize_front_matter(path: Path) -> bool:
     if not changed:
         return False
 
-    path.write_text(f"---\n{'\n'.join(lines)}\n---\n{match.group(2)}", encoding="utf-8")
+    front_matter = "\n".join(lines)
+    path.write_text(f"---\n{front_matter}\n---\n{match.group(2)}", encoding="utf-8")
     return True
 
 
