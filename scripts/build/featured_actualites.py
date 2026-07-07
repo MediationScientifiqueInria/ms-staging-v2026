@@ -11,7 +11,7 @@ from mkdocs.structure.files import File, InclusionLevel
 
 ACTUALITES_DIR = Path("docs/contenus/actualites/posts")
 RESSOURCES_DIR = Path("docs/contenus/ressources/posts")
-BILANS_DIR = Path("docs/bilans/posts")
+BILANS_DIR = Path("docs/contenus/bilans/posts")
 DOCS_REFERENCE_DIR = Path("docs/docs/posts")
 EVENTS_DIR = Path("docs/contenus/evenements")
 ACTUALITES_PER_PAGE = 12
@@ -171,7 +171,7 @@ def _post_from_file(path: Path, section: str, repository: Path) -> dict | None:
     section_details = {
         "actualites": ("contenus/actualites", "Actualité"),
         "ressources": ("contenus/ressources", "Ressource"),
-        "bilans": ("bilans", "Bilan"),
+        "bilans": ("contenus/bilans", "Bilan"),
         "docs": ("docs", "Document"),
     }
     url_base, type_label = section_details[section]
@@ -241,11 +241,11 @@ def _feed_event_from_file(path: Path) -> dict | None:
         "excerpt": _excerpt({}, body),
         "date": _date_label(published),
         "auteur": data.get("lieu") or "",
-        "themes": [data.get("type") or "Événement"],
+        "themes": [data.get("type") or "Évènement"],
         "tags": [item for item in data.get("tags", []) if item],
         "featured": data.get("featured", False) is True,
         "content_type": "evenements",
-        "type_label": "Événement",
+        "type_label": "Évènement",
         "published": published,
         "added": added,
     }
@@ -274,10 +274,10 @@ def _event_to_featured_item(event: dict) -> dict:
         "excerpt": event.get("description") or "",
         "date": event.get("month_label") or event.get("date_debut_label") or "",
         "auteur": event.get("lieu") or "",
-        "themes": [event.get("type") or "Événement"],
+        "themes": [event.get("type") or "Évènement"],
         "featured": True,
         "content_type": "evenements",
-        "type_label": "Événement",
+        "type_label": "Évènement",
         "published": _as_datetime(event.get("date_debut")),
         "added": _as_datetime(event.get("date_publication")),
         "source_path": f"docs/contenus/evenements/{event['entry_id']}.md",
@@ -292,11 +292,11 @@ def _event_to_feed_item(event: dict) -> dict:
         "excerpt": event.get("description") or "",
         "date": event.get("date_debut_label") or event.get("month_label") or "",
         "auteur": event.get("lieu") or "",
-        "themes": [event.get("type") or "Événement"],
+        "themes": [event.get("type") or "Évènement"],
         "tags": [item for item in event.get("tags", []) if item],
         "featured": event.get("featured", False) is True,
         "content_type": "evenements",
-        "type_label": "Événement",
+        "type_label": "Évènement",
         "published": _first_datetime(event.get("date_publication"), event.get("date_ajout"), event.get("date_debut")),
         "added": _as_datetime(event.get("date_publication")),
     }

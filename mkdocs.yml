@@ -38,17 +38,18 @@ extra_javascript:
   - assets/javascripts/clickable-cards.js
   - assets/javascripts/reveal-on-scroll.js
   - assets/javascripts/search-results.js
+  - assets/javascripts/resource-filters.js
 
 nav:
   - Accueil: index.md
   - Nous connaître:
       - Nous connaître: qui-sommes-nous.md
-      - Bilans: bilans/index.md
+      - Bilans: contenus/bilans/index.md
       - Docs: docs/index.md
   - Actualités:
       - Tout: contenus/actualites/index.md
       - Actualités: contenus/actualites/actualites/index.md
-      - Événements: contenus/actualites/evenements/index.md
+      - Évènements: contenus/actualites/evenements/index.md
   - Ressources: contenus/ressources/index.md
   - Réseau: ecosysteme.md
 
@@ -86,7 +87,7 @@ plugins:
     - glightbox
     - table-reader
     - blog:
-        blog_dir: bilans
+        blog_dir: contenus/bilans
         blog_toc: true
         archive: false
         post_date_format: long
@@ -108,7 +109,7 @@ plugins:
         post_date_format: long
         post_url_format: "{slug}"
         authors: false
-        pagination_per_page: 12
+        pagination_per_page: 1000
     - blog:
         blog_dir: contenus/actualites
         blog_toc: true

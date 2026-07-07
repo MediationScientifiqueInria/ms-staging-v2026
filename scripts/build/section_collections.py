@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 
 
-BILANS_DIR = Path("docs/bilans/posts")
+BILANS_DIR = Path("docs/contenus/bilans/posts")
 DOCS_DIR = Path("docs/docs/posts")
 MONTHS_FR = {
     1: "janvier",
@@ -111,6 +111,6 @@ def _collect(config, directory: Path, base_url: str, fallback_type: str) -> list
 
 
 def on_env(env, config, files, **kwargs):
-    env.globals["all_bilans"] = _collect(config, BILANS_DIR, "bilans/", "Bilan")
+    env.globals["all_bilans"] = _collect(config, BILANS_DIR, "contenus/bilans/", "Bilan")
     env.globals["all_reference_docs"] = _collect(config, DOCS_DIR, "docs/", "Doc")
     return env

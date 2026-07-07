@@ -80,7 +80,7 @@ collections:
   - name: bilans
     label: Bilans
     label_singular: Bilan
-    folder: docs/bilans/posts
+    folder: docs/contenus/bilans/posts
     create: true
     slug: "{{slug}}"
     view_filters:
@@ -112,7 +112,10 @@ collections:
 
       - label: Date de publication
         name: date
-        widget: hidden
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
         default: "{{now}}"
 
       - label: Langue
@@ -196,7 +199,10 @@ collections:
 
       - label: Date de publication
         name: date
-        widget: hidden
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
         default: "{{now}}"
 
       - label: Langue
@@ -294,7 +300,10 @@ collections:
 
       - label: Date de publication
         name: date
-        widget: hidden
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
         default: "{{now}}"
 
       - label: Date du sujet
@@ -492,7 +501,10 @@ collections:
 
       - label: Date de publication
         name: date
-        widget: hidden
+        widget: datetime
+        format: YYYY-MM-DD
+        date_format: DD/MM/YYYY
+        time_format: false
         default: "{{now}}"
 
       - label: Langue
@@ -556,10 +568,10 @@ collections:
         widget: list
         required: false
 
-  # ─── ÉVÉNEMENTS ─────────────────────────────────────────────────────────
+  # ─── ÉVÈNEMENTS ─────────────────────────────────────────────────────────
   - name: calendrier
-    label: Événements
-    label_singular: Événement
+    label: Évènements
+    label_singular: Évènement
     folder: docs/contenus/evenements
     create: true
     slug: "{{date_debut}}-{{slug}}"
@@ -584,7 +596,7 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: "Affiche cet événement dans le carrousel À la une de l'accueil"
+        hint: "Affiche cet évènement dans le carrousel À la une de l'accueil"
 
       - label: Titre
         name: title
@@ -600,7 +612,7 @@ collections:
         name: body
         widget: markdown
         required: false
-        hint: "Texte libre de l'événement. Les images insérées ici s'affichent dans l'ordre où elles sont placées."
+        hint: "Texte libre de l'évènement. Les images insérées ici s'affichent dans l'ordre où elles sont placées."
 
       - label: Date de publication
         name: date_publication
@@ -620,7 +632,7 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: "À cocher si l'événement n'a pas d'heure précise"
+        hint: "À cocher si l'évènement n'a pas d'heure précise"
 
       - label: Heure de début
         name: heure_debut
@@ -852,16 +864,16 @@ collections:
           - Exposition
           - Rencontre
           - Formation
-          - Événement
+          - Évènement
           - Autre
-        default: Événement
+        default: Évènement
         required: false
 
       - label: Tags
         name: tags
         widget: list
         required: false
-        hint: "Mots-clés libres affichés sur les cartes de l'événement"
+        hint: "Mots-clés libres affichés sur les cartes de l'évènement"
 
       - label: Couleur
         name: couleur
@@ -904,7 +916,7 @@ collections:
         name: lien
         widget: string
         required: false
-        hint: "URL vers l'inscription ou la page de l'événement"
+        hint: "URL vers l'inscription ou la page de l'évènement"
 
       - label: Libellé du lien
         name: libelle_lien

@@ -24,7 +24,7 @@ Les ressources sont créées dans :
 
 `docs/contenus/ressources/posts/`
 
-Les événements du calendrier sont créés dans :
+Les évènements du calendrier sont créés dans :
 
 `docs/contenus/evenements/`
 

@@ -9,6 +9,7 @@ from pathlib import Path
 CONTENT_DIRS = (
     "contenus/actualites/posts/",
     "contenus/ressources/posts/",
+    "contenus/bilans/posts/",
 )
 
 

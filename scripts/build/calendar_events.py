@@ -218,7 +218,7 @@ def _event_from_file(path: Path) -> dict | None:
         "date_fin_label": _short_date(data.get("date_fin")),
         "heure_fin": "" if is_all_day else _time(data.get("heure_fin")),
         "lieu": data.get("lieu") or "",
-        "type": data.get("type") or "Événement",
+        "type": data.get("type") or "Évènement",
         "tags": _as_list(data.get("tags")),
         "couleur": _color(data.get("couleur") or data.get("color")),
         "public": data.get("public") or [],
@@ -291,7 +291,7 @@ def _current_month(months: list[dict], base_url: str = "contenus/evenements") ->
 
 
 def _event_detail_markdown(meta: dict, markdown: str) -> str:
-    title = meta.get("title") or meta.get("titre") or "Événement"
+    title = meta.get("title") or meta.get("titre") or "Évènement"
     body = markdown.strip()
     details = [
         ("Date de début", _iso(meta.get("date_debut") or meta.get("date"))),

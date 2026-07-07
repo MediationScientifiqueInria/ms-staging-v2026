@@ -10,13 +10,59 @@
       </div>
     </header>
 
-    <div class="ressources-posts">
+    <form class="resource-filters" data-resource-filters role="search" aria-label="Filtrer les ressources">
+      <label class="resource-filters__field resource-filters__field--search">
+        <span>Recherche</span>
+        <input type="search" name="q" placeholder="Mot-clé, thème, public..." autocomplete="off" data-resource-filter-search>
+      </label>
+
+      <label class="resource-filters__field">
+        <span>Type</span>
+        <select name="tag" data-resource-filter-select="tags">
+          <option value="">Tous les types</option>
+        </select>
+      </label>
+
+      <label class="resource-filters__field">
+        <span>Support</span>
+        <select name="support" data-resource-filter-select="support">
+          <option value="">Tous les supports</option>
+        </select>
+      </label>
+
+      <label class="resource-filters__field">
+        <span>Public</span>
+        <select name="cible" data-resource-filter-select="cibles">
+          <option value="">Tous les publics</option>
+        </select>
+      </label>
+
+      <label class="resource-filters__field">
+        <span>Tri</span>
+        <select name="sort" data-resource-sort>
+          <option value="date-desc">Plus récentes</option>
+          <option value="date-asc">Plus anciennes</option>
+          <option value="title-asc">Titre A-Z</option>
+          <option value="title-desc">Titre Z-A</option>
+        </select>
+      </label>
+
+      <button class="resource-filters__reset" type="reset" data-resource-filter-reset>Réinitialiser</button>
+    </form>
+
+    <p class="resource-filters__summary" data-resource-filter-summary aria-live="polite"></p>
+
+    <div class="ressources-posts" data-resource-list>
       {% for post in posts %}
         {% include "partials/resource-card.html" %}
       {% else %}
         <p class="actualites-empty md-typeset">Aucune ressource publiée pour le moment.</p>
       {% endfor %}
     </div>
+
+    <p class="actualites-empty md-typeset resource-filters__empty" data-resource-filter-empty hidden>
+      Aucune ressource ne correspond à ces critères.
+    </p>
 
     {% if pagination %}
       {% block pagination %}
