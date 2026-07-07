@@ -5,7 +5,7 @@
   <div class="md-content__inner">
     {% set actualites_page_index = page.meta.actualites_page_index | d(0, true) | int %}
     {% set actualites_view = page.meta.actualites_view | d("actualites", true) %}
-    {% set feed_page = actualites_article_pages[actualites_page_index] if actualites_view == "articles" else actualites_feed_pages[actualites_page_index] %}
+    {% set feed_page = actualites_only_pages[actualites_page_index] if actualites_view == "actualites_only" else actualites_feed_pages[actualites_page_index] %}
     {% set actualites_tab = actualites_view %}
 
     <header class="section-heading">

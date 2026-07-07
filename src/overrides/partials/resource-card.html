@@ -73,9 +73,9 @@
 
     <footer class="resource-card__footer">
       {% if post.meta.date_maj %}
-        <span>Mis à jour le {{ post.meta.date_maj | date }} à {{ post.meta.date_maj.strftime("%H:%M") }}</span>
+        <span>Mis à jour le {{ post.meta.date_maj | date }}</span>
       {% elif post.config.date.created %}
-        <span>Ajouté le {{ post.config.date.created | date }} à {{ post.config.date.created.strftime("%H:%M") }}</span>
+        <span>Ajouté le {{ post.config.date.created | date }}</span>
       {% endif %}
 
       <a class="resource-card__action" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>

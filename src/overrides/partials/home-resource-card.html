@@ -46,8 +46,10 @@
     </dl>
 
     <footer class="resource-card__footer">
-      {% if resource.date %}
-        <span>Ajoute le {{ resource.date }}</span>
+      {% if resource.date_maj %}
+        <span>Mis à jour le {{ resource.date_maj }}</span>
+      {% elif resource.date %}
+        <span>Ajouté le {{ resource.date }}</span>
       {% endif %}
 
       <a class="resource-card__action" href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
