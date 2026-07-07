@@ -2,7 +2,7 @@ partenaires:
   - nom: Universcience
     logo: assets/images/logos/universcience.svg
     afficher_accueil: true
-    url: ''
+    url: https://www.universcience.fr/fr/accueil/
   - nom: AMCSTI
     logo: assets/images/logos/logo-amcsti-1.png
     afficher_accueil: true
