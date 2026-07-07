@@ -20,6 +20,6 @@ support:
 source: https://www.ouest-france.fr/sport/coupe-du-monde/coupe-du-monde-vous-etes-une-femme-meprisable-kylian-mbappe-repond-a-la-ministre-paraguayenne-layant-insulte-3f2cbbd6-7968-11f1-980a-970130a57304?utm_source=firefox-newtab-fr-fr
 ---
 
-![La casa de l'Alice](/assets/images/Capture%20d'écran%202024-07-02%20163504.png "Testouille")
+![La casa de l'Alice](/assets/images/Capture%20d'écran%202024-07-02%20163504.png)
 
 Mon actu elle est belle et elle sent le sable chaud
