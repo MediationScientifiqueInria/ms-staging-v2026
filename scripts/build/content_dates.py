@@ -4,6 +4,7 @@ import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote, unquote
 
 
 CONTENT_DIRS = (
@@ -11,6 +12,7 @@ CONTENT_DIRS = (
     "contenus/ressources/posts/",
     "contenus/bilans/posts/",
 )
+ASSET_IMAGE_PREFIXES = ("/assets/images/", "assets/images/")
 
 
 def _card_excerpt(markdown: str) -> str:
@@ -19,6 +21,56 @@ def _card_excerpt(markdown: str) -> str:
     excerpt = re.sub(r"(?m)^\s{0,3}#{1,6}\s+", "", excerpt)
     excerpt = re.sub(r"<[^>]+>", "", excerpt)
     return re.sub(r"\s+", " ", excerpt).strip()
+
+
+def _relative_url(from_url: str, target: str) -> str:
+    parts = [part for part in from_url.split("/") if part]
+    prefix = "../" * len(parts)
+    return f"{prefix}{target}" if prefix else target
+
+
+def _normalize_asset_image_url(raw_url: str, page_url: str, repository: Path) -> str:
+    if "://" in raw_url or raw_url.startswith("#"):
+        return raw_url
+
+    clean_url = raw_url.strip()
+    suffix = ""
+
+    for separator in ("#", "?"):
+        if separator in clean_url:
+            clean_url, suffix = clean_url.split(separator, 1)
+            suffix = f"{separator}{suffix}"
+            break
+
+    matched_prefix = next(
+        (prefix for prefix in ASSET_IMAGE_PREFIXES if clean_url.startswith(prefix)),
+        None,
+    )
+
+    if not matched_prefix:
+        return raw_url
+
+    image_path = unquote(clean_url[len(matched_prefix):])
+    source_path = repository / "docs/assets/images" / image_path
+
+    if not source_path.exists():
+        return raw_url
+
+    quoted_path = quote(image_path, safe="/")
+    return f"{_relative_url(page_url, f'assets/images/{quoted_path}')}{suffix}"
+
+
+def _normalize_markdown_images(markdown: str, page_url: str, repository: Path) -> str:
+    image_pattern = re.compile(r"(!\[[^\]]*]\()([^)\s]+(?:%20[^)]*)?)(\))")
+
+    def replace(match: re.Match) -> str:
+        return (
+            f"{match.group(1)}"
+            f"{_normalize_asset_image_url(match.group(2), page_url, repository)}"
+            f"{match.group(3)}"
+        )
+
+    return image_pattern.sub(replace, markdown)
 
 
 def _git_update_date(path: Path, repository: Path) -> datetime | None:
@@ -81,6 +133,7 @@ def on_page_markdown(markdown, page, config, files):
         return markdown
 
     repository = Path(config.config_file_path).resolve().parent
+    markdown = _normalize_markdown_images(markdown, page.url, repository)
     update_date = _git_update_date(abs_src_path.resolve(), repository)
     if update_date:
         page.meta["date_maj"] = update_date
