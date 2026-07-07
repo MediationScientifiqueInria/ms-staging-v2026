@@ -21,7 +21,27 @@ def _card_excerpt(markdown: str) -> str:
 
 
 def _git_update_date(path: Path, repository: Path) -> datetime | None:
-    """Return the latest commit date only when the file has been committed twice."""
+    """Return the local or committed update date when a file has changed after creation."""
+    try:
+        status = subprocess.run(
+            [
+                "git",
+                "status",
+                "--porcelain",
+                "--",
+                str(path.relative_to(repository)),
+            ],
+            cwd=repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        status = None
+
+    if status and status.stdout.strip() and not status.stdout.lstrip().startswith("??"):
+        return datetime.fromtimestamp(path.stat().st_mtime)
+
     try:
         result = subprocess.run(
             [
@@ -45,7 +65,7 @@ def _git_update_date(path: Path, repository: Path) -> datetime | None:
     if len(dates) < 2:
         return None
 
-    return datetime.fromisoformat(dates[0])
+    return datetime.fromisoformat(dates[0]).replace(tzinfo=None)
 
 
 def on_page_markdown(markdown, page, config, files):

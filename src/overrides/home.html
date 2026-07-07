@@ -32,7 +32,6 @@
   </div>
 </section>
 
-{% if home_featured_items %}
 <section class="home-band" aria-labelledby="home-featured-title">
   <div class="home-band__inner">
     <div class="home-featured">
@@ -83,6 +82,10 @@
                   </footer>
                 </div>
               </article>
+            {% else %}
+              <div class="home-featured__empty">
+                <p>Aucun contenu à la une pour le moment.</p>
+              </div>
             {% endfor %}
           </div>
           <div class="home-carousel__dots" aria-label="Pagination des contenus à la une" data-carousel-dots-list></div>
@@ -104,7 +107,7 @@
                     <a class="home-featured__item-image" href="{{ item.url | url }}">
                       <img src="{{ item.image | url }}" alt="">
                       <span class="resource-card__type-badge">
-                        {% if item.content_type == "evenements" %}Événement{% else %}Article{% endif %}
+                        {% if item.content_type == "evenements" %}Événement{% else %}Actualité{% endif %}
                       </span>
                     </a>
                   {% endif %}
@@ -141,7 +144,6 @@
     </div>
   </div>
 </section>
-{% endif %}
 
 {% include "partials/upcoming-events.html" %}
 

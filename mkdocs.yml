@@ -39,6 +39,19 @@ extra_javascript:
   - assets/javascripts/reveal-on-scroll.js
   - assets/javascripts/search-results.js
 
+nav:
+  - Accueil: index.md
+  - Nous connaître:
+      - Nous connaître: qui-sommes-nous.md
+      - Bilans: bilans/index.md
+      - Docs: docs/index.md
+  - Actualités:
+      - Tout: contenus/actualites/index.md
+      - Actualités: contenus/actualites/actualites/index.md
+      - Événements: contenus/actualites/evenements/index.md
+  - Ressources: contenus/ressources/index.md
+  - Réseau: ecosysteme.md
+
 hooks:
   - scripts/build/optimize_images.py
   - scripts/build/content_dates.py
@@ -75,6 +88,7 @@ plugins:
     - blog:
         blog_dir: bilans
         blog_toc: true
+        archive: false
         post_date_format: long
         post_url_format: "{slug}"
         authors: false
@@ -82,6 +96,7 @@ plugins:
     - blog:
         blog_dir: docs
         blog_toc: true
+        archive: false
         post_date_format: long
         post_url_format: "{slug}"
         authors: false
@@ -89,6 +104,7 @@ plugins:
     - blog:
         blog_dir: contenus/ressources
         blog_toc: true
+        archive: false
         post_date_format: long
         post_url_format: "{slug}"
         authors: false
@@ -96,6 +112,7 @@ plugins:
     - blog:
         blog_dir: contenus/actualites
         blog_toc: true
+        archive: false
         post_date_format: long
         post_url_format: "{slug}"
         authors: false

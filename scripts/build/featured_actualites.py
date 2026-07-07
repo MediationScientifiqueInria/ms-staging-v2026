@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from datetime import date, datetime
 from pathlib import Path
 
@@ -10,8 +11,9 @@ from mkdocs.structure.files import File, InclusionLevel
 
 ACTUALITES_DIR = Path("docs/contenus/actualites/posts")
 RESSOURCES_DIR = Path("docs/contenus/ressources/posts")
+BILANS_DIR = Path("docs/bilans/posts")
+DOCS_REFERENCE_DIR = Path("docs/docs/posts")
 EVENTS_DIR = Path("docs/contenus/evenements")
-A_LA_UNE_FILE = Path("docs/contenus/a-la-une.yml")
 ACTUALITES_PER_PAGE = 12
 MONTHS_FR = {
     1: "janvier",
@@ -54,19 +56,66 @@ def _as_date(value) -> date:
 
 def _as_datetime(value) -> datetime:
     if isinstance(value, datetime):
-        return value
+        return value.replace(tzinfo=None)
 
     if isinstance(value, date):
         return datetime.combine(value, datetime.min.time())
 
     if isinstance(value, str) and value:
-        return datetime.fromisoformat(value)
+        return datetime.fromisoformat(value).replace(tzinfo=None)
 
     return datetime.min
 
 
 def _content_added_datetime(data: dict) -> datetime:
     return _first_datetime(data.get("date_publication"), data.get("date"))
+
+
+def _git_update_date(path: Path, repository: Path) -> datetime | None:
+    try:
+        status = subprocess.run(
+            [
+                "git",
+                "status",
+                "--porcelain",
+                "--",
+                str(path.relative_to(repository)),
+            ],
+            cwd=repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        status = None
+
+    if status and status.stdout.strip() and not status.stdout.lstrip().startswith("??"):
+        return datetime.fromtimestamp(path.stat().st_mtime)
+
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "log",
+                "--follow",
+                "--format=%aI",
+                "--max-count=2",
+                "--",
+                str(path.relative_to(repository)),
+            ],
+            cwd=repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        return None
+
+    dates = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if len(dates) < 2:
+        return None
+
+    return datetime.fromisoformat(dates[0]).replace(tzinfo=None)
 
 
 def _first_datetime(*values) -> datetime:
@@ -96,34 +145,44 @@ def _image(data: dict, body: str) -> str:
     if data.get("cover_image"):
         return str(data["cover_image"]).removeprefix("/")
 
-    match = re.search(r"!\[[^\]]*\]\(([^)]+)\)", body)
+    match = re.search(r"!\[[^\]]*\]\(((?:[^()]|\([^)]*\))*)\)", body)
     return match.group(1) if match else ""
 
 
 def _excerpt(data: dict, body: str) -> str:
-    body = re.sub(r"(?m)^\s*!\[[^\]]*\]\([^\n]*\)\s*$", "", body)
-    body = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", body)
+    body = re.sub(r"!\[[^\]]*]\((?:[^()]|\([^)]*\))*\)", "", body)
     body = re.sub(r"<[^>]+>", "", body)
     body = re.sub(r"\s+", " ", body).strip()
     return body
 
 
-def _post_from_file(path: Path, section: str) -> dict | None:
+def _post_from_file(path: Path, section: str, repository: Path) -> dict | None:
     data, body = _front_matter(path.read_text(encoding="utf-8"))
     title = data.get("title") or path.stem
     published = _as_datetime(data.get("date"))
+    updated = _git_update_date(path, repository)
+    display_date = updated or published
     added = _content_added_datetime(data)
     author = data.get("auteur_autre") or data.get("auteur") or ""
 
     if published == datetime.min:
         return None
 
+    section_details = {
+        "actualites": ("contenus/actualites", "Actualité"),
+        "ressources": ("contenus/ressources", "Ressource"),
+        "bilans": ("bilans", "Bilan"),
+        "docs": ("docs", "Document"),
+    }
+    url_base, type_label = section_details[section]
+
     return {
         "title": title,
-        "url": f"contenus/{section}/{_slug(title)}/",
+        "url": f"{url_base}/{_slug(title)}/",
         "image": _image(data, body) or "assets/images/1007721 (1).png",
         "excerpt": _excerpt(data, body),
         "date": _date_label(published),
+        "date_maj": _date_label(updated) if updated else "",
         "auteur": author,
         "themes": [item for item in data.get("thematiques", []) if item],
         "tags": [item for item in data.get("tags", []) if item],
@@ -133,23 +192,34 @@ def _post_from_file(path: Path, section: str) -> dict | None:
         "source": data.get("source") or author,
         "featured": data.get("featured", False) is True,
         "content_type": section,
-        "type_label": "Article" if section == "actualites" else "Ressource",
+        "type_label": type_label,
         "published": published,
+        "updated": updated,
+        "display_date": display_date,
         "added": added,
     }
 
 
 def _collect_posts(config, posts_dir: Path, section: str) -> list[dict]:
-    posts_dir = Path(config.config_file_path).parent / posts_dir
+    root = Path(config.config_file_path).parent
+    posts_dir = root / posts_dir
 
     if not posts_dir.exists():
         return []
 
     posts = []
     for path in posts_dir.glob("*.md"):
-        post = _post_from_file(path, section)
+        post = _post_from_file(path, section, root)
         if post:
+            post["source_path"] = path.relative_to(root).as_posix()
             posts.append(post)
+
+    if section == "ressources":
+        return sorted(
+            posts,
+            key=lambda post: (post["display_date"].date(), post["published"]),
+            reverse=True,
+        )
 
     return sorted(posts, key=lambda post: post["published"], reverse=True)
 
@@ -210,6 +280,7 @@ def _event_to_featured_item(event: dict) -> dict:
         "type_label": "Événement",
         "published": _as_datetime(event.get("date_debut")),
         "added": _as_datetime(event.get("date_publication")),
+        "source_path": f"docs/contenus/evenements/{event['entry_id']}.md",
     }
 
 
@@ -283,7 +354,7 @@ def _unique_by_url(items: list[dict]) -> list[dict]:
 
 
 def _generated_actualites_page(config, path: str, view: str, index: int) -> File:
-    title = "Articles" if view == "articles" else "Actualités"
+    title = "Actualités"
 
     return File.generated(
         config,
@@ -304,47 +375,18 @@ def _generated_actualites_page(config, path: str, view: str, index: int) -> File
     )
 
 
-def _configured_featured(config, actualites: list[dict], events: list[dict]) -> list[dict]:
-    path = Path(config.config_file_path).parent / A_LA_UNE_FILE
-
-    if not path.exists():
-        return []
-
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    items = data.get("items") or []
-    actualites_by_title = {post["title"]: post for post in actualites}
-    events_by_title = {
-        event["title"]: event
-        for event in events
-        if event.get("publie")
-    }
-    featured = []
-
-    for item in items:
-        if len(featured) >= 4:
-            break
-
-        if item.get("type") == "actualite" and item.get("actualite") in actualites_by_title:
-            featured.append(actualites_by_title[item["actualite"]])
-
-        if item.get("type") == "evenement" and item.get("evenement") in events_by_title:
-            featured.append(_event_to_featured_item(events_by_title[item["evenement"]]))
-
-    return featured
-
-
 def on_files(files, config, **kwargs):
     actualites = _collect_posts(config, ACTUALITES_DIR, "actualites")
     events = _collect_feed_events(config)
     feed = sorted(actualites + events, key=lambda item: item["added"], reverse=True)
     feed_pages = _paginate(feed, "contenus/actualites/")
-    article_pages = _paginate(actualites, "contenus/actualites/articles/")
+    actualites_only_pages = _paginate(actualites, "contenus/actualites/actualites/")
 
     for index in range(1, len(feed_pages)):
         files.append(_generated_actualites_page(config, f"contenus/actualites/page/{index + 1}.md", "actualites", index))
 
-    for index in range(0, len(article_pages)):
-        files.append(_generated_actualites_page(config, f"contenus/actualites/articles/{'index' if index == 0 else f'page/{index + 1}'}.md", "articles", index))
+    for index in range(0, len(actualites_only_pages)):
+        files.append(_generated_actualites_page(config, f"contenus/actualites/actualites/{'index' if index == 0 else f'page/{index + 1}'}.md", "actualites_only", index))
 
     return files
 
@@ -352,8 +394,10 @@ def on_files(files, config, **kwargs):
 def on_env(env, config, files, **kwargs):
     actualites = _collect_posts(config, ACTUALITES_DIR, "actualites")
     ressources = _collect_posts(config, RESSOURCES_DIR, "ressources")
-    featured_events = []
+    bilans = _collect_posts(config, BILANS_DIR, "bilans")
+    docs_reference = _collect_posts(config, DOCS_REFERENCE_DIR, "docs")
     feed_events = []
+    featured_events = []
     all_events = env.globals.get("all_evenements", [])
 
     for event in all_events:
@@ -365,10 +409,13 @@ def on_env(env, config, files, **kwargs):
         if event.get("featured"):
             featured_events.append(_event_to_featured_item(event))
 
-    selected_featured = [post for post in actualites if post["featured"]] + featured_events
+    selected_featured = [
+        post
+        for post in actualites + ressources + bilans + docs_reference
+        if post["featured"]
+    ] + featured_events
     selected_featured = sorted(selected_featured, key=lambda item: item["published"], reverse=True)
-    configured_featured = _configured_featured(config, actualites, all_events)
-    home_featured_items = configured_featured or selected_featured[:4] or actualites[:4]
+    home_featured_items = selected_featured
     home_featured_urls = {item["url"] for item in home_featured_items}
     latest_actualites = [
         post for post in actualites
@@ -380,7 +427,7 @@ def on_env(env, config, files, **kwargs):
     env.globals["home_featured_items"] = home_featured_items
     env.globals["all_actualites"] = actualites
     env.globals["actualites_feed_pages"] = _paginate(actualites_feed, "contenus/actualites/")
-    env.globals["actualites_article_pages"] = _paginate(actualites, "contenus/actualites/articles/")
+    env.globals["actualites_only_pages"] = _paginate(actualites, "contenus/actualites/actualites/")
     env.globals["featured_resources"] = ressources[:3]
     env.globals["all_resources"] = ressources
     return env

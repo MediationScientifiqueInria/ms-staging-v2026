@@ -85,21 +85,6 @@
                         </li>
                       {% endif %}
 
-                      {% if page.config.readtime %}
-                        {% set time = page.config.readtime %}
-                        <li class="md-nav__item">
-                          <div class="md-nav__link">
-                            {% include ".icons/material/clock-outline.svg" %}
-                            <span class="md-ellipsis">
-                              {% if time == 1 %}
-                                {{ lang.t("readtime.one") }}
-                              {% else %}
-                                {{ lang.t("readtime.other") | replace("#", time) }}
-                              {% endif %}
-                            </span>
-                          </div>
-                        </li>
-                      {% endif %}
                     </ul>
                   </nav>
                 </li>
@@ -127,10 +112,7 @@
                     {% if page.meta.date_maj %}
                       <div>
                         <dt>Mis à jour le</dt>
-                        <dd>
-                          {{ page.meta.date_maj | date }}
-                          à {{ page.meta.date_maj.strftime("%H:%M") }}
-                        </dd>
+                        <dd>{{ page.meta.date_maj | date }}</dd>
                       </div>
                     {% endif %}
                     {% if page.meta.thematiques %}

@@ -50,54 +50,6 @@ collections:
                 required: false
                 hint: "Site du partenaire, optionnel"
 
-  # ─── À LA UNE ─────────────────────────────────────────────────────────────
-  - name: a_la_une
-    label: À la une
-    files:
-      - name: accueil
-        label: Page d'accueil
-        file: docs/contenus/a-la-une.yml
-        fields:
-          - label: Contenus à afficher
-            name: items
-            widget: list
-            required: false
-            max: 4
-            hint: "Choisir jusqu'à 4 actualités ou événements pour le grand carrousel de l'accueil"
-            fields:
-              - label: Type de contenu
-                name: type
-                widget: select
-                options:
-                  - label: Actualité
-                    value: actualite
-                  - label: Événement
-                    value: evenement
-
-              - label: Actualité
-                name: actualite
-                widget: relation
-                collection: actualites
-                search_fields:
-                  - title
-                value_field: title
-                display_fields:
-                  - title
-                required: false
-                hint: "À remplir si le type choisi est Actualité"
-
-              - label: Événement
-                name: evenement
-                widget: relation
-                collection: calendrier
-                search_fields:
-                  - title
-                value_field: title
-                display_fields:
-                  - title
-                required: false
-                hint: "À remplir si le type choisi est Événement"
-
   # ─── RECHERCHE ────────────────────────────────────────────────────────────
   - name: thesaurus_recherche
     label: Thésaurus de recherche
@@ -131,6 +83,10 @@ collections:
     folder: docs/bilans/posts
     create: true
     slug: "{{slug}}"
+    view_filters:
+      - label: À la une
+        field: featured
+        pattern: "true"
     fields:
       - label: Titre
         name: title
@@ -147,13 +103,17 @@ collections:
         required: true
         hint: "⚠️ Champ obligatoire — le site ne peut pas afficher un bilan sans contenu"
 
+      - label: Mettre à la une
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: "Affiche ce bilan dans le carrousel À la une de l'accueil"
+
       - label: Date de publication
         name: date
-        widget: datetime
+        widget: hidden
         default: "{{now}}"
-        format: YYYY-MM-DDTHH:mm:ss
-        date_format: DD/MM/YYYY
-        time_format: HH:mm
 
       - label: Langue
         name: langue
@@ -207,6 +167,10 @@ collections:
     folder: docs/docs/posts
     create: true
     slug: "{{slug}}"
+    view_filters:
+      - label: À la une
+        field: featured
+        pattern: "true"
     fields:
       - label: Titre
         name: title
@@ -223,13 +187,17 @@ collections:
         required: true
         hint: "⚠️ Champ obligatoire — le site ne peut pas afficher un document sans contenu"
 
+      - label: Mettre à la une
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: "Affiche ce document dans le carrousel À la une de l'accueil"
+
       - label: Date de publication
         name: date
-        widget: datetime
+        widget: hidden
         default: "{{now}}"
-        format: YYYY-MM-DDTHH:mm:ss
-        date_format: DD/MM/YYYY
-        time_format: HH:mm
 
       - label: Langue
         name: langue
@@ -297,6 +265,10 @@ collections:
     folder: docs/contenus/ressources/posts
     create: true
     slug: "{{slug}}"
+    view_filters:
+      - label: À la une
+        field: featured
+        pattern: "true"
     fields:
       - label: Titre
         name: title
@@ -313,14 +285,17 @@ collections:
         required: true
         hint: "⚠️ Champ obligatoire — le site ne peut pas afficher une ressource sans contenu"
 
+      - label: Mettre à la une
+        name: featured
+        widget: boolean
+        default: false
+        required: false
+        hint: "Affiche cette ressource dans le carrousel À la une de l'accueil"
+
       - label: Date de publication
         name: date
-        widget: datetime
+        widget: hidden
         default: "{{now}}"
-        format: YYYY-MM-DDTHH:mm:ss
-        date_format: DD/MM/YYYY
-        time_format: HH:mm
-        hint: "Date de mise en ligne sur le site"
 
       - label: Date du sujet
         name: date_sujet
@@ -491,7 +466,7 @@ collections:
     view_filters:
       - label: À la une
         field: featured
-        pattern: true
+        pattern: "true"
     fields:
       - label: Titre
         name: title
@@ -513,15 +488,12 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: "Affiche ce contenu dans le grand carrousel À la une de la page d'accueil"
+        hint: "Affiche cette actualité dans le carrousel À la une de l'accueil"
 
       - label: Date de publication
         name: date
-        widget: datetime
+        widget: hidden
         default: "{{now}}"
-        format: YYYY-MM-DDTHH:mm:ss
-        date_format: DD/MM/YYYY
-        time_format: HH:mm
 
       - label: Langue
         name: langue
@@ -595,10 +567,10 @@ collections:
     view_filters:
       - label: À la une
         field: featured
-        pattern: true
+        pattern: "true"
       - label: Publiés
         field: publie
-        pattern: true
+        pattern: "true"
     editor:
       preview: false
     fields:
@@ -612,7 +584,7 @@ collections:
         widget: boolean
         default: false
         required: false
-        hint: "Affiche cet événement dans le grand carrousel À la une de la page d'accueil"
+        hint: "Affiche cet événement dans le carrousel À la une de l'accueil"
 
       - label: Titre
         name: title
@@ -632,13 +604,9 @@ collections:
 
       - label: Date de publication
         name: date_publication
-        widget: datetime
+        widget: hidden
         default: "{{now}}"
-        format: YYYY-MM-DDTHH:mm:ss
-        date_format: DD/MM/YYYY
-        time_format: HH:mm
         required: false
-        hint: "Date utilisée pour classer l'événement dans le flux Actualités. Si vide, la date d'ajout du fichier est utilisée."
 
       - label: Date de début
         name: date_debut

@@ -359,9 +359,13 @@ def _generated_month_page(config, month: dict, path: str) -> File:
 
 def on_files(files, config, **kwargs):
     events = _collect_events(config)
+    months = _group_events_by_month(events, "contenus/actualites/evenements")
 
-    for month in _group_events_by_month(events, "contenus/actualites/evenements"):
+    for month in months:
         files.append(_generated_month_page(config, month, f"contenus/actualites/evenements/{month['key']}.md"))
+
+    current_month = _current_month(months, "contenus/actualites/evenements")
+    files.append(_generated_month_page(config, current_month, "contenus/actualites/evenements/index.md"))
 
     return files
 
