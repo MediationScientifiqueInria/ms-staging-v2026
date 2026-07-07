@@ -2,7 +2,7 @@
 title: Jack Mapier
 cover_image: /assets/images/Capture d'écran 2024-04-09 141731.png
 featured: false
-date: ''
+date: 2026-07-07
 date_sujet: 2026-07-07
 langue: fr
 auteur: Inria - Médiation Scientifique
