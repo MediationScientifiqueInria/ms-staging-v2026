@@ -1,4 +1,30 @@
-<article class="resource-card">
+{% set resource_date = post.meta.date_maj or post.meta.date or post.config.date.created %}
+{% set resource_author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
+{% set resource_search = [
+  post.title,
+  post.meta.description,
+  post.meta.card_excerpt,
+  post.meta.langue,
+  resource_author,
+  post.meta.source,
+  post.meta.tags | default([], true) | join(" "),
+  post.meta.support | default([], true) | join(" "),
+  post.meta.cibles | default([], true) | join(" "),
+  post.meta.domaines | default([], true) | join(" "),
+  post.meta.thematiques | default([], true) | join(" "),
+  post.meta.territoire | default([], true) | join(" ")
+] | join(" ") %}
+<article
+  class="resource-card"
+  data-resource-card
+  data-title="{{ post.title | e }}"
+  data-date="{{ resource_date | default('', true) | e }}"
+  data-search="{{ resource_search | striptags | e }}"
+  data-tags="{{ post.meta.tags | default([], true) | join('||') | e }}"
+  data-support="{{ post.meta.support | default([], true) | join('||') | e }}"
+  data-cibles="{{ post.meta.cibles | default([], true) | join('||') | e }}"
+  data-domaines="{{ post.meta.domaines | default([], true) | join('||') | e }}"
+>
   {% set fallback = namespace(excerpt = post.meta.description | default(post.meta.card_excerpt, true) | trim) %}
   {% if not fallback.excerpt %}
     {% set fallback.excerpt = post.markdown | default("", true) | trim %}
@@ -19,7 +45,7 @@
   {% set excerpt = fallback.excerpt | striptags %}
   {% set external_url = post.meta.url_externe | default("", true) | trim %}
   {% set source = post.meta.source | default("", true) | trim %}
-  {% set author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
+  {% set author = resource_author %}
   {% set image = post.meta.cover_image or "assets/images/1007721 (1).png" %}
   {% if image.startswith("/") %}
     {% set image = image[1:] %}

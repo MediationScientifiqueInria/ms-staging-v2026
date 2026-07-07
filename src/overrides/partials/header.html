@@ -40,7 +40,7 @@ site-header--transparent" %} {% endif %}
       </a>
       <div class="site-header-nav__item">
         <a
-          class="site-header-nav__link{% if current_url.startswith('qui-sommes-nous') or current_url.startswith('bilans') or current_url.startswith('docs') %} is-active{% endif %}"
+          class="site-header-nav__link{% if current_url.startswith('qui-sommes-nous') or current_url.startswith('contenus/bilans') or current_url.startswith('docs') %} is-active{% endif %}"
           href="{{ 'qui-sommes-nous/' | url }}"
         >
           Nous connaître
@@ -62,7 +62,7 @@ site-header--transparent" %} {% endif %}
         <div class="site-header-nav__panel" aria-label="Actualités">
           <div class="site-header-nav__panel-inner">
             <a class="site-header-nav__panel-link" href="{{ current_actualites_evenements_url | url }}"
-              >Événements</a
+              >Évènements</a
             >
           </div>
         </div>
