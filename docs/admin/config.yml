@@ -335,6 +335,7 @@ collections:
         options:
           - Inria - Médiation Scientifique
           - Co-production Inria
+          - Autre
         hint: "Sélectionner la nature de la production"
 
       - label: Autre auteur / producteur
