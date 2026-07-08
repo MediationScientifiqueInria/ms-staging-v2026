@@ -76,94 +76,6 @@ collections:
                 required: false
                 hint: "Ajouter un mot ou une expression par ligne."
 
-  # ─── NOUS CONNAÎTRE ──────────────────────────────────────────────────────
-  - name: bilans
-    label: Bilans
-    label_singular: Bilan
-    folder: docs/contenus/bilans/posts
-    create: true
-    slug: "{{slug}}"
-    view_filters:
-      - label: À la une
-        field: featured
-        pattern: "true"
-    fields:
-      - label: Titre
-        name: title
-        widget: string
-
-      - label: Image de couverture
-        name: cover_image
-        widget: image
-        required: false
-
-      - label: Contenu
-        name: body
-        widget: markdown
-        required: true
-        hint: "⚠️ Champ obligatoire — le site ne peut pas afficher un bilan sans contenu"
-
-      - label: Mettre à la une
-        name: featured
-        widget: boolean
-        default: false
-        required: false
-        hint: "Affiche ce bilan dans le carrousel À la une de l'accueil"
-
-      - label: Date de publication
-        name: date
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: DD/MM/YYYY
-        time_format: false
-        default: "{{now}}"
-
-      - label: Langue
-        name: langue
-        widget: select
-        options:
-          - label: Français
-            value: fr
-          - label: Anglais
-            value: en
-          - label: Bilingue (FR/EN)
-            value: fr-en
-        default: fr
-
-      - label: Auteur / Producteur
-        name: auteur
-        widget: string
-        default: Inria - Médiation Scientifique
-        required: false
-
-      - label: Thématiques
-        name: thematiques
-        widget: list
-        required: false
-
-      - label: Type
-        name: tags
-        widget: select
-        multiple: true
-        options:
-          - Bilan annuel
-          - Bilan d'action
-          - Infographie
-          - Retour d'expérience
-          - Autre
-        required: false
-
-      - label: URL externe
-        name: url_externe
-        widget: string
-        required: false
-        hint: "Lien externe optionnel si le bilan est consultable ailleurs"
-
-      - label: Source externe
-        name: source
-        widget: string
-        required: false
-
   - name: docs_reference
     label: Docs de référence
     label_singular: Doc de référence
@@ -448,6 +360,23 @@ collections:
             value: Siège Inria (Rocquencourt)
         hint: "Sélectionner un ou plusieurs centres ; les villes associées sont indiquées pour faciliter la recherche"
 
+      - label: Type
+        name: tags
+        widget: select
+        multiple: true
+        options:
+          - Atelier
+          - Exposition
+          - Jeu
+          - Publication
+          - Vidéo
+          - Bilan annuel
+          - Bilan d'action
+          - Infographie
+          - Retour d'expérience
+          - Autre
+        required: false
+
       - label: Support
         name: support
         widget: select
@@ -458,7 +387,15 @@ collections:
           - En ligne
           - Empruntable
           - Duplicable
+          - PDF
+          - Page web
         required: false
+
+      - label: URL externe
+        name: url_externe
+        widget: string
+        required: false
+        hint: "Lien externe optionnel si la ressource est consultable ailleurs"
 
       - label: Source externe
         name: source
