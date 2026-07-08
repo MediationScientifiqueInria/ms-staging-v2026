@@ -38,7 +38,7 @@ extra_javascript:
   - assets/javascripts/clickable-cards.js
   - assets/javascripts/reveal-on-scroll.js
   - assets/javascripts/search-results.js
-  - assets/javascripts/resource-filters.js?v=20260707-1
+  - assets/javascripts/resource-filters.js?v=20260708-1
 
 nav:
   - Accueil: index.md
