@@ -11,7 +11,6 @@ from mkdocs.structure.files import File, InclusionLevel
 
 ACTUALITES_DIR = Path("docs/contenus/actualites/posts")
 RESSOURCES_DIR = Path("docs/contenus/ressources/posts")
-BILANS_DIR = Path("docs/contenus/bilans/posts")
 DOCS_REFERENCE_DIR = Path("docs/docs/posts")
 EVENTS_DIR = Path("docs/contenus/evenements")
 ACTUALITES_PER_PAGE = 12
@@ -171,7 +170,6 @@ def _post_from_file(path: Path, section: str, repository: Path) -> dict | None:
     section_details = {
         "actualites": ("contenus/actualites", "Actualité"),
         "ressources": ("contenus/ressources", "Ressource"),
-        "bilans": ("contenus/bilans", "Bilan"),
         "docs": ("docs", "Document"),
     }
     url_base, type_label = section_details[section]
@@ -394,7 +392,6 @@ def on_files(files, config, **kwargs):
 def on_env(env, config, files, **kwargs):
     actualites = _collect_posts(config, ACTUALITES_DIR, "actualites")
     ressources = _collect_posts(config, RESSOURCES_DIR, "ressources")
-    bilans = _collect_posts(config, BILANS_DIR, "bilans")
     docs_reference = _collect_posts(config, DOCS_REFERENCE_DIR, "docs")
     feed_events = []
     featured_events = []
@@ -411,7 +408,7 @@ def on_env(env, config, files, **kwargs):
 
     selected_featured = [
         post
-        for post in actualites + ressources + bilans + docs_reference
+        for post in actualites + ressources + docs_reference
         if post["featured"]
     ] + featured_events
     selected_featured = sorted(selected_featured, key=lambda item: item["published"], reverse=True)

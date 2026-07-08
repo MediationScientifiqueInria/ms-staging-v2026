@@ -40,15 +40,16 @@ site-header--transparent" %} {% endif %}
       </a>
       <div class="site-header-nav__item">
         <a
-          class="site-header-nav__link{% if current_url.startswith('qui-sommes-nous') or current_url.startswith('contenus/bilans') or current_url.startswith('docs') %} is-active{% endif %}"
-          href="{{ 'qui-sommes-nous/' | url }}"
+          class="site-header-nav__link{% if current_url.startswith('nous-connaitre') or current_url.startswith('docs') %} is-active{% endif %}"
+          href="{{ 'nous-connaitre/' | url }}"
         >
           Nous connaître
         </a>
         <div class="site-header-nav__panel" aria-label="Nous connaître">
           <div class="site-header-nav__panel-inner">
-            <a class="site-header-nav__panel-link" href="{{ 'qui-sommes-nous/#bilans' | url }}">Bilans</a>
-            <a class="site-header-nav__panel-link" href="{{ 'qui-sommes-nous/#docs-reference' | url }}">Docs</a>
+            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#nos-missions' | url }}">Nos missions</a>
+            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#nos-actions' | url }}">Nos actions</a>
+            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#inria-pres-de-chez-vous' | url }}">Inria près de chez vous</a>
           </div>
         </div>
       </div>
@@ -88,6 +89,12 @@ site-header--transparent" %} {% endif %}
           </div>
         </div>
       </div>
+      <a
+        class="site-header-nav__link{% if current_url.startswith('contact') %} is-active{% endif %}"
+        href="{{ 'contact/' | url }}"
+      >
+        Contact
+      </a>
     </div>
 
     {% if config.theme.palette %} {% if not config.theme.palette is mapping %} {% include "partials/palette.html"

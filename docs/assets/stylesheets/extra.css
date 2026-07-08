@@ -1661,6 +1661,10 @@ html .md-footer-meta.md-typeset a:hover {
     transform 180ms ease;
 }
 
+.resource-card.is-hidden {
+  display: none !important;
+}
+
 .resource-card__image {
   display: block;
   position: relative;
@@ -2081,8 +2085,17 @@ html .md-footer-meta.md-typeset a:hover {
   background: linear-gradient(90deg, #27348b 0%, #a60f79 52%, #e30613 100%);
 }
 
+.section-gradient-bar--title-overflow {
+  width: calc(100% + 2rem);
+  max-width: none;
+}
+
 .section-gradient-bar--small {
   width: clamp(9rem, calc(100% + 2rem), 14rem);
+}
+
+.contact-section-spacer {
+  height: 1.8rem;
 }
 
 .scroll-reveal-ready [data-reveal] {
@@ -2876,12 +2889,23 @@ html .md-footer-meta.md-typeset a:hover {
   }
 }
 
-ul,
-li {
+.site-header-nav ul,
+.site-header-nav li,
+.site-footer ul,
+.site-footer li {
   list-style-type: none;
   padding-left: 0;
   margin-left: 0 !important;
 }
+
+.md-typeset ul {
+  list-style-type: disc;
+}
+
+.md-typeset li {
+  list-style-type: inherit;
+}
+
 .game-list ul li {
   margin-left: 1.25em !important;
 }

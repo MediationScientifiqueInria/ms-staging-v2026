@@ -54,6 +54,10 @@
       });
     });
 
+    if (field === "tags" && Array.from(values.keys()).some((value) => value.includes("bilan"))) {
+      values.set("bilan", "Bilan");
+    }
+
     Array.from(values.values())
       .sort((a, b) => collator.compare(a, b))
       .forEach((value) => {
@@ -72,7 +76,10 @@
     }
 
     const normalizedValue = normalize(value);
-    return (data[field] || []).some((item) => normalize(item) === normalizedValue);
+    return (data[field] || []).some((item) => {
+      const normalizedItem = normalize(item);
+      return normalizedItem === normalizedValue || normalizedItem.includes(normalizedValue);
+    });
   };
 
   const compareCards = (first, second, sortMode) => {
@@ -114,6 +121,7 @@
         matchesSelect(data, "cibles", selected.cibles);
 
       card.hidden = !isVisible;
+      card.classList.toggle("is-hidden", !isVisible);
       if (isVisible) {
         visibleCount += 1;
       }

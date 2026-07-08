@@ -38,13 +38,12 @@ extra_javascript:
   - assets/javascripts/clickable-cards.js
   - assets/javascripts/reveal-on-scroll.js
   - assets/javascripts/search-results.js
-  - assets/javascripts/resource-filters.js
+  - assets/javascripts/resource-filters.js?v=20260707-1
 
 nav:
   - Accueil: index.md
   - Nous connaître:
-      - Nous connaître: qui-sommes-nous.md
-      - Bilans: contenus/bilans/index.md
+      - Nous connaître: nous-connaitre.md
       - Docs: docs/index.md
   - Actualités:
       - Tout: contenus/actualites/index.md
@@ -52,6 +51,7 @@ nav:
       - Évènements: contenus/actualites/evenements/index.md
   - Ressources: contenus/ressources/index.md
   - Réseau: ecosysteme.md
+  - Contact: contact.md
 
 hooks:
   - scripts/build/optimize_images.py
@@ -86,14 +86,6 @@ plugins:
     - awesome-pages
     - glightbox
     - table-reader
-    - blog:
-        blog_dir: contenus/bilans
-        blog_toc: true
-        archive: false
-        post_date_format: long
-        post_url_format: "{slug}"
-        authors: false
-        pagination_per_page: 12
     - blog:
         blog_dir: docs
         blog_toc: true

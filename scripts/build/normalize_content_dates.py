@@ -9,7 +9,6 @@ from pathlib import Path
 CONTENT_DIRS = (
     Path("docs/contenus/actualites/posts"),
     Path("docs/contenus/ressources/posts"),
-    Path("docs/contenus/bilans/posts"),
     Path("docs/docs/posts"),
 )
 DATE_FIELDS = {

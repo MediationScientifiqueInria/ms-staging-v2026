@@ -10,7 +10,6 @@ from urllib.parse import quote, unquote
 CONTENT_DIRS = (
     "contenus/actualites/posts/",
     "contenus/ressources/posts/",
-    "contenus/bilans/posts/",
 )
 ASSET_IMAGE_PREFIXES = ("/assets/images/", "assets/images/")
 
