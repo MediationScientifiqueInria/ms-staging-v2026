@@ -12,6 +12,28 @@
   const summary = document.querySelector("[data-resource-filter-summary]");
   const emptyState = document.querySelector("[data-resource-filter-empty]");
   const collator = new Intl.Collator("fr", { sensitivity: "base", numeric: true });
+  const publicFilterOptions = [
+    "Grand public",
+    "Scolaires / Étudiants",
+    "Communauté éducative",
+    "Scientifiques",
+    "Collectivités / Associations",
+  ];
+  const publicFilterAliases = {
+    "scolaires / etudiants": [
+      "scolaires / etudiants",
+      "scolaires",
+      "etudiants",
+      "lyceens",
+      "college",
+      "cycle 3",
+    ],
+    "communaute educative": [
+      "communaute educative",
+      "enseignants",
+      "education",
+    ],
+  };
 
   const normalize = (value) =>
     (value || "")
@@ -48,6 +70,16 @@
     const field = select.dataset.resourceFilterSelect;
     const values = new Map();
 
+    if (field === "cibles") {
+      publicFilterOptions.forEach((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        select.append(option);
+      });
+      return;
+    }
+
     cards.forEach((card) => {
       (cardData.get(card)[field] || []).forEach((value) => {
         values.set(normalize(value), value);
@@ -76,9 +108,11 @@
     }
 
     const normalizedValue = normalize(value);
+    const aliases = publicFilterAliases[normalizedValue] || [normalizedValue];
+
     return (data[field] || []).some((item) => {
       const normalizedItem = normalize(item);
-      return normalizedItem === normalizedValue || normalizedItem.includes(normalizedValue);
+      return aliases.some((alias) => normalizedItem === alias || normalizedItem.includes(alias));
     });
   };
 
