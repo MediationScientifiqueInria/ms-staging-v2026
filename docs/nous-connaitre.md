@@ -1,6 +1,6 @@
 ---
 title: La culture scientifique chez Inria
-template: nous-connaitre.html
+template: section-page.html
 hide:
   - navigation
   - toc
@@ -31,6 +31,6 @@ Nous organisons également des ateliers, conférences, rencontres avec des scien
 
 Notre objectif est de permettre à chacun de mieux comprendre les sciences du numérique afin de se forger sa propre opinion sur les enjeux qu’elles soulèvent.
 
-## Un réseau présent sur tout le territoire
+## Un réseau présent sur tout le territoire { #inria-pres-de-chez-vous }
 Chaque centre développe des projets en lien avec son territoire, ses partenaires et les équipes de recherche locales.
 Avec une carte ou une liste des centres : Bordeaux, Grenoble, Lille, Lyon, Nancy, Paris, Rennes, Saclay et Sophia Antipolis

@@ -1273,6 +1273,48 @@ html .md-footer-meta.md-typeset a:hover {
   scroll-margin-top: calc(var(--site-header-height, 3.7rem) + 1rem);
 }
 
+.section-page--markdown {
+  display: block;
+}
+
+.section-page--markdown h1,
+.section-page--markdown h2 {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 1.4rem;
+  color: var(--md-default-fg-color);
+  font-weight: 800;
+  line-height: var(--site-heading-line-height);
+  scroll-margin-top: calc(var(--site-header-height, 3.7rem) + 1rem);
+}
+
+.section-page--markdown h1 {
+  font-size: var(--site-h1-size);
+}
+
+.section-page--markdown h2 {
+  margin-top: 3rem;
+  font-size: var(--site-h2-size);
+}
+
+.section-page--markdown h1::after,
+.section-page--markdown h2::after {
+  display: block;
+  height: 0.32rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #27348b 0%, #a60f79 52%, #e30613 100%);
+  content: "";
+}
+
+.section-page--markdown h1::after {
+  width: calc(100% + 2rem);
+}
+
+.section-page--markdown h2::after {
+  width: clamp(9rem, calc(100% + 2rem), 14rem);
+}
+
 .partners-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8.75rem, 1fr));
