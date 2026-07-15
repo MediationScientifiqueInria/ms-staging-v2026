@@ -1,12 +1,28 @@
 from __future__ import annotations
 
 import re
-import subprocess
+import sys
 from datetime import date, datetime
 from pathlib import Path
 
-import yaml
 from mkdocs.structure.files import File, InclusionLevel
+
+BUILD_DIR = Path(__file__).resolve().parent
+if str(BUILD_DIR) not in sys.path:
+    sys.path.insert(0, str(BUILD_DIR))
+
+from content_utils import (
+    DEFAULT_IMAGE,
+    as_date as _as_date,
+    as_datetime as _as_datetime,
+    date_label as _date_label,
+    first_datetime as _first_datetime,
+    git_update_date as _git_update_date,
+    image_from_content as _image,
+    parse_front_matter as _front_matter,
+    plain_excerpt,
+    slug as _slug,
+)
 
 
 ACTUALITES_DIR = Path("docs/contenus/actualites/posts")
@@ -14,145 +30,14 @@ RESSOURCES_DIR = Path("docs/contenus/ressources/posts")
 DOCS_REFERENCE_DIR = Path("docs/docs/posts")
 EVENTS_DIR = Path("docs/contenus/evenements")
 ACTUALITES_PER_PAGE = 12
-MONTHS_FR = {
-    1: "janvier",
-    2: "février",
-    3: "mars",
-    4: "avril",
-    5: "mai",
-    6: "juin",
-    7: "juillet",
-    8: "août",
-    9: "septembre",
-    10: "octobre",
-    11: "novembre",
-    12: "décembre",
-}
-
-
-def _front_matter(markdown: str) -> tuple[dict, str]:
-    match = re.match(r"^---\s*\n(.*?)\n---\s*(.*)$", markdown, re.DOTALL)
-
-    if not match:
-        return {}, markdown
-
-    data = yaml.safe_load(match.group(1)) or {}
-    return data, match.group(2).strip()
-
-
-def _as_date(value) -> date:
-    if isinstance(value, datetime):
-        return value.date()
-
-    if isinstance(value, date):
-        return value
-
-    if isinstance(value, str) and value:
-        return datetime.fromisoformat(value.split("T")[0]).date()
-
-    return date.min
-
-
-def _as_datetime(value) -> datetime:
-    if isinstance(value, datetime):
-        return value.replace(tzinfo=None)
-
-    if isinstance(value, date):
-        return datetime.combine(value, datetime.min.time())
-
-    if isinstance(value, str) and value:
-        return datetime.fromisoformat(value).replace(tzinfo=None)
-
-    return datetime.min
 
 
 def _content_added_datetime(data: dict) -> datetime:
     return _first_datetime(data.get("date_publication"), data.get("date"))
 
 
-def _git_update_date(path: Path, repository: Path) -> datetime | None:
-    try:
-        status = subprocess.run(
-            [
-                "git",
-                "status",
-                "--porcelain",
-                "--",
-                str(path.relative_to(repository)),
-            ],
-            cwd=repository,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (OSError, subprocess.CalledProcessError, ValueError):
-        status = None
-
-    if status and status.stdout.strip() and not status.stdout.lstrip().startswith("??"):
-        return datetime.fromtimestamp(path.stat().st_mtime)
-
-    try:
-        result = subprocess.run(
-            [
-                "git",
-                "log",
-                "--follow",
-                "--format=%aI",
-                "--max-count=2",
-                "--",
-                str(path.relative_to(repository)),
-            ],
-            cwd=repository,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (OSError, subprocess.CalledProcessError, ValueError):
-        return None
-
-    dates = [line.strip() for line in result.stdout.splitlines() if line.strip()]
-    if len(dates) < 2:
-        return None
-
-    return datetime.fromisoformat(dates[0]).replace(tzinfo=None)
-
-
-def _first_datetime(*values) -> datetime:
-    for value in values:
-        parsed = value if isinstance(value, datetime) else _as_datetime(value)
-        if parsed != datetime.min:
-            return parsed
-
-    return datetime.min
-
-
-def _date_label(value: date) -> str:
-    if value in (date.min, datetime.min):
-        return ""
-
-    return f"{value.day} {MONTHS_FR[value.month]} {value.year}"
-
-
-def _slug(value: str) -> str:
-    value = value.lower()
-    value = re.sub(r"[^\w\s-]", "", value, flags=re.UNICODE)
-    value = re.sub(r"[\s_]+", "-", value).strip("-")
-    return value
-
-
-def _image(data: dict, body: str) -> str:
-    if data.get("cover_image"):
-        return str(data["cover_image"]).removeprefix("/")
-
-    match = re.search(r"!\[[^\]]*\]\(((?:[^()]|\([^)]*\))*)\)", body)
-    return match.group(1) if match else ""
-
-
 def _excerpt(data: dict, body: str) -> str:
-    body = re.sub(r"!\[[^\]]*]\((?:[^()]|\([^)]*\))*\)", "", body)
-    body = re.sub(r"<[^>]+>", "", body)
-    body = re.sub(r"\s+", " ", body).strip()
-    return body
+    return plain_excerpt(body)
 
 
 def _post_from_file(path: Path, section: str, repository: Path) -> dict | None:
@@ -177,7 +62,7 @@ def _post_from_file(path: Path, section: str, repository: Path) -> dict | None:
     return {
         "title": title,
         "url": f"{url_base}/{_slug(title)}/",
-        "image": _image(data, body) or "assets/images/1007721 (1).png",
+        "image": _image(data, body) or DEFAULT_IMAGE,
         "excerpt": _excerpt(data, body),
         "date": _date_label(published),
         "date_maj": _date_label(updated) if updated else "",
@@ -235,7 +120,7 @@ def _feed_event_from_file(path: Path) -> dict | None:
     return {
         "title": title,
         "url": f"contenus/evenements/{path.stem}/",
-        "image": _image(data, body) or "assets/images/1007721 (1).png",
+        "image": _image(data, body) or DEFAULT_IMAGE,
         "excerpt": _excerpt({}, body),
         "date": _date_label(published),
         "auteur": data.get("lieu") or "",
@@ -268,7 +153,7 @@ def _event_to_featured_item(event: dict) -> dict:
     return {
         "title": event["title"],
         "url": event["url"],
-        "image": event.get("image") or "assets/images/1007721 (1).png",
+        "image": event.get("image") or DEFAULT_IMAGE,
         "excerpt": event.get("description") or "",
         "date": event.get("month_label") or event.get("date_debut_label") or "",
         "auteur": event.get("lieu") or "",
@@ -286,7 +171,7 @@ def _event_to_feed_item(event: dict) -> dict:
     return {
         "title": event["title"],
         "url": event["url"],
-        "image": event.get("image") or "assets/images/1007721 (1).png",
+        "image": event.get("image") or DEFAULT_IMAGE,
         "excerpt": event.get("description") or "",
         "date": event.get("date_debut_label") or event.get("month_label") or "",
         "auteur": event.get("lieu") or "",

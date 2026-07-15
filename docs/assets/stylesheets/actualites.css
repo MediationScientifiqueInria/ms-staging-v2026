@@ -1,0 +1,119 @@
+.actualites-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 2rem;
+  border-bottom: 1px solid rgba(39, 52, 139, 0.16);
+}
+
+.actualites-tabs__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.45rem;
+  border-bottom: 3px solid transparent;
+  padding: 0 0.9rem;
+  color: var(--md-default-fg-color);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.actualites-tabs__link:hover,
+.actualites-tabs__link:focus-visible {
+  color: #e30613;
+}
+
+.actualites-tabs__link.is-active {
+  border-bottom-color: #e30613;
+  color: #e30613;
+}
+
+.actualites-posts .md-post--excerpt {
+  border: 1px solid rgba(227, 6, 19, 0.18);
+  border-radius: 6px;
+  padding: 0.85rem;
+  background: #ffffff;
+}
+.actualites-upcoming {
+  margin-top: 3rem;
+  padding: 1.25rem 1.25rem 1.4rem;
+  padding-top: 0;
+  background: transparent;
+}
+
+.actualites-upcoming__heading {
+  margin: 0 0 1.4rem;
+}
+
+.actualites-upcoming__heading h2 {
+  margin: 0;
+  color: var(--md-default-fg-color);
+  font-size: var(--site-h2-size);
+  font-weight: 800;
+  line-height: var(--site-heading-line-height);
+}
+
+.actualites-upcoming__heading > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.actualites-upcoming__eyebrow {
+  color: #e30613;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.actualites-upcoming__posts {
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+.actualites-upcoming .md-post--excerpt {
+  border: 1px solid rgba(39, 52, 139, 0.12);
+  border-radius: 6px;
+  padding: 0.85rem;
+  background: #ffffff;
+}
+
+.actualites-upcoming .md-post--excerpt .md-post__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.actualites-upcoming .post-card__title-row {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.actualites-upcoming .post-card__title-row time {
+  width: fit-content;
+  border-radius: 4px;
+  padding: 0.22rem 0.45rem;
+  background: rgba(227, 6, 19, 0.08);
+  color: #e30613;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.actualites-upcoming .md-post--excerpt .md-post__content h2 {
+  order: 2;
+}
+
+.actualites-upcoming .post-card__title-row time {
+  order: 1;
+}
+
+.actualites-upcoming .post-card__meta {
+  border-top: 1px solid rgba(39, 52, 139, 0.1);
+}
+
+.actualites-empty {
+  color: var(--md-default-fg-color--light);
+}
+  .actualites-upcoming {
+    padding-right: 0;
+    padding-left: 0;
+  }

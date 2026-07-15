@@ -187,6 +187,24 @@ collections:
       - label: À la une
         field: featured
         pattern: "true"
+      - label: Type - Atelier
+        field: tags
+        pattern: "Atelier"
+      - label: Type - Exposition
+        field: tags
+        pattern: "Exposition"
+      - label: Type - Jeu
+        field: tags
+        pattern: "Jeu"
+      - label: Type - Publication
+        field: tags
+        pattern: "Publication"
+      - label: Type - Vidéo
+        field: tags
+        pattern: "Vidéo"
+      - label: Type - Bilan
+        field: tags
+        pattern: "Bilan"
     fields:
       - label: Titre
         name: title
@@ -365,14 +383,29 @@ collections:
         widget: select
         multiple: true
         options:
+          - Article
           - Atelier
+          - Bande dessinée
+          - Dossier
+          - Fiche pédagogique
           - Exposition
           - Jeu
+          - Activité pédagogique
+          - Kit de médiation
           - Publication
+          - Infographie
+          - Témoignage
+          - Reportage
+          - Documentaire
+          - Animation
           - Vidéo
+          - Podcast
+          - Conférence
+          - Table ronde
+          - Pièce de théâtre
+          - Ressource interactive
           - Bilan annuel
           - Bilan d'action
-          - Infographie
           - Retour d'expérience
           - Autre
         required: false

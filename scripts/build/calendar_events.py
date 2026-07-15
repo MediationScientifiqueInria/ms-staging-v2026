@@ -2,136 +2,33 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from datetime import date, datetime
 from pathlib import Path
 
-import yaml
 from mkdocs.structure.files import File, InclusionLevel
+
+BUILD_DIR = Path(__file__).resolve().parent
+if str(BUILD_DIR) not in sys.path:
+    sys.path.insert(0, str(BUILD_DIR))
+
+from content_utils import (
+    add_months as _add_months,
+    as_list as _as_list,
+    image_from_content as _image,
+    iso_date as _iso,
+    month_key as _month_key,
+    month_label as _month_label,
+    month_label_from_key as _month_label_from_key,
+    month_range as _month_range,
+    parse_front_matter as _front_matter,
+    plain_excerpt,
+    short_date as _short_date,
+)
 
 
 EVENTS_DIR = Path("docs/contenus/evenements")
 DEFAULT_COLOR = "#d95e61"
-MONTHS_SHORT_FR = {
-    "01": "JAN",
-    "02": "FÉV",
-    "03": "MAR",
-    "04": "AVR",
-    "05": "MAI",
-    "06": "JUN",
-    "07": "JUL",
-    "08": "AOÛ",
-    "09": "SEP",
-    "10": "OCT",
-    "11": "NOV",
-    "12": "DÉC",
-}
-MONTHS_FR = {
-    "01": "Janvier",
-    "02": "Février",
-    "03": "Mars",
-    "04": "Avril",
-    "05": "Mai",
-    "06": "Juin",
-    "07": "Juillet",
-    "08": "Août",
-    "09": "Septembre",
-    "10": "Octobre",
-    "11": "Novembre",
-    "12": "Décembre",
-}
-
-
-def _front_matter(markdown: str) -> tuple[dict, str]:
-    match = re.match(r"^---\s*\n(.*?)\n---\s*(.*)$", markdown, re.DOTALL)
-
-    if not match:
-        return {}, markdown
-
-    data = yaml.safe_load(match.group(1)) or {}
-
-    return data, match.group(2).strip()
-
-
-def _iso(value) -> str:
-    if value in (None, ""):
-        return ""
-
-    if isinstance(value, datetime):
-        return value.date().isoformat()
-
-    if isinstance(value, date):
-        return value.isoformat()
-
-    return str(value).split("T")[0]
-
-
-def _short_date(value) -> str:
-    iso = _iso(value)
-
-    if not iso:
-        return ""
-
-    _, month, day = iso.split("-")
-    return f"{day} {MONTHS_SHORT_FR.get(month, month)}"
-
-
-def _month_label(value) -> str:
-    iso = _iso(value)
-
-    if not iso:
-        return ""
-
-    year, month, _ = iso.split("-")
-    return f"{MONTHS_FR.get(month, month)} {year}"
-
-
-def _month_key(value) -> str:
-    iso = _iso(value)
-    return iso[:7] if iso else ""
-
-
-def _month_label_from_key(key: str) -> str:
-    if not key or "-" not in key:
-        return ""
-
-    year, month = key.split("-", 1)
-    return f"{MONTHS_FR.get(month, month)} {year}"
-
-
-def _add_months(key: str, count: int) -> str:
-    year, month = (int(part) for part in key.split("-", 1))
-    month += count
-
-    while month < 1:
-        month += 12
-        year -= 1
-
-    while month > 12:
-        month -= 12
-        year += 1
-
-    return f"{year:04d}-{month:02d}"
-
-
-def _month_range(start_key: str, end_key: str) -> list[str]:
-    months = []
-    current = start_key
-
-    while current <= end_key:
-        months.append(current)
-        current = _add_months(current, 1)
-
-    return months
-
-
-def _as_list(value) -> list:
-    if value in (None, ""):
-        return []
-
-    if isinstance(value, list):
-        return [item for item in value if item not in (None, "")]
-
-    return [value]
 
 
 def _time(value) -> str:
@@ -171,21 +68,8 @@ def _color(value) -> str:
     return DEFAULT_COLOR
 
 
-def _image(data: dict, body: str) -> str:
-    if data.get("cover_image"):
-        return str(data["cover_image"]).removeprefix("/")
-
-    match = re.search(r"!\[[^\]]*\]\(([^)]+)\)", body)
-    return match.group(1) if match else ""
-
-
 def _excerpt(body: str) -> str:
-    body = re.sub(r"(?m)^\s*!\[[^\]]*\]\([^\n]*\)\s*$", "", body)
-    body = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", body)
-    body = re.sub(r"<[^>]+>", "", body)
-    body = re.sub(r"#{1,6}\s*", "", body)
-    body = re.sub(r"\s+", " ", body).strip()
-    return body
+    return plain_excerpt(body, strip_heading_markers=True)
 
 
 def _event_from_file(path: Path) -> dict | None:
