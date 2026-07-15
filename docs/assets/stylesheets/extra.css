@@ -661,10 +661,6 @@ html .md-footer-meta.md-typeset a:hover {
   color: #ffffff;
 }
 
-.md-header.site-header--transparent .site-header-nav__link::after {
-  background: #ffffff;
-}
-
 .md-header.site-header--transparent .site-header-nav__link:hover,
 .md-header.site-header--transparent .site-header-nav__link:focus-visible,
 .md-header.site-header--transparent .site-header-nav__link.is-active {
@@ -725,11 +721,16 @@ html .md-footer-meta.md-typeset a:hover {
   line-height: 1;
 }
 
-.site-header-nav__link::after {
+.site-header-nav__label {
+  display: inline-block;
+  position: relative;
+}
+
+.site-header-nav__label::after {
   position: absolute;
-  right: 0.85rem;
-  bottom: 0.85rem;
-  left: 0.85rem;
+  right: 0;
+  bottom: -0.45rem;
+  left: 0;
   height: 0.12rem;
   border-radius: 999px;
   background: var(--md-accent-fg-color);
@@ -747,11 +748,11 @@ html .md-footer-meta.md-typeset a:hover {
   color: var(--md-accent-fg-color);
 }
 
-.site-header-nav__link:hover::after,
-.site-header-nav__link:focus-visible::after,
-.site-header-nav__link.is-active::after,
-.site-header-nav__item:hover > .site-header-nav__link::after,
-.site-header-nav__item:focus-within > .site-header-nav__link::after {
+.site-header-nav__link:hover .site-header-nav__label::after,
+.site-header-nav__link:focus-visible .site-header-nav__label::after,
+.site-header-nav__link.is-active .site-header-nav__label::after,
+.site-header-nav__item:hover > .site-header-nav__link .site-header-nav__label::after,
+.site-header-nav__item:focus-within > .site-header-nav__link .site-header-nav__label::after {
   opacity: 1;
   transform: scaleX(1);
 }
@@ -819,20 +820,8 @@ html .md-footer-meta.md-typeset a:hover {
   transition: color 160ms ease;
 }
 
-.site-header-nav__panel-link::after {
-  position: absolute;
-  right: 0.8rem;
-  bottom: 0.25rem;
-  left: 0.8rem;
-  height: 0.12rem;
-  border-radius: 999px;
-  background: var(--md-accent-fg-color);
-  content: "";
-  opacity: 0;
-  transform: scaleX(0.4);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
+.site-header-nav__panel-link .site-header-nav__label::after {
+  bottom: -0.18rem;
 }
 
 .site-header-nav__panel-link:hover,
@@ -840,8 +829,8 @@ html .md-footer-meta.md-typeset a:hover {
   color: var(--md-accent-fg-color);
 }
 
-.site-header-nav__panel-link:hover::after,
-.site-header-nav__panel-link:focus-visible::after {
+.site-header-nav__panel-link:hover .site-header-nav__label::after,
+.site-header-nav__panel-link:focus-visible .site-header-nav__label::after {
   opacity: 1;
   transform: scaleX(1);
 }
@@ -862,7 +851,7 @@ html .md-footer-meta.md-typeset a:hover {
   color: #ffffff;
 }
 
-.md-header.site-header--transparent .site-header-nav__panel-link::after {
+.md-header.site-header--transparent .site-header-nav__label::after {
   background: #ffffff;
 }
 

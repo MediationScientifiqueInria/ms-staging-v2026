@@ -1,7 +1,7 @@
 {#- Custom header based on the Material for MkDocs header partial. -#} {% set class = "md-header" %} {% if
 "navigation.tabs.sticky" in features %} {% set class = class ~ " md-header--shadow md-header--lifted" %} {% elif
 "navigation.tabs" not in features %} {% set class = class ~ " md-header--shadow" %} {% endif %} {% set current_url
-= page.url | d("", true) %} {% if not current_url %} {% set class = class ~ " site-header--home
+= page.url | d("", true) %} {% set is_homepage = page.is_homepage | d(false, true) %} {% if is_homepage %} {% set class = class ~ " site-header--home
 site-header--transparent" %} {% endif %}
 <header class="{{ class }}" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="{{ lang.t('header') }}">
@@ -33,23 +33,23 @@ site-header--transparent" %} {% endif %}
 
     <div class="site-header-nav" aria-label="Navigation principale">
       <a
-        class="site-header-nav__link{% if not current_url %} is-active{% endif %}"
+        class="site-header-nav__link{% if is_homepage %} is-active{% endif %}"
         href="{{ nav.homepage.url | url }}"
       >
-        Accueil
+        <span class="site-header-nav__label">Accueil</span>
       </a>
       <div class="site-header-nav__item">
         <a
           class="site-header-nav__link{% if current_url.startswith('nous-connaitre') or current_url.startswith('docs') %} is-active{% endif %}"
           href="{{ 'nous-connaitre/' | url }}"
         >
-          Nous connaître
+          <span class="site-header-nav__label">Nous connaître</span>
         </a>
         <div class="site-header-nav__panel" aria-label="Nous connaître">
           <div class="site-header-nav__panel-inner">
-            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#nos-missions' | url }}">Nos missions</a>
-            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#nos-actions' | url }}">Nos actions</a>
-            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#inria-pres-de-chez-vous' | url }}">Inria près de chez vous</a>
+            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#nos-missions' | url }}"><span class="site-header-nav__label">Nos missions</span></a>
+            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#nos-actions' | url }}"><span class="site-header-nav__label">Nos actions</span></a>
+            <a class="site-header-nav__panel-link" href="{{ 'nous-connaitre/#inria-pres-de-chez-vous' | url }}"><span class="site-header-nav__label">Un réseau présent sur tout le territoire</span></a>
           </div>
         </div>
       </div>
@@ -58,12 +58,12 @@ site-header--transparent" %} {% endif %}
           class="site-header-nav__link{% if current_url.startswith('contenus/actualites') or current_url.startswith('contenus/evenements') %} is-active{% endif %}"
           href="{{ 'contenus/actualites/' | url }}"
         >
-          Actualités
+          <span class="site-header-nav__label">Actualités</span>
         </a>
         <div class="site-header-nav__panel" aria-label="Actualités">
           <div class="site-header-nav__panel-inner">
             <a class="site-header-nav__panel-link" href="{{ current_actualites_evenements_url | url }}"
-              >Évènements</a
+              ><span class="site-header-nav__label">Évènements</span></a
             >
           </div>
         </div>
@@ -72,20 +72,20 @@ site-header--transparent" %} {% endif %}
         class="site-header-nav__link{% if current_url.startswith('contenus/ressources') %} is-active{% endif %}"
         href="{{ 'contenus/ressources/' | url }}"
       >
-        Ressources
+        <span class="site-header-nav__label">Ressources</span>
       </a>
       <div class="site-header-nav__item">
         <a
           class="site-header-nav__link{% if current_url.startswith('ecosysteme') or current_url.startswith('partenaires') %} is-active{% endif %}"
           href="{{ 'ecosysteme/' | url }}"
         >
-          Réseau
+          <span class="site-header-nav__label">Réseau</span>
         </a>
         <div class="site-header-nav__panel" aria-label="Réseau">
           <div class="site-header-nav__panel-inner">
-            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#ecosysteme' | url }}">Écosystème</a>
-            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#diffusion' | url }}">Diffusion</a>
-            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#partenaires' | url }}">Partenaires</a>
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#ecosysteme' | url }}"><span class="site-header-nav__label">Écosystème</span></a>
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#diffusion' | url }}"><span class="site-header-nav__label">Diffusion</span></a>
+            <a class="site-header-nav__panel-link" href="{{ 'ecosysteme/#partenaires' | url }}"><span class="site-header-nav__label">Partenaires</span></a>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@ site-header--transparent" %} {% endif %}
         class="site-header-nav__link{% if current_url.startswith('contact') %} is-active{% endif %}"
         href="{{ 'contact/' | url }}"
       >
-        Contact
+        <span class="site-header-nav__label">Contact</span>
       </a>
     </div>
 
