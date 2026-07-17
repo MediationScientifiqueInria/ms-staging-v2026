@@ -1,79 +1,29 @@
 from __future__ import annotations
 
-import re
-from datetime import date, datetime
+import sys
+from datetime import datetime
 from pathlib import Path
 
-import yaml
+BUILD_DIR = Path(__file__).resolve().parent
+if str(BUILD_DIR) not in sys.path:
+    sys.path.insert(0, str(BUILD_DIR))
+
+from content_utils import (
+    DEFAULT_IMAGE,
+    as_datetime as _as_datetime,
+    date_label as _date_label,
+    image_from_content,
+    parse_front_matter as _front_matter,
+    plain_excerpt as _excerpt,
+    slug as _slug,
+)
 
 
 DOCS_DIR = Path("docs/docs/posts")
-MONTHS_FR = {
-    1: "janvier",
-    2: "février",
-    3: "mars",
-    4: "avril",
-    5: "mai",
-    6: "juin",
-    7: "juillet",
-    8: "août",
-    9: "septembre",
-    10: "octobre",
-    11: "novembre",
-    12: "décembre",
-}
-
-
-def _front_matter(markdown: str) -> tuple[dict, str]:
-    match = re.match(r"^---\s*\n(.*?)\n---\s*(.*)$", markdown, re.DOTALL)
-
-    if not match:
-        return {}, markdown
-
-    data = yaml.safe_load(match.group(1)) or {}
-    return data, match.group(2).strip()
-
-
-def _as_datetime(value) -> datetime:
-    if isinstance(value, datetime):
-        return value
-
-    if isinstance(value, date):
-        return datetime.combine(value, datetime.min.time())
-
-    if isinstance(value, str) and value:
-        return datetime.fromisoformat(value)
-
-    return datetime.min
-
-
-def _date_label(value: datetime) -> str:
-    if value == datetime.min:
-        return ""
-
-    return f"{value.day} {MONTHS_FR[value.month]} {value.year}"
-
-
-def _slug(value: str) -> str:
-    value = value.lower()
-    value = re.sub(r"[^\w\s-]", "", value, flags=re.UNICODE)
-    value = re.sub(r"[\s_]+", "-", value).strip("-")
-    return value
 
 
 def _image(data: dict, body: str) -> str:
-    if data.get("cover_image"):
-        return str(data["cover_image"]).removeprefix("/")
-
-    match = re.search(r"!\[[^\]]*\]\(([^)]+)\)", body)
-    return match.group(1) if match else "assets/images/1007721 (1).png"
-
-
-def _excerpt(body: str) -> str:
-    body = re.sub(r"(?m)^\s*!\[[^\]]*\]\([^\n]*\)\s*$", "", body)
-    body = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", body)
-    body = re.sub(r"<[^>]+>", "", body)
-    return re.sub(r"\s+", " ", body).strip()
+    return image_from_content(data, body, DEFAULT_IMAGE)
 
 
 def _collect(config, directory: Path, base_url: str, fallback_type: str) -> list[dict]:

@@ -1,41 +1,37 @@
 ---
 title: La culture scientifique chez Inria
-template: nous-connaitre.html
+template: section-page.html
 hide:
   - navigation
   - toc
 ---
 
 # La culture scientifique chez Inria
+Inria est l’institut national de recherche en sciences et technologies du numérique. Sa mission de médiation scientifique vise à rendre les sciences du numérique accessibles au plus grand nombre.
 
-Inria est l’institut national de recherche en sciences et technologies du numérique. Sa mission de médiation scientifique vise à rendre les sciences du numérique accessibles à toutes et tous, des élèves aux citoyennes et citoyens curieux, en passant par les professionnels de l’éducation, de la culture scientifique et de l’éducation populaire.
+Les sciences du numérique façonnent aujourd’hui une grande partie de notre quotidien, de nos façons de communiquer, de travailler, de nous informer ou de prendre des décisions. Pourtant, les concepts scientifiques qui se cachent derrière les technologies restent souvent peu visibles.
 
-Notre rôle est de faire découvrir l’informatique comme science, et pas seulement comme ensemble de technologies. À travers des ressources, des rencontres et des projets de terrain, nous expliquons les concepts, les méthodes de recherche, les innovations et les grands enjeux éthiques et sociétaux liés au numérique.
+Notre rôle est de vous donner des clés pour mieux les comprendre. Nous faisons découvrir l’informatique comme une science. À travers des ressources, des rencontres et des projets de terrain, vous pouvez explorer les concepts, les méthodes de recherche, les innovations ainsi que les grands enjeux éthiques et sociétaux liés au numérique.
 
 ## Nos missions
+Nos actions vous permettent de :
 
-Nous agissons pour :
-
-- Vulgariser des résultats de recherche et des concepts scientifiques ;
-- faire connaître les métiers de la recherche en sciences du numérique ;
-- développer l’esprit critique et la compréhension de la démarche scientifique ;
-- interroger les impacts du numérique dans la société ;
-- encourager une approche responsable, éthique et participative de la science.
+- découvrir les recherches menées à Inria et les concepts scientifiques qui se cachent derrière les technologies du quotidien ;
+- mieux comprendre la manière dont les connaissances scientifiques sont produites, discutées et mises à l’épreuve ;
+- rencontrer celles et ceux qui font la recherche et découvrir la diversité de leurs métiers ;
+- développer son esprit critique face aux technologies et aux transformations numériques ;
+- questionner les impacts du numérique dans la société ;
+- participer au dialogue entre la recherche et la société, dans une démarche responsable, éthique et ouverte.
 
 ## Nos actions
+Nos actions s’adressent à des publics variés : scolaires, grand public, professionnels de l’éducation, de la médiation, de la culture scientifique ou de l’éducation populaire.
 
-La médiation scientifique Inria se déploie partout en France, avec les équipes de recherche, les centres Inria et de nombreux partenaires.
+Nous concevons et mettons à votre disposition des ressources pédagogiques et de médiation : activités, jeux, vidéos, expositions, dossiers, articles ou outils numériques.
 
-Nous proposons des ressources accessibles à différents publics : articles, vidéos, jeux, infographies, dossiers thématiques et contenus pédagogiques.
+Nous organisons également des ateliers, conférences, rencontres avec des scientifiques, débats, expositions et événements partout en France, en partenariat avec les centres Inria et de nombreux acteurs des territoires.
 
-Nous organisons ou accompagnons également des actions de terrain : ateliers, conférences, débats, cafés scientifiques, rencontres avec des chercheuses et chercheurs, interventions scolaires, évènements de culture scientifique, fêtes de la science ou projets avec des médiathèques, fab labs et structures d’éducation populaire.
+Notre objectif est de permettre de mieux comprendre les sciences du numérique afin de vous forger votre propre opinion sur les enjeux qu’elles soulèvent.
 
-Notre ambition : créer des espaces d’échange où chacun peut comprendre, questionner et s’approprier les sciences et technologies du numérique.
-
-## Inria près de chez vous
-
-Les actions de médiation scientifique sont portées par les centres Inria présents sur le territoire :
-
-Bordeaux, Grenoble, Lille, Lyon, Nancy, Paris, Rennes, Saclay et Sophia Antipolis.
-
-Chaque centre développe des actions adaptées à ses publics, ses partenaires et son territoire.
+## Un réseau présent sur tout le territoire { #inria-pres-de-chez-vous }
+Chaque centre développe des projets en lien avec son territoire, ses partenaires et les équipes de recherche locales.
+Avec une carte ou une liste des centres : Bordeaux, Grenoble, Lille, Lyon, Nancy, Paris, Rennes, Saclay et Sophia Antipolis

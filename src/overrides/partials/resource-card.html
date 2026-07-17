@@ -50,8 +50,9 @@
   {% if image.startswith("/") %}
     {% set image = image[1:] %}
   {% endif %}
+  {% set image_fit = post.meta.image_fit | default("cover", true) %}
 
-  <a class="resource-card__image" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+  <a class="resource-card__image{% if image_fit == 'contain' %} resource-card__image--contain{% endif %}" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
     <img src="{{ image | url }}" alt="">
   </a>
 

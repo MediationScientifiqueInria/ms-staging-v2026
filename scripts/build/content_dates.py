@@ -1,10 +1,18 @@
 from __future__ import annotations
 
 import re
-import subprocess
-from datetime import datetime
+import sys
 from pathlib import Path
 from urllib.parse import quote, unquote
+
+BUILD_DIR = Path(__file__).resolve().parent
+if str(BUILD_DIR) not in sys.path:
+    sys.path.insert(0, str(BUILD_DIR))
+
+from content_utils import (
+    git_update_date as _git_update_date,
+    plain_excerpt,
+)
 
 
 CONTENT_DIRS = (
@@ -16,10 +24,7 @@ ASSET_IMAGE_PREFIXES = ("/assets/images/", "assets/images/")
 
 def _card_excerpt(markdown: str) -> str:
     """Return plain card copy without Markdown images or headings."""
-    excerpt = re.sub(r"!\[[^\]]*]\((?:[^()]|\([^)]*\))*\)", "", markdown)
-    excerpt = re.sub(r"(?m)^\s{0,3}#{1,6}\s+", "", excerpt)
-    excerpt = re.sub(r"<[^>]+>", "", excerpt)
-    return re.sub(r"\s+", " ", excerpt).strip()
+    return plain_excerpt(markdown, strip_heading_markers=True)
 
 
 def _relative_url(from_url: str, target: str) -> str:
@@ -70,54 +75,6 @@ def _normalize_markdown_images(markdown: str, page_url: str, repository: Path) -
         )
 
     return image_pattern.sub(replace, markdown)
-
-
-def _git_update_date(path: Path, repository: Path) -> datetime | None:
-    """Return the local or committed update date when a file has changed after creation."""
-    try:
-        status = subprocess.run(
-            [
-                "git",
-                "status",
-                "--porcelain",
-                "--",
-                str(path.relative_to(repository)),
-            ],
-            cwd=repository,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (OSError, subprocess.CalledProcessError, ValueError):
-        status = None
-
-    if status and status.stdout.strip() and not status.stdout.lstrip().startswith("??"):
-        return datetime.fromtimestamp(path.stat().st_mtime)
-
-    try:
-        result = subprocess.run(
-            [
-                "git",
-                "log",
-                "--follow",
-                "--format=%aI",
-                "--max-count=2",
-                "--",
-                str(path.relative_to(repository)),
-            ],
-            cwd=repository,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (OSError, subprocess.CalledProcessError, ValueError):
-        return None
-
-    dates = [line.strip() for line in result.stdout.splitlines() if line.strip()]
-    if len(dates) < 2:
-        return None
-
-    return datetime.fromisoformat(dates[0]).replace(tzinfo=None)
 
 
 def on_page_markdown(markdown, page, config, files):

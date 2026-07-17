@@ -12,13 +12,6 @@
   const summary = document.querySelector("[data-resource-filter-summary]");
   const emptyState = document.querySelector("[data-resource-filter-empty]");
   const collator = new Intl.Collator("fr", { sensitivity: "base", numeric: true });
-  const publicFilterOptions = [
-    "Grand public",
-    "Scolaires / Étudiants",
-    "Communauté éducative",
-    "Scientifiques",
-    "Collectivités / Associations",
-  ];
   const publicFilterAliases = {
     "scolaires / etudiants": [
       "scolaires / etudiants",
@@ -34,6 +27,54 @@
       "education",
     ],
   };
+  const resourceTypeFilters = [
+    {
+      label: "À lire",
+      aliases: [
+        "article",
+        "dossier",
+        "bande dessinee",
+        "bd",
+        "fiche pedagogique",
+      ],
+    },
+    {
+      label: "À regarder",
+      aliases: [
+        "temoignage",
+        "reportage",
+        "documentaire",
+        "animation",
+        "video",
+      ],
+    },
+    {
+      label: "À écouter",
+      aliases: [
+        "podcast",
+      ],
+    },
+    {
+      label: "À expérimenter",
+      aliases: [
+        "jeu",
+        "activite",
+        "activite pedagogique",
+        "atelier",
+        "ressource interactive",
+      ],
+    },
+    {
+      label: "À présenter",
+      aliases: [
+        "exposition",
+        "piece de theatre",
+        "kit de mediation",
+        "table ronde",
+        "conference",
+      ],
+    },
+  ];
 
   const normalize = (value) =>
     (value || "")
@@ -67,16 +108,24 @@
   );
 
   const populateSelect = (select) => {
+    if (select.options.length > 1) {
+      return;
+    }
+
     const field = select.dataset.resourceFilterSelect;
     const values = new Map();
 
-    if (field === "cibles") {
-      publicFilterOptions.forEach((value) => {
+    if (field === "tags") {
+      resourceTypeFilters.forEach((group) => {
         const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value;
+        option.value = group.label;
+        option.textContent = group.label;
         select.append(option);
       });
+      return;
+    }
+
+    if (field === "cibles") {
       return;
     }
 
@@ -85,10 +134,6 @@
         values.set(normalize(value), value);
       });
     });
-
-    if (field === "tags" && Array.from(values.keys()).some((value) => value.includes("bilan"))) {
-      values.set("bilan", "Bilan");
-    }
 
     Array.from(values.values())
       .sort((a, b) => collator.compare(a, b))
@@ -108,7 +153,10 @@
     }
 
     const normalizedValue = normalize(value);
-    const aliases = publicFilterAliases[normalizedValue] || [normalizedValue];
+    const typeFilter = field === "tags"
+      ? resourceTypeFilters.find((group) => normalize(group.label) === normalizedValue)
+      : null;
+    const aliases = typeFilter?.aliases || publicFilterAliases[normalizedValue] || [normalizedValue];
 
     return (data[field] || []).some((item) => {
       const normalizedItem = normalize(item);

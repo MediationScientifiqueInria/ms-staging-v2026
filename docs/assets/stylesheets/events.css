@@ -1,0 +1,99 @@
+.events-month {
+  margin: 2.2rem 0 3rem;
+}
+
+.events-month > h2 {
+  margin: 0 0 1.4rem;
+  color: var(--md-primary-fg-color);
+}
+
+.events-month .events-posts {
+  margin-bottom: 0;
+}
+
+.events-month-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.4rem;
+}
+
+.events-month-card {
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid rgba(39, 52, 139, 0.12);
+  border-radius: 8px;
+  padding: 1rem;
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(39, 52, 139, 0.08);
+}
+
+.events-month-card span {
+  color: var(--md-primary-fg-color);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.events-month-card strong {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.75rem;
+}
+
+.events-month-card:hover,
+.events-month-card:focus-visible {
+  border-color: var(--md-accent-fg-color);
+}
+
+.events-month-back {
+  margin: 0 0 1.4rem;
+}
+
+.events-month-back a {
+  color: #e30613;
+  font-weight: 700;
+}
+
+.events-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.events-month-nav h1,
+.events-month-nav h2 {
+  min-width: min(22rem, 70vw);
+  margin: 0;
+  color: var(--md-primary-fg-color);
+  font-size: var(--site-h1-size);
+  font-weight: 800;
+  line-height: var(--site-heading-line-height);
+  text-align: center;
+}
+
+.events-month-nav__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid rgba(227, 6, 19, 0.45);
+  border-radius: 8px;
+  color: #e30613;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.events-month-nav__arrow:hover,
+.events-month-nav__arrow:focus-visible {
+  border-color: #e30613;
+  background: rgba(227, 6, 19, 0.06);
+}
+
+.events-month-nav__arrow.is-disabled {
+  border-color: rgba(39, 52, 139, 0.12);
+  color: rgba(39, 52, 139, 0.25);
+  pointer-events: none;
+}
