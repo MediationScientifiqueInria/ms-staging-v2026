@@ -215,6 +215,18 @@ collections:
         widget: image
         required: false
 
+      - label: Ajustement de l'image
+        name: image_fit
+        widget: select
+        required: false
+        default: cover
+        options:
+          - label: Remplir le cadre
+            value: cover
+          - label: Afficher l'image entière
+            value: contain
+        hint: "Utiliser “Afficher l'image entière” pour les affiches, BD, logos, captures ou couvertures qui ne doivent pas être recadrés."
+
       - label: Contenu
         name: body
         widget: markdown
