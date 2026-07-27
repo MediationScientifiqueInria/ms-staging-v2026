@@ -12,12 +12,11 @@ Vous souhaitez construire un projet avec Inria, obtenir des informations sur nos
 Nous sommes à votre écoute : [mediation-scientifique@inria.fr](mailto:mediation-scientifique@inria.fr)
 
 ## Nous suivre
-Retrouvez nos ressources, nos actualités et nos projets en ligne :
+Retrouvez nos ressources et nos actualités sur nos différents espaces :
 
-- [Pixees](https://pixees.fr/)
-- [YouTube Inria Médiation scientifique](https://www.youtube.com/@Inria-MediationScientifique/videos)
-- [Pearltrees Pixees](https://www.pearltrees.com/pixees)
-- [Réseaux sociaux](https://www.inria.fr/fr/reseaux-sociaux)
-- Newsletter
-- [Nancynum](https://nancynum.fr/)
-- [Le truc de Bordeaux](https://letrucdebordeaux.fr/)
+- [Pixees](https://pixees.fr/){: target="_blank" rel="noopener" }
+- [YouTube Inria Médiation scientifique](https://www.youtube.com/@Inria-MediationScientifique/videos){: target="_blank" rel="noopener" }
+- [Interstices](https://interstices.info/){: target="_blank" rel="noopener" }
+- [NanSciNum](https://iww.inria.fr/NanSciNum/){: target="_blank" rel="noopener" }
+- [TIPE](https://mediation-scientifique.gitlabpages.inria.fr/tipe-2026/){: target="_blank" rel="noopener" }
+- [MediaNum](https://mediation-scientifique.gitlabpages.inria.fr/anr-medianum/){: target="_blank" rel="noopener" }
