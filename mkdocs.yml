@@ -1,4 +1,5 @@
 site_name: Médiation scientifique - Inria
+site_url: !ENV [MKDOCS_SITE_URL, ""]
 
 extra:
   noindex: !ENV [MKDOCS_NO_INDEX, false]
@@ -46,6 +47,7 @@ extra_javascript:
   - assets/javascripts/reveal-on-scroll.js
   - assets/javascripts/search-results.js
   - assets/javascripts/resource-filters.js?v=20260715-4
+  - assets/javascripts/content-share.js?v=20260806-1
 
 nav:
   - Accueil: index.md
