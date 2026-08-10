@@ -365,11 +365,11 @@ html {
 }
 
 .section-page--markdown h1::after {
-  width: calc(100% + 2rem);
+  width: calc(100% + 4rem);
 }
 
 .section-page--markdown h2::after {
-  width: clamp(9rem, calc(100% + 2rem), 14rem);
+  width: calc(100% + 3rem);
 }
 
 .partners-grid {
@@ -466,7 +466,8 @@ html {
 
 .section-gradient-bar {
   display: block;
-  width: clamp(9rem, calc(100% + 3rem), 22rem);
+  width: calc(100% + 4rem);
+  max-width: none;
   height: 0.32rem;
   margin-top: 0.25rem;
   margin-bottom: 0.5rem;
@@ -479,7 +480,7 @@ html {
 }
 
 .section-gradient-bar--small {
-  width: clamp(9rem, calc(100% + 2rem), 14rem);
+  width: calc(100% + 3rem);
 }
 
 .contact-section-spacer {
