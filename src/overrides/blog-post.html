@@ -197,6 +197,20 @@
                 </li>
               </ul>
             {% endif %}
+
+            <ul class="md-post__meta md-nav__list content-share" data-content-share data-content-title="{{ page.title | e }}">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">Partager</span>
+                </div>
+                <div class="content-share__actions">
+                  <button type="button" class="content-share__button" data-content-share-copy="link">
+                    Copier le lien
+                  </button>
+                </div>
+                <p class="content-share__feedback" data-content-share-feedback role="status" aria-live="polite"></p>
+              </li>
+            </ul>
           </nav>
 
           {% if "toc.integrate" in features %}

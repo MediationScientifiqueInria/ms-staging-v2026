@@ -2,6 +2,39 @@
 
 {% block extrahead %}
   {{ super() }}
+  {% if page %}
+    {% set page_title = page.meta.title | default(page.title, true) %}
+    {% set content_description = page.content | default("", true) | striptags | trim %}
+    {% if content_description.startswith(page_title) %}
+      {% set content_description = content_description.replace(page_title, "", 1) | trim %}
+    {% endif %}
+    {% set page_description = page.meta.description | default(page.meta.card_excerpt, true) | default(content_description, true) | default(config.site_description, true) | default(config.site_name, true) %}
+    {% set share_image = page.meta.cover_image | default(page.meta.image, true) | default("assets/images/Inria-mediation.png", true) %}
+    {% set site_url = config.site_url | default("", true) %}
+    {% set site_root = site_url.rstrip("/") %}
+    {% set share_url = site_root ~ "/" ~ page.url if site_root else page.url | url %}
+    {% if share_image.startswith("http://") or share_image.startswith("https://") %}
+      {% set share_image_url = share_image %}
+    {% elif share_image.startswith("/") %}
+      {% set share_image_url = site_root ~ share_image if site_root else share_image %}
+    {% else %}
+      {% set share_image_url = site_root ~ "/" ~ share_image if site_root else share_image | url %}
+    {% endif %}
+    <meta property="og:type" content="{% if page.url.startswith('contenus/') and not page.url.endswith('/index.html') %}article{% else %}website{% endif %}">
+    <meta property="og:site_name" content="{{ config.site_name | e }}">
+    <meta property="og:title" content="{{ page_title | e }}">
+    <meta property="og:description" content="{{ page_description | striptags | trim | truncate(220, true, '...') | e }}">
+    <meta property="og:url" content="{{ share_url | e }}">
+    <meta property="og:image" content="{{ share_image_url | e }}">
+    <meta property="og:image:alt" content="{{ page_title | e }}">
+    {% if not page.meta.description %}
+      <meta name="description" content="{{ page_description | striptags | trim | truncate(220, true, '...') | e }}">
+    {% endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page_title | e }}">
+    <meta name="twitter:description" content="{{ page_description | striptags | trim | truncate(220, true, '...') | e }}">
+    <meta name="twitter:image" content="{{ share_image_url | e }}">
+  {% endif %}
   {% set noindex = config.extra.noindex | string | lower %}
   {% if noindex in ["1", "true", "yes", "on"] %}
     <meta name="robots" content="noindex, nofollow, noarchive">
