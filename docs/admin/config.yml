@@ -622,8 +622,6 @@ collections:
         widget: select
         required: false
         options:
-          - label: Non précisé
-            value: ""
           - "00:00"
           - "00:15"
           - "00:30"
@@ -734,8 +732,6 @@ collections:
         widget: select
         required: false
         options:
-          - label: Non précisé
-            value: ""
           - "00:00"
           - "00:15"
           - "00:30"

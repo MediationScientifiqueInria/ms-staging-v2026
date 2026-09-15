@@ -1,6 +1,6 @@
-document.querySelectorAll(".resource-card, .home-featured__main, .home-featured__item").forEach((card) => {
+document.querySelectorAll(".content-card, .home-featured__main, .home-featured__item").forEach((card) => {
   const primaryLink = card.querySelector(
-    ".resource-card__action, .home-featured__action, .resource-card__title a, .home-featured__title-row a, .resource-card__image, .home-featured__main-image, .home-featured__item-image",
+    ".content-card__title a, .content-card__image, .home-featured__action, .home-featured__title-row a, .home-featured__main-image, .home-featured__item-image, .content-card__action",
   );
 
   if (!primaryLink) {

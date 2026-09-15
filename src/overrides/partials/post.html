@@ -1,5 +1,5 @@
 
-<article class="resource-card">
+<article class="content-card">
   {% set image = post.meta.cover_image %}
   {% if not image and "![" in post.post.markdown and "](" in post.post.markdown %}
     {% set image_parts = post.post.markdown.split("](", 1) %}
@@ -32,22 +32,23 @@
   {% if image.startswith("/") %}
     {% set image = image[1:] %}
   {% endif %}
-  <a class="resource-card__image" href="{{ post.url | url }}">
+  <a class="content-card__image" href="{{ post.url | url }}">
     <img src="{{ image | url }}" alt="">
+    <span class="content-card__type-badge">Actualité</span>
   </a>
 
-  <div class="resource-card__content">
-    <div class="resource-card__chips" aria-label="Informations principales">
+  <div class="content-card__content">
+    <div class="content-card__chips" aria-label="Informations principales">
       {% if post.meta.categories %}
         {% for category in post.meta.categories[:2] %}
-          <span class="resource-card__chip">{{ category }}</span>
+          <span class="content-card__chip">{{ category }}</span>
         {% endfor %}
       {% else %}
-        <span class="resource-card__chip">Actualité</span>
+        <span class="content-card__chip">Actualité</span>
       {% endif %}
     </div>
 
-    <h2 class="resource-card__title">
+    <h2 class="content-card__title">
       <a href="{{ post.url | url }}">{{ post.title }}</a>
     </h2>
 
@@ -55,7 +56,7 @@
       <p>{{ excerpt | truncate(155, true, "...") }}</p>
     {% endif %}
 
-    <dl class="resource-card__details">
+    <dl class="content-card__details">
       {% if post.config.date.created %}
         <div>
           <dt>Date</dt>
@@ -64,7 +65,7 @@
       {% endif %}
       {% if post.meta.thematiques %}
         <div>
-          <dt>Theme</dt>
+          <dt>Thème</dt>
           <dd>{{ post.meta.thematiques[:2] | join(", ") }}</dd>
         </div>
       {% endif %}
@@ -77,11 +78,11 @@
       {% endif %}
     </dl>
 
-    <footer class="resource-card__footer">
+    <footer class="content-card__footer">
       {% if post.config.draft %}
         <span class="md-draft">{{ lang.t("blog.draft") }}</span>
       {% endif %}
-      <a class="resource-card__action" href="{{ post.url | url }}">
+      <a class="content-card__action" href="{{ post.url | url }}">
         Lire
         <span aria-hidden="true">↗</span>
       </a>

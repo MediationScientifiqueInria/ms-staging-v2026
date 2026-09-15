@@ -1,20 +1,20 @@
-<article class="resource-card">
+<article class="content-card">
   {% set image = event.image or "assets/images/1007721 (1).png" %}
-  <a class="resource-card__image" href="{{ event.url | url }}">
+  <a class="content-card__image" href="{{ event.url | url }}">
     <img src="{{ image | url }}" alt="">
-    <span class="resource-card__type-badge">Évènement</span>
+    <span class="content-card__type-badge">Évènement</span>
   </a>
 
-  <div class="resource-card__content">
+  <div class="content-card__content">
     {% if event.tags %}
-      <div class="resource-card__chips" aria-label="Informations principales">
+      <div class="content-card__chips" aria-label="Informations principales">
         {% for tag in event.tags[:1] %}
-          <span class="resource-card__chip resource-card__chip--muted">{{ tag }}</span>
+          <span class="content-card__chip content-card__chip--muted">{{ tag }}</span>
         {% endfor %}
       </div>
     {% endif %}
 
-    <h3 class="resource-card__title">
+    <h3 class="content-card__title">
       <a href="{{ event.url | url }}">{{ event.title }}</a>
     </h3>
 
@@ -22,7 +22,7 @@
       <p>{{ event.description | truncate(155, true, "...") }}</p>
     {% endif %}
 
-    <dl class="resource-card__details">
+    <dl class="content-card__details">
       <div>
         <dt>Date</dt>
         <dd>
@@ -57,8 +57,8 @@
       {% endif %}
     </dl>
 
-    <footer class="resource-card__footer">
-      <a class="resource-card__action" href="{{ event.url | url }}">
+    <footer class="content-card__footer">
+      <a class="content-card__action" href="{{ event.url | url }}">
         Consulter
         <span aria-hidden="true">↗</span>
       </a>

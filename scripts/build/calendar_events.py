@@ -4,6 +4,7 @@ import json
 import re
 import sys
 from datetime import date, datetime
+from html import escape
 from pathlib import Path
 
 from mkdocs.structure.files import File, InclusionLevel
@@ -193,16 +194,36 @@ def _event_detail_markdown(meta: dict, markdown: str) -> str:
 
     visible_details = [(label, value) for label, value in details if value]
 
-    if visible_details:
-        parts.append("## Informations pratiques")
-        parts.extend(f"- **{label}** : {value}" for label, value in visible_details)
-
-    if meta.get("lien"):
-        label = meta.get("libelle_lien") or "En savoir plus"
-        parts.append(f"[{label}]({meta['lien']})")
-
     if body:
         parts.append(body)
+
+    if visible_details or meta.get("lien"):
+        detail_items = [
+            "<div>"
+            f"<dt>{escape(label)}</dt>"
+            f"<dd>{escape(str(value))}</dd>"
+            "</div>"
+            for label, value in visible_details
+        ]
+
+        if meta.get("lien"):
+            label = meta.get("libelle_lien") or "En savoir plus"
+            detail_items.append(
+                "<div>"
+                "<dt>Lien</dt>"
+                f'<dd><a href="{escape(str(meta["lien"]), quote=True)}" target="_blank" rel="noopener">'
+                f"{escape(str(label))}"
+                "</a></dd>"
+                "</div>"
+            )
+
+        parts.append(
+            '<section class="content-bottom-meta" aria-label="Informations de l\'évènement">\n'
+            '<dl class="content-bottom-meta__list">\n'
+            + "\n".join(detail_items)
+            + "\n</dl>\n"
+            "</section>"
+        )
 
     return "\n\n".join(parts)
 

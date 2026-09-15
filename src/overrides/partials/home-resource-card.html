@@ -1,21 +1,24 @@
-<article class="resource-card">
-  {% set target_url = resource.external_url or resource.url %}
-  <a class="resource-card__image" href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
+<article class="content-card">
+  {% set target_url = resource.url %}
+  <a class="content-card__image" href="{{ target_url | url }}">
     <img src="{{ resource.image | url }}" alt="">
+    <span class="content-card__type-badge">Ressource</span>
   </a>
 
-  <div class="resource-card__content">
-    <div class="resource-card__chips" aria-label="Informations principales">
-      {% for tag in resource.tags[:2] %}
-        <span class="resource-card__chip">{{ tag }}</span>
-      {% endfor %}
-      {% for support in resource.support[:1] %}
-        <span class="resource-card__chip resource-card__chip--muted">{{ support }}</span>
-      {% endfor %}
-    </div>
+  <div class="content-card__content">
+    {% if resource.tags or resource.support %}
+      <div class="content-card__chips" aria-label="Informations principales">
+        {% for tag in resource.tags[:2] %}
+          <span class="content-card__chip">{{ tag }}</span>
+        {% endfor %}
+        {% for support in resource.support[:1] %}
+          <span class="content-card__chip content-card__chip--muted">{{ support }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
 
-    <h3 class="resource-card__title">
-      <a href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
+    <h3 class="content-card__title">
+      <a href="{{ target_url | url }}">
         {{ resource.title }}
       </a>
     </h3>
@@ -24,10 +27,10 @@
       <p>{{ resource.excerpt | truncate(155, true, "...") }}</p>
     {% endif %}
 
-    <dl class="resource-card__details">
+    <dl class="content-card__details">
       {% if resource.themes %}
         <div>
-          <dt>Theme</dt>
+          <dt>Thème</dt>
           <dd>{{ resource.themes[:2] | join(", ") }}</dd>
         </div>
       {% endif %}
@@ -45,14 +48,14 @@
       {% endif %}
     </dl>
 
-    <footer class="resource-card__footer">
+    <footer class="content-card__footer">
       {% if resource.date_maj %}
         <span>Mis à jour le {{ resource.date_maj }}</span>
       {% elif resource.date %}
         <span>Ajouté le {{ resource.date }}</span>
       {% endif %}
 
-      <a class="resource-card__action" href="{{ target_url | url }}"{% if resource.external_url %} target="_blank" rel="noopener"{% endif %}>
+      <a class="content-card__action" href="{{ target_url | url }}">
         Consulter
         <span aria-hidden="true">↗</span>
       </a>

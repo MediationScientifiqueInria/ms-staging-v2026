@@ -33,6 +33,7 @@ extra_css:
   - assets/stylesheets/header.css?v=20260715-1
   - assets/stylesheets/footer.css?v=20260715-1
   - assets/stylesheets/cards.css?v=20260715-1
+  - assets/stylesheets/contenus.css?v=20260914-2
   - assets/stylesheets/actualites.css?v=20260715-1
   - assets/stylesheets/ressources.css?v=20260715-3
   - assets/stylesheets/events.css?v=20260715-1

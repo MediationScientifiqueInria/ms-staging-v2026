@@ -15,7 +15,7 @@
   post.meta.territoire | default([], true) | join(" ")
 ] | join(" ") %}
 <article
-  class="resource-card"
+  class="content-card"
   data-resource-card
   data-title="{{ post.title | e }}"
   data-date="{{ resource_date | default('', true) | e }}"
@@ -52,29 +52,32 @@
   {% endif %}
   {% set image_fit = post.meta.image_fit | default("cover", true) %}
 
-  <a class="resource-card__image{% if image_fit == 'contain' %} resource-card__image--contain{% endif %}" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+  <a class="content-card__image{% if image_fit == 'contain' %} content-card__image--contain{% endif %}" href="{{ post.url | url }}">
     <img src="{{ image | url }}" alt="">
+    <span class="content-card__type-badge">Ressource</span>
   </a>
 
-  <div class="resource-card__content">
-    <div class="resource-card__chips" aria-label="Informations principales">
-      {% if post.meta.tags %}
-        {% for tag in post.meta.tags[:2] %}
-          <span class="resource-card__chip">{{ tag }}</span>
-        {% endfor %}
-      {% endif %}
-      {% if post.meta.support %}
-        {% for support in post.meta.support[:1] %}
-          <span class="resource-card__chip resource-card__chip--muted">{{ support }}</span>
-        {% endfor %}
-      {% endif %}
-      {% if post.meta.langue %}
-        <span class="resource-card__chip resource-card__chip--muted">{{ post.meta.langue | upper }}</span>
-      {% endif %}
-    </div>
+  <div class="content-card__content">
+    {% if post.meta.tags or post.meta.support or post.meta.langue %}
+      <div class="content-card__chips" aria-label="Informations principales">
+        {% if post.meta.tags %}
+          {% for tag in post.meta.tags[:2] %}
+            <span class="content-card__chip">{{ tag }}</span>
+          {% endfor %}
+        {% endif %}
+        {% if post.meta.support %}
+          {% for support in post.meta.support[:1] %}
+            <span class="content-card__chip content-card__chip--muted">{{ support }}</span>
+          {% endfor %}
+        {% endif %}
+        {% if post.meta.langue %}
+          <span class="content-card__chip content-card__chip--muted">{{ post.meta.langue | upper }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
 
-    <h2 class="resource-card__title">
-      <a href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+    <h2 class="content-card__title">
+      <a href="{{ post.url | url }}">
         {{ post.title }}
       </a>
     </h2>
@@ -83,7 +86,7 @@
       <p>{{ excerpt | truncate(155, true, "...") }}</p>
     {% endif %}
 
-    <dl class="resource-card__details">
+    <dl class="content-card__details">
       {% if post.meta.cibles %}
         <div>
           <dt>Public</dt>
@@ -98,14 +101,14 @@
       {% endif %}
     </dl>
 
-    <footer class="resource-card__footer">
+    <footer class="content-card__footer">
       {% if post.meta.date_maj %}
         <span>Mis à jour le {{ post.meta.date_maj | date }}</span>
       {% elif post.config.date.created %}
         <span>Ajouté le {{ post.config.date.created | date }}</span>
       {% endif %}
 
-      <a class="resource-card__action" href="{{ external_url or post.url | url }}"{% if external_url %} target="_blank" rel="noopener"{% endif %}>
+      <a class="content-card__action" href="{{ post.url | url }}">
         Consulter
         <span aria-hidden="true">↗</span>
       </a>
