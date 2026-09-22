@@ -65,7 +65,7 @@ def _normalize_asset_image_url(raw_url: str, page_url: str, repository: Path) ->
 
 
 def _normalize_markdown_images(markdown: str, page_url: str, repository: Path) -> str:
-    image_pattern = re.compile(r"(!\[[^\]]*]\()([^)\s]+(?:%20[^)]*)?)(\))")
+    image_pattern = re.compile(r"(!\[[^\]]*]\()([^\n]+)(\))")
 
     def replace(match: re.Match) -> str:
         return (
@@ -75,6 +75,18 @@ def _normalize_markdown_images(markdown: str, page_url: str, repository: Path) -
         )
 
     return image_pattern.sub(replace, markdown)
+
+
+def _promote_first_markdown_image(markdown: str) -> str:
+    image_pattern = re.compile(r"!\[[^\]]*]\([^\n]+\)")
+    match = image_pattern.search(markdown)
+
+    if not match or not markdown[:match.start()].strip():
+        return markdown
+
+    image = match.group(0)
+    body = f"{markdown[:match.start()]}{markdown[match.end():]}".strip()
+    return f"{image}\n\n{body}" if body else image
 
 
 def on_page_markdown(markdown, page, config, files):
@@ -90,6 +102,7 @@ def on_page_markdown(markdown, page, config, files):
 
     repository = Path(config.config_file_path).resolve().parent
     markdown = _normalize_markdown_images(markdown, page.url, repository)
+    markdown = _promote_first_markdown_image(markdown)
     update_date = _git_update_date(abs_src_path.resolve(), repository)
     if update_date:
         page.meta["date_maj"] = update_date

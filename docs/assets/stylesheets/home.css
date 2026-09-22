@@ -460,7 +460,7 @@
   border-radius: 0;
 }
 
-.home-featured__item-image .resource-card__type-badge {
+.home-featured__item-image .content-card__type-badge {
   min-height: 1.15rem;
   padding: 0.16rem 0.38rem;
   font-size: 0.5rem;
