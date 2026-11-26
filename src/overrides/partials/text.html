@@ -1,0 +1,4 @@
+{% macro truncate(value, length) -%}
+  {{- value[:length] -}}
+  {%- if value | length > length -%}...{%- endif -%}
+{%- endmacro %}

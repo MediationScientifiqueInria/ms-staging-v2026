@@ -1,38 +1,53 @@
 {% extends "base.html" %}
+{% from "partials/text.html" import truncate %}
+{% set site_extra = config.extra | default({}, true) %}
+{% set all_evenements = all_evenements | default(site_extra.all_evenements, true) | default([], true) %}
+{% set home_evenements = home_evenements | default(site_extra.home_evenements, true) | default([], true) %}
+{% set current_actualites_evenements_url = current_actualites_evenements_url | default(site_extra.current_actualites_evenements_url, true) | default("contenus/actualites/evenements/", true) %}
+{% set all_partners = all_partners | default(site_extra.all_partners, true) | default([], true) %}
+{% set home_partners = home_partners | default(site_extra.home_partners, true) | default([], true) %}
+{% set featured_actualites = featured_actualites | default(site_extra.featured_actualites, true) | default([], true) %}
+{% set home_featured_items = home_featured_items | default(site_extra.home_featured_items, true) | default([], true) %}
+{% set actualites_feed_pages = actualites_feed_pages | default(site_extra.actualites_feed_pages, true) | default([], true) %}
+{% set actualites_only_pages = actualites_only_pages | default(site_extra.actualites_only_pages, true) | default([], true) %}
+{% set featured_resources = featured_resources | default(site_extra.featured_resources, true) | default([], true) %}
+{% set all_resources = all_resources | default(site_extra.all_resources, true) | default([], true) %}
 
 {% block extrahead %}
   {{ super() }}
   {% if page %}
-    {% set page_title = page.meta.title | default(page.title, true) %}
+    {% set meta = page.meta | default({}, true) %}
+    {% set page_title = meta.title | default(page.title, true) | default(config.site_name, true) %}
     {% set content_description = page.content | default("", true) | striptags | trim %}
-    {% if content_description.startswith(page_title) %}
-      {% set content_description = content_description.replace(page_title, "", 1) | trim %}
+    {% if content_description[:page_title | length] == page_title %}
+      {% set content_description = content_description | replace(page_title, "") | trim %}
     {% endif %}
-    {% set page_description = page.meta.description | default(page.meta.card_excerpt, true) | default(content_description, true) | default(config.site_description, true) | default(config.site_name, true) %}
-    {% set share_image = page.meta.cover_image | default(page.meta.image, true) | default("assets/images/Inria-mediation.png", true) %}
+    {% set page_description = meta.description | default(meta.card_excerpt, true) | default(content_description, true) | default(config.site_description, true) | default(config.site_name, true) %}
+    {% set share_image = meta.cover_image | default(meta.image, true) | default("assets/images/Inria-mediation.png", true) %}
     {% set site_url = config.site_url | default("", true) %}
-    {% set site_root = site_url.rstrip("/") %}
+    {% set site_root = site_url | trim("/") %}
     {% set share_url = site_root ~ "/" ~ page.url if site_root else page.url | url %}
-    {% if share_image.startswith("http://") or share_image.startswith("https://") %}
+    {% if share_image[:7] == "http://" or share_image[:8] == "https://" %}
       {% set share_image_url = share_image %}
-    {% elif share_image.startswith("/") %}
+    {% elif share_image[:1] == "/" %}
       {% set share_image_url = site_root ~ share_image if site_root else share_image %}
     {% else %}
       {% set share_image_url = site_root ~ "/" ~ share_image if site_root else share_image | url %}
     {% endif %}
-    <meta property="og:type" content="{% if page.url.startswith('contenus/') and not page.url.endswith('/index.html') %}article{% else %}website{% endif %}">
+    <meta property="og:type" content="{% if page.url[:9] == 'contenus/' and page.url[-11:] != '/index.html' %}article{% else %}website{% endif %}">
     <meta property="og:site_name" content="{{ config.site_name | e }}">
     <meta property="og:title" content="{{ page_title | e }}">
-    <meta property="og:description" content="{{ page_description | striptags | trim | truncate(220, true, '...') | e }}">
+    {% set page_description = page_description | striptags | trim %}
+    <meta property="og:description" content="{{ truncate(page_description, 220) | e }}">
     <meta property="og:url" content="{{ share_url | e }}">
     <meta property="og:image" content="{{ share_image_url | e }}">
     <meta property="og:image:alt" content="{{ page_title | e }}">
-    {% if not page.meta.description %}
-      <meta name="description" content="{{ page_description | striptags | trim | truncate(220, true, '...') | e }}">
+    {% if not meta.description %}
+      <meta name="description" content="{{ truncate(page_description, 220) | e }}">
     {% endif %}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ page_title | e }}">
-    <meta name="twitter:description" content="{{ page_description | striptags | trim | truncate(220, true, '...') | e }}">
+    <meta name="twitter:description" content="{{ truncate(page_description, 220) | e }}">
     <meta name="twitter:image" content="{{ share_image_url | e }}">
   {% endif %}
   {% set noindex = config.extra.noindex | string | lower %}

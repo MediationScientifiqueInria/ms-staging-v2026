@@ -2,7 +2,50 @@
 
 ## Getting started
 
+Installer les dépendances, puis lancer Zensical :
+
+```bash
+pip install -r requirements.txt
+python scripts/zensical.py serve
+```
+
+Le wrapper prépare les données auparavant produites par les hooks MkDocs, puis
+relance automatiquement Zensical quand le contenu, les templates ou les données
+changent. Il n'est pas nécessaire d'utiliser `--dirtyreload` ni de définir
+`WATCHDOG_FORCE_POLLING`.
+
+Pendant la migration, le serveur MkDocs reste disponible uniquement comme
+solution de secours et de comparaison :
+
+```bash
 WATCHDOG_FORCE_POLLING=1 mkdocs serve --dirtyreload
+```
+
+Pour produire le site dans `site/` :
+
+```bash
+python scripts/zensical.py build --strict
+```
+
+Pour lancer les tests de non-régression :
+
+```bash
+python -m unittest discover -s tests
+```
+
+Le déploiement GitHub Pages exécute ces tests, puis effectue le même build
+Zensical strict. `mkdocs.yml` reste la configuration commune pendant la
+migration ; MkDocs Material et les hooks MkDocs sont donc encore conservés
+comme dépendances de compatibilité.
+
+## Structure du projet
+
+- `docs/` : contenus Markdown, administration CMS et fichiers statiques ;
+- `src/overrides/` : templates du thème ;
+- `data/` : données structurées utilisées par les hooks ;
+- `scripts/build/` : génération des collections et optimisation des images ;
+- `scripts/zensical.py` : préparation des données puis lancement de Zensical ;
+- `tests/` : tests rapides des fonctions de transformation du contenu.
 
 Puis ouvrir l’administration locale dans un navigateur Chromium (Chrome, Edge ou Brave) :
 

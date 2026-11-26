@@ -1,35 +1,49 @@
+{% from "partials/text.html" import truncate %}
 
 <article class="content-card">
   {% set image = post.meta.cover_image %}
   {% if not image and "![" in post.post.markdown and "](" in post.post.markdown %}
-    {% set image_parts = post.post.markdown.split("](", 1) %}
+    {% if post.post.markdown.split is defined %}
+      {% set image_parts = post.post.markdown.split("](", 1) %}
+    {% else %}
+      {% set image_parts = post.post.markdown | split("](") %}
+    {% endif %}
     {% if image_parts | length > 1 %}
-      {% set image = image_parts[1].split(")", 1)[0] %}
+      {% if image_parts[1].split is defined %}
+        {% set image = image_parts[1].split(")", 1)[0] %}
+      {% else %}
+        {% set image = (image_parts[1] | split(")"))[0] %}
+      {% endif %}
     {% endif %}
   {% endif %}
   {% set fallback = namespace(excerpt = post.content | striptags | trim) %}
-  {% if fallback.excerpt.startswith("# " ~ post.title) %}
-    {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
+  {% set heading = "# " ~ post.title %}
+  {% if fallback.excerpt[:heading | length] == heading %}
+    {% set fallback.excerpt = fallback.excerpt | replace(heading, "") | trim %}
   {% endif %}
-  {% if fallback.excerpt.startswith(post.title) %}
-    {% set fallback.excerpt = fallback.excerpt.replace(post.title, "", 1) | trim %}
+  {% if fallback.excerpt[:post.title | length] == post.title %}
+    {% set fallback.excerpt = fallback.excerpt | replace(post.title, "") | trim %}
   {% endif %}
   {% if fallback.excerpt | string | trim | lower == "none" %}
     {% set fallback.excerpt = "" %}
   {% endif %}
   {% if not fallback.excerpt %}
     {% set fallback.excerpt = post.markdown | default("", true) | trim %}
-    {% if fallback.excerpt.startswith("# " ~ post.title) %}
-      {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
+    {% if fallback.excerpt[:heading | length] == heading %}
+      {% set fallback.excerpt = fallback.excerpt | replace(heading, "") | trim %}
     {% endif %}
-    {% if fallback.excerpt.startswith("![") and ")" in fallback.excerpt %}
-      {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
+    {% if fallback.excerpt[:2] == "![" and ")" in fallback.excerpt %}
+      {% if fallback.excerpt.split is defined %}
+        {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
+      {% else %}
+        {% set fallback.excerpt = (fallback.excerpt | split(")"))[1] | trim %}
+      {% endif %}
     {% endif %}
   {% endif %}
   {% set excerpt = fallback.excerpt %}
 
   {% set image = image or "assets/images/1007721 (1).png" %}
-  {% if image.startswith("/") %}
+  {% if image[:1] == "/" %}
     {% set image = image[1:] %}
   {% endif %}
   <a class="content-card__image" href="{{ post.url | url }}">
@@ -53,7 +67,7 @@
     </h2>
 
     {% if excerpt %}
-      <p>{{ excerpt | truncate(155, true, "...") }}</p>
+      <p>{{ truncate(excerpt, 155) }}</p>
     {% endif %}
 
     <dl class="content-card__details">

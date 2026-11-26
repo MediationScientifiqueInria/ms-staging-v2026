@@ -1,3 +1,4 @@
+{% from "partials/text.html" import truncate %}
 <article class="content-card">
   {% set image = event.image or "assets/images/1007721 (1).png" %}
   <a class="content-card__image" href="{{ event.url | url }}">
@@ -19,7 +20,7 @@
     </h3>
 
     {% if event.description %}
-      <p>{{ event.description | truncate(155, true, "...") }}</p>
+      <p>{{ truncate(event.description, 155) }}</p>
     {% endif %}
 
     <dl class="content-card__details">

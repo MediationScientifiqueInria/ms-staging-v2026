@@ -220,6 +220,12 @@ def _paginate(items: list[dict], base_url: str) -> list[dict]:
     return pages
 
 
+# Public API shared by the MkDocs hook and the Zensical preparation layer.
+collect_posts = _collect_posts
+event_to_feed_item = _event_to_feed_item
+paginate = _paginate
+
+
 def _unique_by_url(items: list[dict]) -> list[dict]:
     seen = set()
     unique = []

@@ -86,16 +86,13 @@ markdown_extensions:
   - pymdownx.tilde
   - md_in_html
   - attr_list
-  - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
 
 
 plugins:
-    - mkdocs-video
     - awesome-pages
     - glightbox
-    - table-reader
     - blog:
         blog_dir: docs
         blog_toc: true

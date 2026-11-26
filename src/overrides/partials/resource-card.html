@@ -1,3 +1,4 @@
+{% from "partials/text.html" import truncate %}
 {% set resource_date = post.meta.date_maj or post.meta.date or post.config.date.created %}
 {% set resource_author = post.meta.auteur_autre | default("", true) | trim or post.meta.auteur %}
 {% set resource_search = [
@@ -29,14 +30,19 @@
   {% if not fallback.excerpt %}
     {% set fallback.excerpt = post.markdown | default("", true) | trim %}
   {% endif %}
-  {% if fallback.excerpt.startswith("# " ~ post.title) %}
-    {% set fallback.excerpt = fallback.excerpt.replace("# " ~ post.title, "", 1) | trim %}
+  {% set heading = "# " ~ post.title %}
+  {% if fallback.excerpt[:heading | length] == heading %}
+    {% set fallback.excerpt = fallback.excerpt | replace(heading, "") | trim %}
   {% endif %}
-  {% if fallback.excerpt.startswith(post.title) %}
-    {% set fallback.excerpt = fallback.excerpt.replace(post.title, "", 1) | trim %}
+  {% if fallback.excerpt[:post.title | length] == post.title %}
+    {% set fallback.excerpt = fallback.excerpt | replace(post.title, "") | trim %}
   {% endif %}
-  {% if fallback.excerpt.startswith("![") and ")" in fallback.excerpt %}
-    {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
+  {% if fallback.excerpt[:2] == "![" and ")" in fallback.excerpt %}
+    {% if fallback.excerpt.split is defined %}
+      {% set fallback.excerpt = fallback.excerpt.split(")", 1)[1] | trim %}
+    {% else %}
+      {% set fallback.excerpt = (fallback.excerpt | split(")"))[1] | trim %}
+    {% endif %}
   {% endif %}
   {% if fallback.excerpt | string | trim | lower == "none" %}
     {% set fallback.excerpt = "" %}
@@ -47,7 +53,7 @@
   {% set source = post.meta.source | default("", true) | trim %}
   {% set author = resource_author %}
   {% set image = post.meta.cover_image or "assets/images/1007721 (1).png" %}
-  {% if image.startswith("/") %}
+  {% if image[:1] == "/" %}
     {% set image = image[1:] %}
   {% endif %}
   {% set image_fit = post.meta.image_fit | default("cover", true) %}
@@ -83,7 +89,7 @@
     </h2>
 
     {% if excerpt %}
-      <p>{{ excerpt | truncate(155, true, "...") }}</p>
+      <p>{{ truncate(excerpt, 155) }}</p>
     {% endif %}
 
     <dl class="content-card__details">

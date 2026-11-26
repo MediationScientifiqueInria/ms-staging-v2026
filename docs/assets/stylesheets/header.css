@@ -409,6 +409,8 @@
 
   .md-header__button[for="__search"],
   .md-header__source {
+    grid-column: 3;
+    grid-row: 1;
     justify-self: end;
   }
 

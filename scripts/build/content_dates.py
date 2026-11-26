@@ -89,6 +89,13 @@ def _promote_first_markdown_image(markdown: str) -> str:
     return f"{image}\n\n{body}" if body else image
 
 
+# Public API shared by the MkDocs hook and the Zensical preparation layer.
+normalize_markdown_images = _normalize_markdown_images
+promote_first_markdown_image = _promote_first_markdown_image
+content_update_date = _git_update_date
+card_excerpt = _card_excerpt
+
+
 def on_page_markdown(markdown, page, config, files):
     src_path = getattr(page.file, "src_path", "")
 

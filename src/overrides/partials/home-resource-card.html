@@ -1,3 +1,4 @@
+{% from "partials/text.html" import truncate %}
 <article class="content-card">
   {% set target_url = resource.url %}
   <a class="content-card__image" href="{{ target_url | url }}">
@@ -24,7 +25,7 @@
     </h3>
 
     {% if resource.excerpt %}
-      <p>{{ resource.excerpt | truncate(155, true, "...") }}</p>
+      <p>{{ truncate(resource.excerpt, 155) }}</p>
     {% endif %}
 
     <dl class="content-card__details">
