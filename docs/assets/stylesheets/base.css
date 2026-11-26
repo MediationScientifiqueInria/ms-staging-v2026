@@ -60,7 +60,7 @@ html {
 }
 
 .md-typeset .note > .admonition-title:before {
-  background-color: var(-md-fourth-color);
+  background-color: var(--md-fourth-color);
 }
 
 /*Icon note*/
@@ -507,6 +507,23 @@ html {
 .scroll-reveal-ready [data-reveal].is-revealed {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+}
+
+@media screen and (max-width: 60rem) {
+  .scroll-reveal-ready [data-reveal="left"],
+  .scroll-reveal-ready [data-reveal="right"] {
+    --reveal-x: 0;
+  }
+}
+
+@media screen and (max-width: 44rem) {
+  .section-gradient-bar,
+  .section-gradient-bar--title-overflow,
+  .section-gradient-bar--small,
+  .section-page--markdown h1::after,
+  .section-page--markdown h2::after {
+    width: min(calc(100% + 2rem), calc(100vw - 3rem));
+  }
 }
 
 .section-heading a {

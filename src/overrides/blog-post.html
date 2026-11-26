@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block container %}
-  {% set is_resource = page.url.startswith("contenus/ressources/") %}
+  {% set is_resource = page.url[:20] == "contenus/ressources/" %}
   {% set author = page.meta.auteur_autre | default("", true) | trim or page.meta.auteur %}
 
   <div class="md-content md-content--post" data-md-component="content">
@@ -10,7 +10,7 @@
         {% include "partials/content.html" %}
       {% endblock %}
 
-      {% if page.url.startswith("contenus/") %}
+      {% if page.url[:9] == "contenus/" %}
         <section class="content-bottom-meta" aria-label="Informations du contenu">
           <p class="content-bottom-meta__byline">
             Publié le
@@ -103,6 +103,9 @@
             {% endif %}
           </dl>
         </section>
+      {% endif %}
+      {% if page.meta.search_metadata %}
+        <div class="search-metadata" aria-hidden="true">{{ page.meta.search_metadata }}</div>
       {% endif %}
     </article>
   </div>

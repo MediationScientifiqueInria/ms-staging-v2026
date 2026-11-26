@@ -29,6 +29,9 @@ def _normalize(value):
     return "".join(character for character in value if not unicodedata.combining(character))
 
 
+normalize_term = _normalize
+
+
 def on_config(config):
     global thesaurus
 

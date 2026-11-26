@@ -1,0 +1,21 @@
+[project]
+name = "inria-mediation-site"
+version = "0.1.0"
+description = "Site de médiation scientifique Inria construit avec Zensical"
+requires-python = ">=3.11"
+dependencies = [
+  "mkdocs>=1.6,<2",
+  "mkdocs-material>=9.6,<10",
+  "zensical>=0.1.3,<0.2",
+  "mkdocs-awesome-pages-plugin>=2.10,<3",
+  "mkdocs-glightbox>=0.4,<1",
+  "Pillow>=11,<12",
+  "PyYAML>=6,<7",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
