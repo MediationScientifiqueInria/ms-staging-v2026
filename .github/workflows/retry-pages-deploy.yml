@@ -3,7 +3,7 @@ name: Retry Pages deployment
 on:
   workflow_run:
     workflows:
-      - Deploy MkDocs to GitHub Pages
+      - Deploy Zensical to GitHub Pages
     types:
       - completed
 

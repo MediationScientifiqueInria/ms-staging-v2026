@@ -1,5 +1,7 @@
 # Build output
 site/
+.zensical/
+.zensical.generated.yml
 
 # Python cache
 __pycache__/

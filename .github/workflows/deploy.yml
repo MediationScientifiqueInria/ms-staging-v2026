@@ -1,4 +1,4 @@
-name: Deploy MkDocs to GitHub Pages
+name: Deploy Zensical to GitHub Pages
 
 on:
   # The same workflow is shared by the production and staging repositories.
@@ -51,10 +51,13 @@ jobs:
       - name: Normalize content dates
         run: python scripts/build/normalize_content_dates.py
 
-      - name: Build MkDocs site
+      - name: Run unit tests
+        run: python -m unittest discover -s tests
+
+      - name: Build Zensical site
         env:
           MKDOCS_NO_INDEX: ${{ github.ref_name == 'staging' && 'true' || 'false' }}
-        run: mkdocs build --clean
+        run: python scripts/zensical.py build --strict
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

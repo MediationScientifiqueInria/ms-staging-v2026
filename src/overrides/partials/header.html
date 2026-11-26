@@ -40,7 +40,7 @@ site-header--transparent" %} {% endif %}
       </a>
       <div class="site-header-nav__item">
         <a
-          class="site-header-nav__link{% if current_url.startswith('nous-connaitre') or current_url.startswith('docs') %} is-active{% endif %}"
+          class="site-header-nav__link{% if current_url[:14] == 'nous-connaitre' or current_url[:4] == 'docs' %} is-active{% endif %}"
           href="{{ 'nous-connaitre/' | url }}"
         >
           <span class="site-header-nav__label">Nous connaître</span>
@@ -55,7 +55,7 @@ site-header--transparent" %} {% endif %}
       </div>
       <div class="site-header-nav__item">
         <a
-          class="site-header-nav__link{% if current_url.startswith('contenus/actualites') or current_url.startswith('contenus/evenements') %} is-active{% endif %}"
+          class="site-header-nav__link{% if current_url[:19] == 'contenus/actualites' or current_url[:19] == 'contenus/evenements' %} is-active{% endif %}"
           href="{{ 'contenus/actualites/' | url }}"
         >
           <span class="site-header-nav__label">Actualités</span>
@@ -69,14 +69,14 @@ site-header--transparent" %} {% endif %}
         </div>
       </div>
       <a
-        class="site-header-nav__link{% if current_url.startswith('contenus/ressources') %} is-active{% endif %}"
+        class="site-header-nav__link{% if current_url[:19] == 'contenus/ressources' %} is-active{% endif %}"
         href="{{ 'contenus/ressources/' | url }}"
       >
         <span class="site-header-nav__label">Ressources</span>
       </a>
       <div class="site-header-nav__item">
         <a
-          class="site-header-nav__link{% if current_url.startswith('ecosysteme') or current_url.startswith('partenaires') %} is-active{% endif %}"
+          class="site-header-nav__link{% if current_url[:10] == 'ecosysteme' or current_url[:11] == 'partenaires' %} is-active{% endif %}"
           href="{{ 'ecosysteme/' | url }}"
         >
           <span class="site-header-nav__label">Réseau</span>
@@ -90,7 +90,7 @@ site-header--transparent" %} {% endif %}
         </div>
       </div>
       <a
-        class="site-header-nav__link{% if current_url.startswith('contact') %} is-active{% endif %}"
+        class="site-header-nav__link{% if current_url[:7] == 'contact' %} is-active{% endif %}"
         href="{{ 'contact/' | url }}"
       >
         <span class="site-header-nav__label">Contact</span>
@@ -100,12 +100,11 @@ site-header--transparent" %} {% endif %}
     {% if config.theme.palette %} {% if not config.theme.palette is mapping %} {% include "partials/palette.html"
     %} {% endif %} {% endif %} {% if not config.theme.palette is mapping %} {% include
     "partials/javascripts/palette.html" %} {% endif %} {% if config.extra.alternate %} {% include
-    "partials/alternate.html" %} {% endif %} {% if "material/search" in config.plugins %} {% set search =
-    config.plugins["material/search"] | attr("config") %} {% if search.enabled %}
+    "partials/alternate.html" %} {% endif %} {% if "search" in config.plugins or "material/search" in config.plugins %}
     <label class="md-header__button md-icon" for="__search">
       {% set icon = config.theme.icon.search or "material/magnify" %} {% include ".icons/" ~ icon ~ ".svg" %}
     </label>
-    {% include "partials/search.html" %} {% endif %} {% endif %} {% if config.repo_url %}
+    {% include "partials/search.html" %} {% endif %} {% if config.repo_url %}
     <div class="md-header__source">{% include "partials/source.html" %}</div>
     {% endif %}
   </nav>

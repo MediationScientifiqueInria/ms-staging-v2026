@@ -228,6 +228,13 @@ def _event_detail_markdown(meta: dict, markdown: str) -> str:
     return "\n\n".join(parts)
 
 
+# Public API shared by the MkDocs hook and the Zensical preparation layer.
+collect_events = _collect_events
+group_events_by_month = _group_events_by_month
+current_month = _current_month
+event_detail_markdown = _event_detail_markdown
+
+
 def on_page_markdown(markdown, page, config, files):
     if not page.file.src_uri.startswith("contenus/evenements/"):
         return markdown
